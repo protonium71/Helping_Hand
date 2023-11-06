@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "976845643013",
+    "project_id": "khattitoffee",
+    "storage_bucket": "khattitoffee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976845643013:android:4cfa9227bb6fd04fe12b6c",
+        "android_client_info": {
+          "package_name": "com.example.helping_hand"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "976845643013-8d666fjdca3idpijs6hdihl0q6smjhas.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.helping_hand",
+            "certificate_hash": "f091232e0cb268f11c806df02fd77b4698ccc5c9"
+          }
+        },
+        {
+          "client_id": "976845643013-ogsac0r2jg0if46i1ju7l74kre7j3vt8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.helping_hand",
+            "certificate_hash": "39228bbf08a8baa6fd06d95765236fa130963151"
+          }
+        },
+        {
+          "client_id": "976845643013-qn8j5adlcsg7pus5ucd8k0g9hepl1tn2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDVBI4s2Pklwlm7M-9W_RHl02e3w0JBY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "976845643013-qn8j5adlcsg7pus5ucd8k0g9hepl1tn2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "976845643013-e73913q5119t12j6gimrt060hji7sgmt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.helpingHand"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
