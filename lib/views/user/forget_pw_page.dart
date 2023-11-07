@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/utilities/my_button.dart';
@@ -5,8 +6,6 @@ import 'package:helping_hand/utilities/my_textField.dart';
 import 'package:helping_hand/views/user/auth_page.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
-
-
   const ForgetPasswordPage({super.key});
 
   @override
@@ -18,18 +17,31 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   Future passwordReset() async{
     try{
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text);
-      // ignore: use_build_context_synchronously
-      showDialog(context: context, builder: (context){
-        return const AlertDialog(
-          content: Text('Password change email sent! Please check your email'),
-        );
-      });
+      QuerySnapshot query = await FirebaseFirestore.instance.collection('users').where('email',isEqualTo:emailController.text).get();
+      if (query.docs.isEmpty){
+        // ignore: use_build_context_synchronously
+        showDialog(context: context, builder: (context){
+          return const AlertDialog(
+            content: Text('NO USER WITH GIVEN EMAIL'),
+          );
+        });
+      }
+      else {
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text);
+        // ignore: use_build_context_synchronously
+        showDialog(context: context, builder: (context){
+          return const AlertDialog(
+            content: Text('Password change email sent! Please check your email'),
+          );
+        });
+      }
     } on FirebaseAuthException catch (e){
       // ignore: use_build_context_synchronously
       showDialog(context: context, builder: (context){
+        String res = e.code.toString();
+        if(res == 'channel-error')res = 'Enter email';
         return AlertDialog(
-          content: Text(e.toString()),
+          content: Text(res),
         );
       });
     }    

@@ -12,6 +12,8 @@ dependencies:
   cloud_firestore: ^4.12.2
   google_sign_in: ^6.1.5
   google_fonts: ^6.1.0
+  country_state_city_pro: ^0.0.6
+  uuid: ^3.0.7
   flutter:
     sdk: flutter
 

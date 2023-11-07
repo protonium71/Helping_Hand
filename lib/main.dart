@@ -26,7 +26,7 @@ class MainApp extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
       ),
       debugShowCheckedModeBanner: false,
-      home: UserFeed(),
+      home: AuthPage(),
     );
   }
 }

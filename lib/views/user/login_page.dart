@@ -31,29 +31,29 @@ class _LoginPageState extends State<LoginPage> {
       );
     });
 
-    try{
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text, 
-        password: passwordController.text
-      );
-      //pop the loading circle
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context);
-    } on FirebaseAuthException catch(e){
-      //pop the loading circle
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context);
-      print(e.code);
+    //login user
+    String res = await AuthService().loginUser(
+      email: emailController.text,
+      password: passwordController.text,
+    );
 
-      //WRONG EMAIL
-      if(e.code == 'invalid-email'){
-        showErrorMessage('Invalid Email!');
-      }
+    print(res);
 
-      //WRONG PASSWORD
-      if(e.code == 'INVALID_LOGIN_CREDENTIALS'){
-        showErrorMessage('Incorrect login credentials!');
-      }
+    Navigator.pop(context);
+
+    //WRONG EMAIL
+    if(res == 'invalid-email'){
+      showErrorMessage('Invalid Email!');
+    }
+
+    //EMPTY FIELDS
+    if(res == 'Enter email and password'){
+      showErrorMessage('Enter email and password!');
+    }
+
+    //WRONG PASSWORD
+    if(res == 'INVALID_LOGIN_CREDENTIALS'){
+      showErrorMessage('Incorrect login credentials!');
     }
   }
 

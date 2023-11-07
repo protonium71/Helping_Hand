@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:helping_hand/resources/auth_services.dart';
 import 'package:helping_hand/utilities/user_feed_cards.dart';
 
 class UserFeed extends StatefulWidget {
@@ -18,9 +19,10 @@ class _UserFeedState extends State<UserFeed> {
 
     return Scaffold(
       appBar: AppBar(
+        actions: [IconButton(onPressed: () => AuthService().logoutUser(), icon: const Icon(Icons.logout))],
         centerTitle: true, 
-        backgroundColor: Color(0xffCDD4E0),
-        title: Text('Home Feed'),),
+        backgroundColor: const Color(0xffCDD4E0),
+        title: const Text('Home Feed'),),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: width*0.04),
         child: StreamBuilder(
