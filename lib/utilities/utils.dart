@@ -74,7 +74,7 @@ class EventCard extends StatelessWidget {
                         children: [
                           SizedBox(height: height*0.005,),
                           const Text(
-                              'test data ',
+                              'test data test data test data test data test data test data test data test data ',
                               style: TextStyle(
                                   color: Color(0xFF1D1517),
                                   fontSize: 15,

@@ -5,6 +5,7 @@ import 'package:helping_hand/utilities/utils.dart';
 import 'package:helping_hand/views/user/auth_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:helping_hand/views/user/search_page.dart';
+import 'package:helping_hand/views/user/user_feed.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +26,7 @@ class MainApp extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
       ),
       debugShowCheckedModeBanner: false,
-      home: SearchPage(),
+      home: UserFeed(),
     );
   }
 }
