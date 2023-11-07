@@ -8,8 +8,6 @@ class Organisation {
   String? email;
   String? bio;
   String? following;
-  List<String> interests = [];
-  List<String> skills = [];
   List<String> volunteerHistory = [];  // list of job ids
   List<String> upcomingEvents = [];  // list of job ids
 
@@ -20,8 +18,6 @@ class Organisation {
     this.profileURL,
     this.bio,
     this.following,
-    required this.interests,
-    required this.skills,
     required this.volunteerHistory,
     required this.upcomingEvents,
   });
@@ -34,8 +30,6 @@ class Organisation {
         "profileURL": profileURL,
         "location": bio,
         "following": following,
-        "interests": interests,
-        "skills": skills,
         "volunteerHistory": volunteerHistory,
         "upcomingEvents": upcomingEvents,
       };
@@ -51,8 +45,6 @@ class Organisation {
       profileURL: map['profileURL'],
       bio: map['bio'],
       following: map['following'],
-      interests: map['interests'],
-      skills: map['skills'],
       volunteerHistory: map['volunteerHistory'],
       upcomingEvents: map['upcomingEvents'],
     );
