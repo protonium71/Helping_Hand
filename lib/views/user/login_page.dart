@@ -67,6 +67,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
     return  Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -75,11 +77,11 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               //logo
-              const SizedBox(height: 30,),
+              SizedBox(height: height*0.05,),
               const Icon(Icons.lock, size: 100,),
         
               //welcome, you have been missed
-              const SizedBox(height: 40,),
+              SizedBox(height: height*0.05,),
               Text("Welcome back you've been missed", 
                 style: TextStyle(
                   color: Colors.grey[800],
@@ -88,15 +90,15 @@ class _LoginPageState extends State<LoginPage> {
               ),
         
               //username textfield
-              const SizedBox(height: 35,),
+              SizedBox(height: height*0.04,),
               MyTextField(controller: emailController, hintText: "Email", obscureText: false, icon: const Icon(Icons.email_outlined),),
         
               //password textfield
-              const SizedBox(height: 25,),
+              SizedBox(height: height*0.025,),
               MyTextField(controller: passwordController, hintText: "Password", obscureText: true, icon: const Icon(Icons.lock_outline)),
         
               //forgot password
-              const SizedBox(height: 10,),
+              SizedBox(height: height*0.015,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Row(
@@ -121,15 +123,13 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
-
-              const SizedBox(height: 55,),
         
               //sign in button
-              const SizedBox(height: 25),
+              SizedBox(height: height*0.075),
               MyButton(onTap: signUserIn, text: 'Sign In',),
         
               //or continue with
-              const SizedBox(height: 50),
+              SizedBox(height: height*0.06),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Row(
@@ -145,14 +145,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
         
               //google sign in
-              const SizedBox(height: 40),
+              SizedBox(height: height*0.06),
               SquareTile(
                 onTap: () => AuthService().signInWithGoogle(),
                 imagePath: 'lib/assets/google.png',
               ),
         
               //not a member sign up
-              const SizedBox(height: 75),
+              SizedBox(height: height*0.07),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

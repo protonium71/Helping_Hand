@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Organisation {
   String? uid;
-  String? orgName;
+  String? orgname;
   String? profileURL;
   String? email;
   String? bio;
@@ -13,7 +13,7 @@ class Organisation {
 
   Organisation({
     this.uid,
-    this.orgName,
+    this.orgname,
     this.email,
     this.profileURL,
     this.bio,
@@ -25,7 +25,7 @@ class Organisation {
   //This function returns a map of data related to the Organisation object
   Map<String, dynamic> getData() => {
         "uid": uid,
-        "orgName": orgName,
+        "orgname": orgname,
         "email": email,
         "profileURL": profileURL,
         "location": bio,
@@ -35,12 +35,12 @@ class Organisation {
       };
 
   //This method returns a Organisation instance based on the document snapshot given by firebase authentication
-  static Organisation getUser(DocumentSnapshot snap) {
+  static Organisation getOrganisation(DocumentSnapshot snap) {
     Map<String, dynamic> map = snap.data() as Map<String, dynamic>;
 
     return Organisation(
       uid: map['uid'],
-      orgName: map['orgName'],
+      orgname: map['orgname'],
       email: map['email'],
       profileURL: map['profileURL'],
       bio: map['bio'],

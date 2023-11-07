@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Job {
   String uid;
   String jid;
-  String jobName;
+  String jobname;
   String profileURL;
   String organisedBy;
   String location;
@@ -18,7 +18,7 @@ class Job {
   Job({
     required this.uid,
     required this.jid,
-    required this.jobName,
+    required this.jobname,
     required this.profileURL,
     required this.location,
     required this.organisedBy,
@@ -34,7 +34,7 @@ class Job {
   Map<String, dynamic> getData() => {
         "uid": uid,
         "jid": jid,
-        "jobName": jobName,
+        "jobname": jobname,
         "profileURL": profileURL,
         "location": location,
         "organisedBy": organisedBy,
@@ -53,7 +53,7 @@ class Job {
     return Job(
       uid: map['uid'],
       jid: map['jid'],
-      jobName: map['jobName'],
+      jobname: map['jobname'],
       profileURL: map['profileURL'],
       location: map['location'],
       organisedBy: map['organisedBy'],

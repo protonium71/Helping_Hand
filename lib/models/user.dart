@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
   String? uid;
-  String? userName;
+  String? username;
   String? profileURL;
   String? email;
   String? location;
@@ -16,7 +16,7 @@ class User {
 
   User({
     this.uid,
-    this.userName,
+    this.username,
     this.email,
     this.profileURL,
     this.location,
@@ -31,7 +31,7 @@ class User {
   //This function returns a map of data related to the user object
   Map<String, dynamic> getData() => {
         "uid": uid,
-        "userName": userName,
+        "username": username,
         "email": email,
         "profileURL": profileURL,
         "location": location,
@@ -49,7 +49,7 @@ class User {
 
     return User(
       uid: map['uid'],
-      userName: map['userName'],
+      username: map['username'],
       email: map['email'],
       profileURL: map['profileURL'],
       location: map['location'],

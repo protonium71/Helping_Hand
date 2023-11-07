@@ -27,16 +27,22 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20,), 
+        leading: GestureDetector(
+          onTap: (){},
+          child: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20,)
+        ), 
         centerTitle: true,
         title: const Text(
             'Volunteer Events',
             style: TextStyle(
                 color: Color(0xFF1D1517),
-                fontSize: 25,
+                fontSize: 26,
                 // fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
             ),
@@ -48,15 +54,13 @@ class _SearchPageState extends State<SearchPage> {
       body: SafeArea(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: EdgeInsets.symmetric(horizontal: width*0.04, vertical: height*0.01),
             child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 DropdownMenu<String>(
                   textStyle: const TextStyle(fontSize: 18),
                   initialSelection: list.first,
-                  // hintText: 'Search By',
-                  width: 383,
+                  width: width*0.92,
                   onSelected: (String? value) {
                     // This is called when the user selects an item.
                     setState(() {
@@ -71,20 +75,25 @@ class _SearchPageState extends State<SearchPage> {
                   }).toList(),
                 ),
                 SearchBox(value: widget.dropdownValue),
-                const SizedBox(height: 20),
-                if (widget.dropdownValue == list.first) const Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                SizedBox(height: height*0.015),
+                if (widget.dropdownValue == list.first) Column(
                   children: [
-                    Text(
-                      'Recommendations',
-                      style: TextStyle(
-                          color: Color(0xFF1D1517),
-                          fontSize: 25,
-                          // fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                          // height: 0.09,
-                      ),
-                  ),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Recommendations',
+                          style: TextStyle(
+                              color: Color(0xFF1D1517),
+                              fontSize: 25,
+                              // fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              // height: 0.09,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: height*0.005,),
                   ],
                 ) else const SizedBox(height: 0,),
                 if (widget.dropdownValue == list.first) Expanded(

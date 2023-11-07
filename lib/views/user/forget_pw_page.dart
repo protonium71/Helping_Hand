@@ -37,6 +37,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -72,7 +74,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 20,),
+              SizedBox(height: height*0.04,),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 25.0),
                 child: Text(
@@ -83,9 +85,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
+              SizedBox(height: height*0.02,),
               MyTextField(controller: emailController, hintText: 'Email', obscureText: false),
-              const SizedBox(height: 20,),
+              SizedBox(height: height*0.03,),
               MyButton(onTap: passwordReset, text: 'Reset Password'),
             ],
           ),
