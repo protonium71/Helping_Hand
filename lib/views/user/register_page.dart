@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -18,14 +20,16 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   //text editing controllers
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
+  final userNameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final country = TextEditingController();
+  final state = TextEditingController();
+  final city = TextEditingController();
+  bool isLoading = true;
 
   //sign user in method
   void signUserUp() async{
-
     //show loading circle
     showDialog(context: context, builder: (context){
       return const Center(
@@ -33,24 +37,41 @@ class _RegisterPageState extends State<RegisterPage> {
       );
     });
 
-    //try creating the user
-    try{
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text, 
-        password: passwordController.text
-      );
-      //pop the loading circle
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context);
-    } on FirebaseAuthException catch(e){
-      //pop the loading circle
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context);
+    String res;
 
-      //WRONG EMAIL OR PASSWORD
-      if(e.code == 'INVALID_LOGIN_CREDENTIALS'){
-        showErrorMessage('Incorrect login credentials!');
-      }
+    QuerySnapshot query = await FirebaseFirestore.instance.collection('users').where('email',isEqualTo:emailController.text).get();
+    if (query.docs.isEmpty){
+      //signup user
+      // ignore: use_build_context_synchronously
+      res = await AuthService().signUpUser(
+        email: emailController.text,
+        password: passwordController.text,
+        username: userNameController.text,
+        location: city.text,
+        context: context
+      );
+    }
+    else{
+      res = 'user-already-present';
+    }
+
+    if(mounted){
+      Navigator.pop(context);
+    }
+
+    //WRONG EMAIL
+    if(res == 'invalid-email'){
+      showErrorMessage('Invalid Email!');
+    }
+
+    //EMPTY FIELDS
+    if(res == 'Enter email and password'){
+      showErrorMessage('Enter email and password!');
+    }
+
+    //WRONG PASSWORD
+    if(res == 'user-already-present'){
+      showErrorMessage('User already present with given email!');
     }
   }
 
@@ -65,6 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
 
     return  Scaffold(
       backgroundColor: Colors.white,
@@ -77,7 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const Icon(Icons.lock, size: 50,),
         
               //Lets create an account for you
-              SizedBox(height: height*0.03,),
+              SizedBox(height: height*0.01,),
               Text("Lets create an account for you", 
                 style: TextStyle(
                   color: Colors.grey[800],
@@ -86,28 +108,40 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
 
               //firstname textfield
-              SizedBox(height: height*0.03,),
-              MyTextField(controller: firstNameController, hintText: "First Name", obscureText: false, icon: const Icon(Icons.person_2_outlined)),
+              SizedBox(height: height*0.02,),
+              MyTextField(controller: userNameController, hintText: "First Name", obscureText: false, icon: const Icon(Icons.person_2_outlined)),
               
-              //lastname textfield
-              SizedBox(height: height*0.03,),
-              MyTextField(controller: lastNameController, hintText: "Last Name", obscureText: false, icon: const Icon(Icons.person_2_outlined)),
-        
-        
+              //location
+              SizedBox(height: height*0.01,),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: width*0.06),
+                child: CountryStateCityPicker(
+                  country: country,
+                  state: state,
+                  city: city,
+                  dialogColor: Colors.grey.shade200,
+                  textFieldDecoration: InputDecoration(
+                    fillColor: Colors.blueGrey.shade100,
+                    filled: true,
+                    suffixIcon: const Icon(Icons.arrow_downward_rounded), 
+                    border:  const OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(3.0)))),
+                ),
+              ),
+              
               //email textfield
-              SizedBox(height: height*0.03,),
+              SizedBox(height: height*0.01,),
               MyTextField(controller: emailController, hintText: "Email", obscureText: false, icon: const Icon(Icons.email_outlined),),
         
               //password textfield
-              SizedBox(height: height*0.03,),
+              SizedBox(height: height*0.01,),
               MyTextField(controller: passwordController, hintText: "Password", obscureText: true, icon: const Icon(Icons.lock_outline)),
         
-              //sign in button
-              SizedBox(height: height*0.03),
+              //sign up button
+              SizedBox(height: height*0.01),
               MyButton(onTap: signUserUp, text: 'Sign Up',),
         
               //or continue with
-              SizedBox(height: height*0.07),
+              SizedBox(height: height*0.04),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Row(
@@ -123,14 +157,14 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
         
               //google sign in
-              SizedBox(height: height*0.045),
+              SizedBox(height: height*0.035),
               SquareTile(
                 onTap: () => AuthService().signInWithGoogle(),
                 imagePath: 'lib/assets/google.png',
               ),
         
               //not a member sign up
-              SizedBox(height: height*0.045),
+              SizedBox(height: height*0.035),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

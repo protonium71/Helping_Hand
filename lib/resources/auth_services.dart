@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:helping_hand/models/organisation.dart';
 import 'package:helping_hand/models/user.dart' as model;
+import 'package:uuid/uuid.dart';
 
 class AuthService {
   //Instance of firebase authentication
@@ -22,14 +24,36 @@ class AuthService {
     //obtain auth details from request
     gAuth = await gUser!.authentication;
 
+    print(gUser!.email);
+
     //create a new credential for user
-    final credential = GoogleAuthProvider.credential(
+    final cred = GoogleAuthProvider.credential(
       accessToken: gAuth!.accessToken,
       idToken: gAuth!.idToken,
     );
 
+    //if the user is not present in the firestore database add it
+    QuerySnapshot query = await FirebaseFirestore.instance.collection('users').where('email',isEqualTo:gUser!.email.toString()).get();
+    if (query.docs.isEmpty){
+      model.User user = model.User(
+        username: '',
+        email: gUser!.email,
+        uid: const Uuid().v1(), 
+        interests: [], 
+        skills: [], 
+        volunteerHistory: [], 
+        upcomingEvents: [], 
+        following: [],
+      );
+
+      await _firestore
+          .collection('users')
+          .doc(cred.idToken)
+          .set(user.getData());
+    }
+
     //finally, lets sign in
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    return await FirebaseAuth.instance.signInWithCredential(cred);
   }
 
   //google sign out
@@ -53,7 +77,7 @@ class AuthService {
     User currentOrg = _auth.currentUser!;
 
     DocumentSnapshot snapshot =
-        await _firestore.collection('Organisation').doc(currentOrg.uid).get();
+        await _firestore.collection('organisations').doc(currentOrg.uid).get();
 
     return Organisation.getOrganisation(snapshot);
   }
@@ -64,12 +88,13 @@ class AuthService {
     required String password,
     required String username,
     required String location,
+    required BuildContext context,
   }) async {
     String res = "Some error occured";
     try {
-      if (email.isNotEmpty ||
-          password.isNotEmpty ||
-          username.isNotEmpty ||
+      if (email.isNotEmpty &&
+          password.isNotEmpty &&
+          username.isNotEmpty &&
           location.isNotEmpty) {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
@@ -84,19 +109,19 @@ class AuthService {
           upcomingEvents: [], 
           following: [],
         );
-
+        Navigator.pop(context);
         await _firestore
             .collection('users')
             .doc(cred.user!.uid)
             .set(user.getData());
-        await _firestore
-              .collection('type')
-              .doc(cred.user!.uid)
-              .set({'type':"user"});
+        // await _firestore
+        //     .collection('type')
+        //     .doc(cred.user!.uid)
+        //     .set({'type':"user"});
       }
       res = "Sign Up Success";
-    } catch (err) {
-      res = err.toString();
+    } on FirebaseAuthException catch(err) {
+      res = err.code.toString();
     }
     return res;
   }
@@ -164,7 +189,7 @@ class AuthService {
   }) async {
     String res = "Some Error Occurred";
     try {
-      if (email.isNotEmpty || password.isNotEmpty) {
+      if (email.isNotEmpty && password.isNotEmpty) {
         await _auth.signInWithEmailAndPassword(
           email: email,
           password: password,
@@ -173,8 +198,8 @@ class AuthService {
       } else {
         res = "Enter email and password";
       }
-    } catch (err) {
-      res = err.toString();
+    } on FirebaseAuthException catch(err) {
+      res = err.code.toString();
     }
     return res;
   }
@@ -183,15 +208,16 @@ class AuthService {
     String res = "Some Error Occured";
     try {
       await _auth.signOut();
+      await AuthService().signOutWithGoogle();
       res = "Log Out Success";
-    } catch (err) {
-      res = err.toString();
+    } on FirebaseAuthException catch(err) {
+      res = err.code.toString();
     }
     return res;
   }
 
   Future<String> changeState(
-      String key, String value, Map<String, dynamic> userMap) async {
+    String key, String value, Map<String, dynamic> userMap) async {
     String res = "Some Error Occured";
     try {
       userMap[key] = value;
@@ -205,7 +231,7 @@ class AuthService {
   }
 
   Future<String> changeAdminState(
-      String key, String value, Map<String, dynamic> userMap) async {
+    String key, String value, Map<String, dynamic> userMap) async {
     String res = "Some Error Occured";
     try {
       userMap[key] = value;
@@ -216,7 +242,7 @@ class AuthService {
     }
 
     print(res);
-    return res;
+    return res; 
   }
 
   // Future<String> changeComplaintState(
