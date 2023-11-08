@@ -47,3 +47,7 @@ Map<int, Color> color =
 };
 
 MaterialColor colorCustom = MaterialColor(0xFF92A3FD, color);
+
+// String getTextResult(){
+
+// }

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/resources/auth_services.dart';
 import 'package:helping_hand/utilities/event_card.dart';
@@ -12,7 +11,7 @@ class UserFeed extends StatefulWidget {
 
 class _UserFeedState extends State<UserFeed> {
   
-  final CollectionReference _jobs = FirebaseFirestore.instance.collection('events');
+  final CollectionReference _jobs = FirebaseFirestore.instance.collection('jobs');
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
