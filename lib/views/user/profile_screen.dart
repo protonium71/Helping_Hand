@@ -1,5 +1,6 @@
 //import 'package:auth/components/work_history.dart';
 import 'package:flutter/material.dart';
+import 'package:helping_hand/views/user/work_history.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -292,6 +293,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
+
+            //ADDING SOME SPACE
+            SizedBox(
+              height: 40,
+            ),
+            Text("Your Work History", style: TextStyle(
+              fontSize: 25,fontWeight: FontWeight.w500
+            )),
+
+            SizedBox(
+              height: 20,
+            ),
+
+            //for the volunteer work history
+            WorkHistory(),
 
               Container(
                 height: 200,
