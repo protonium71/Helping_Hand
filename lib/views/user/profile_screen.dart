@@ -1,5 +1,6 @@
 //import 'package:auth/components/work_history.dart';
 import 'package:flutter/material.dart';
+import 'package:helping_hand/views/user/work_history.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -234,6 +235,79 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
+
+                     //SPACE
+            SizedBox(
+              height: 50,
+            ),
+            
+      //GRID FOR THE SKILLSET
+            Text("Skills", style: TextStyle(
+              fontSize: 25,fontWeight: FontWeight.w500
+            )),
+            //SPACE
+            SizedBox(
+              height: 10,
+            ),
+      
+            //GRID VIEW FOR THE USER SKILLS
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Container(
+                height: 200,
+                child: GridView.custom(
+                  // padding: EdgeInsets.all(10),
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10, 
+                    ),
+              
+                    childrenDelegate: SliverChildBuilderDelegate((context, index){
+                      String skill = skills[index];
+                      double gridItemWidth = 100;
+                      double gridItemHeight = 100;
+                        return Container(
+                          width: gridItemWidth,
+                          height : gridItemHeight,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(5),
+              
+                          ),
+                        
+                          alignment: Alignment.center,
+                          child: Text(
+                            skill,
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                           padding: EdgeInsets.all(20),
+                        );
+                     
+                    },
+                    childCount: skills.length,
+                    ),
+                ),
+              ),
+            ),
+
+            //ADDING SOME SPACE
+            SizedBox(
+              height: 40,
+            ),
+            Text("Your Work History", style: TextStyle(
+              fontSize: 25,fontWeight: FontWeight.w500
+            )),
+
+            SizedBox(
+              height: 20,
+            ),
+
+            //for the volunteer work history
+            WorkHistory(),
 
               Container(
                 height: 200,
