@@ -47,7 +47,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     ),
                   ),
                   
-                  Text(widget.documentSnapshot['jobname'], style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                  Text(widget.documentSnapshot['eventname'], style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                   Text(widget.documentSnapshot['organisedBy'], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff6379A5))),
                    Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),

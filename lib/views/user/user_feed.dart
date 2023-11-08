@@ -11,7 +11,7 @@ class UserFeed extends StatefulWidget {
 
 class _UserFeedState extends State<UserFeed> {
   
-  final CollectionReference _jobs = FirebaseFirestore.instance.collection('jobs');
+  final CollectionReference _jobs = FirebaseFirestore.instance.collection('events');
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

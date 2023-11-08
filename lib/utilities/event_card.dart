@@ -10,7 +10,7 @@ class EventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    Timestamp t = documentSnapshot['start_time'] as Timestamp;
+    Timestamp t = documentSnapshot['startTime'] as Timestamp;
     DateTime startDate = t.toDate();
     String date = '${startDate.day}/${startDate.month}/${startDate.year}';
 
@@ -46,7 +46,7 @@ class EventCard extends StatelessWidget {
                         children: [
                           SizedBox(height: height*0.005,),
                           Text(
-                            documentSnapshot['title'],
+                            documentSnapshot['eventname'],
                               style: const TextStyle(
                                   color: Color(0xFF1D1517),
                                   fontSize: 15,
@@ -74,7 +74,7 @@ class EventCard extends StatelessWidget {
                             children: [
                               const Icon(Icons.people_alt_outlined, color: Color(0xFF7B6F72),),
                               SizedBox(width: width*0.015,),
-                              Text(documentSnapshot['filled_spots'].toString(), style: const TextStyle(fontSize: 15, color: Color(0xFF7B6F72))),
+                              Text(documentSnapshot['signedSpots'].toString(), style: const TextStyle(fontSize: 15, color: Color(0xFF7B6F72))),
                             ],
                           ),
                         ],

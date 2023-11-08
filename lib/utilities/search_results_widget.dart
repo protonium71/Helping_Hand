@@ -16,7 +16,7 @@ class SearchResultsWidget extends StatefulWidget {
 }
 
 class _SearchResultsWidgetState extends State<SearchResultsWidget> {
-  final CollectionReference _jobs = FirebaseFirestore.instance.collection('jobs'); 
+  final CollectionReference _jobs = FirebaseFirestore.instance.collection('events'); 
   String textarea_value = "";
   
   @override
