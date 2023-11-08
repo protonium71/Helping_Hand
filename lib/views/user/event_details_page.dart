@@ -1,17 +1,15 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class UserFeedDetail extends StatefulWidget {
+class EventDetailsPage extends StatefulWidget {
   final DocumentSnapshot documentSnapshot;
-  const UserFeedDetail( {super.key, required this.documentSnapshot});
+  const EventDetailsPage( {super.key, required this.documentSnapshot});
   
   @override
-  State<UserFeedDetail> createState() => _UserFeedDetailState();
+  State<EventDetailsPage> createState() => _EventDetailsPageState();
 }
 
-class _UserFeedDetailState extends State<UserFeedDetail> {
+class _EventDetailsPageState extends State<EventDetailsPage> {
   
 
   @override

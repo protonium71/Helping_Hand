@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:helping_hand/utilities/utils.dart';
+import 'package:helping_hand/utilities/event_card.dart';
+import 'package:helping_hand/utilities/search_box.dart';
 
 const List<String> list = <String>['Recommendations', 'Location', 'Date', 'Cause', 'Organisation'];
 
@@ -102,7 +103,8 @@ class _SearchPageState extends State<SearchPage> {
                     // physics: const NeverScrollableScrollPhysics(),
                     itemCount: 10,
                     itemBuilder: (BuildContext context, int index) {
-                      return const EventCard();
+                      var documentSnapshot;
+                      return  EventCard(documentSnapshot: documentSnapshot);
                     }
                   ),
                 ) else const SizedBox(height: 0,),

@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:helping_hand/views/user/home_page.dart';
 import 'package:helping_hand/views/user/login_or_register.dart';
 import 'package:helping_hand/views/user/user_feed.dart';
 

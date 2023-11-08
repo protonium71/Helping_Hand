@@ -1,10 +1,10 @@
-// This class is used as the Job model class
+// This class is used as the Event model class
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Job {
+class Event {
   String uid;
-  String jid;
-  String jobname;
+  String eventid;
+  String eventname;
   String profileURL;
   String organisedBy;
   String location;
@@ -15,10 +15,10 @@ class Job {
   String signedSpots;
   String cause;
 
-  Job({
+  Event({
     required this.uid,
-    required this.jid,
-    required this.jobname,
+    required this.eventid,
+    required this.eventname,
     required this.profileURL,
     required this.location,
     required this.organisedBy,
@@ -30,11 +30,11 @@ class Job {
     required this.cause,
   });
 
-  //This function returns a map of data related to the Job object
+  //This function returns a map of data related to the Event object
   Map<String, dynamic> getData() => {
         "uid": uid,
-        "jid": jid,
-        "jobname": jobname,
+        "eventid": eventid,
+        "eventname": eventname,
         "profileURL": profileURL,
         "location": location,
         "organisedBy": organisedBy,
@@ -46,14 +46,14 @@ class Job {
         "cause": cause,
       };
 
-  //This method returns a Job instance based on the document snapshot given by firebase authentication
-  static Job getUser(DocumentSnapshot snap) {
+  //This method returns a Event instance based on the document snapshot given by firebase authentication
+  static Event getUser(DocumentSnapshot snap) {
     Map<String, dynamic> map = snap.data() as Map<String, dynamic>;
 
-    return Job(
+    return Event(
       uid: map['uid'],
-      jid: map['jid'],
-      jobname: map['jobname'],
+      eventid: map['eventid'],
+      eventname: map['eventname'],
       profileURL: map['profileURL'],
       location: map['location'],
       organisedBy: map['organisedBy'],

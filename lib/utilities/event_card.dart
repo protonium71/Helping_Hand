@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:helping_hand/views/user/user_feed_deails.dart';
+import 'package:helping_hand/views/user/event_details_page.dart';
 
 class EventCard extends StatelessWidget {
   final DocumentSnapshot documentSnapshot;
@@ -10,10 +10,9 @@ class EventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    String title = documentSnapshot['title'];
     Timestamp t = documentSnapshot['start_time'] as Timestamp;
-    DateTime start_date = t.toDate();
-    String date = '${start_date.day}/${start_date.month}/${start_date.year}';
+    DateTime startDate = t.toDate();
+    String date = '${startDate.day}/${startDate.month}/${startDate.year}';
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: height*0.01),
@@ -98,7 +97,7 @@ class EventCard extends StatelessWidget {
                         child: GestureDetector(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                            UserFeedDetail(documentSnapshot: documentSnapshot)));
+                            EventDetailsPage(documentSnapshot: documentSnapshot)));
                           },
                           child: const Center(
                             child: Text('Details', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),),
