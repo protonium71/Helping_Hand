@@ -20,12 +20,12 @@ class EditProfilePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
-          },
-          child: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20,)
-        ), 
+        // leading: GestureDetector(
+        //   // onTap: (){
+        //   //   Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+        //   // },
+        //   child: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20,)
+        // ), 
         centerTitle: true,
         title:  const Text(
           'Edit Profile',

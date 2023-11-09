@@ -8,20 +8,21 @@ class InterestsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Center(
         child: SafeArea(
           child: Column(
             children: [
-              const SizedBox(height: 70,),
+               SizedBox(height: height * 0.05,),
               const Text('Select your interests', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color(0xff323459)),),
-              const SizedBox(height: 7,),
+              SizedBox(height: height * 0.005,),
               const Text('You can choose multiple categories', style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),),
-              const SizedBox(height: 20,),
+               SizedBox(height: height * 0.02,),
               Container(
-                height: 520,
+                height: height * 0.57,
                 child: GridView.builder(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(15),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
                     crossAxisSpacing: 10,
@@ -34,14 +35,14 @@ class InterestsPage extends StatelessWidget {
                 ),
               ),
               //continue button
-              const SizedBox(height: 10,),
+              SizedBox(height: height * 0.02,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: MyButton(onTap: () {}, text: 'Continue', color: const Color(0xff6379A5),),
               ),
 
               //skip button
-              const SizedBox(height: 20,),
+               SizedBox(height: height * 0.02,),
               GestureDetector(
                 onTap: (){},
                 child: Container(
