@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:helping_hand/views/user/profile_page.dart';
 import 'package:helping_hand/views/user/search_page.dart';
 import 'package:helping_hand/views/user/user_feed.dart';
 import 'package:get/get.dart';
@@ -86,6 +87,6 @@ class NavigationController extends GetxController{
     SearchPage(),
     Container(color: Colors.orange,),
     Container(color: Colors.purple,),
-    Container(color: Colors.red,)
+    ProfilePage(),
   ];
 }
