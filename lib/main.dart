@@ -4,6 +4,7 @@ import 'package:helping_hand/firebase_options.dart';
 import 'package:helping_hand/utilities/utils.dart';
 import 'package:helping_hand/resources/auth_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:helping_hand/views/user/navigation.dart';
 import 'package:helping_hand/views/user/search_page.dart';
 import 'package:helping_hand/views/user/user_feed.dart';
 //import 'package:helping_hand/views/user/user_feed.dart';
@@ -27,7 +28,7 @@ class MainApp extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
       ),
       debugShowCheckedModeBanner: false,
-      home: SearchPage(),
+      home: const AuthPage(),
     );
   }
 }

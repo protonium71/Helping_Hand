@@ -14,7 +14,8 @@ dependencies:
   google_fonts: ^6.1.0
   country_state_city_pro: ^0.0.6
   google_nav_bar: ^5.0.6
-  uuid: ^3.0.7
+  uuid: ^4.2.1
+  get: ^4.6.5
   flutter:
     sdk: flutter
 
