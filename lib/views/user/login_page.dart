@@ -148,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: height*0.06),
               SquareTile(
                 onTap: () => AuthService().signInWithGoogle(),
-                imagePath: 'lib/assets/google.png',
+                imagePath: 'lib/assets/images/google.png',
               ),
         
               //not a member sign up

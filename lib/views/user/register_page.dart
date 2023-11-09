@@ -160,7 +160,7 @@ class _RegisterPageState extends State<RegisterPage> {
               SizedBox(height: height*0.035),
               SquareTile(
                 onTap: () => AuthService().signInWithGoogle(),
-                imagePath: 'lib/assets/google.png',
+                imagePath: 'lib/assets/images/google.png',
               ),
         
               //not a member sign up
