@@ -22,7 +22,7 @@ class _SignedEventsPageState extends State<SignedEventsPage> {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+            Navigator.pop(context);
           }, 
           child: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20,),
         ), 

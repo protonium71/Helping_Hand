@@ -7,12 +7,12 @@ class User {
   String? profileURL;
   String? email;
   String? location;
-  List<String> interests = [];
-  List<String> skills = [];
-  List<String> volunteerHistory = [];  // list of job ids
-  List<String> upcomingEvents = [];  // list of job ids
-  List<String> following = [];  // list of organisation ids
-  String? volunteeringHours;
+  List<dynamic>? interests;
+  List<dynamic>? skills;
+  List<dynamic>? volunteerHistory;  // list of job ids
+  List<dynamic>? upcomingEvents;  // list of job ids
+  List<dynamic>? following;  // list of organisation ids
+  int? volunteeringHours;
 
   User({
     this.uid,
@@ -20,11 +20,11 @@ class User {
     this.email,
     this.profileURL,
     this.location,
-    required this.interests,
-    required this.skills,
-    required this.volunteerHistory,
-    required this.upcomingEvents,
-    required this.following,
+    this.interests,
+    this.skills,
+    this.volunteerHistory,
+    this.upcomingEvents,
+    this.following,
     this.volunteeringHours,
   });
 

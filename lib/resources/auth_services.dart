@@ -18,46 +18,57 @@ class AuthService {
 
   //google sign in
   signInWithGoogle() async{
-    //begin interactive sign in process
-    gUser = await _googleSignIn.signIn();
+    try{
+        //begin interactive sign in process
+      gUser = await _googleSignIn.signIn();
 
-    //obtain auth details from request
-    gAuth = await gUser!.authentication;
+      //obtain auth details from request
+      gAuth = await gUser!.authentication;
 
-    print(gUser!.email);
+      print('hhhhhhhhhhhhhhhhhhhhhhhhhhh');
+      print(gUser!.email);
 
-    //create a new credential for user
-    final cred = GoogleAuthProvider.credential(
-      accessToken: gAuth!.accessToken,
-      idToken: gAuth!.idToken,
-    );
-
-    //if the user is not present in the firestore database add it
-    QuerySnapshot query = await FirebaseFirestore.instance.collection('users').where('email',isEqualTo:gUser!.email.toString()).get();
-    if (query.docs.isEmpty){
-      model.User user = model.User(
-        username: '',
-        email: gUser!.email,
-        uid: const Uuid().v1(), 
-        interests: [], 
-        skills: [], 
-        volunteerHistory: [], 
-        upcomingEvents: [], 
-        following: [],
+      //create a new credential for user
+      final cred = GoogleAuthProvider.credential(
+        accessToken: gAuth!.accessToken,
+        idToken: gAuth!.idToken,
       );
 
-      await _firestore
-          .collection('users')
-          .doc(cred.idToken)
-          .set(user.getData());
-    }
+      await FirebaseAuth.instance.signInWithCredential(cred);
+      //if the user is not present in the firestore database add it
+      QuerySnapshot query = await FirebaseFirestore.instance.collection('users').where('email',isEqualTo:gUser!.email.toString()).get();
+      if (query.docs.isEmpty){
+        String uid = const Uuid().v1();
+        model.User user = model.User(
+          username: '',
+          email: gUser!.email,
+          location: '',
+          profileURL: '',
+          volunteeringHours: 0,
+          uid: _auth.currentUser!.uid.toString(), 
+          interests: [], 
+          skills: [], 
+          volunteerHistory: [], 
+          upcomingEvents: [], 
+          following: [],
+        );
 
-    //finally, lets sign in
-    return await FirebaseAuth.instance.signInWithCredential(cred);
+        await _firestore
+            .collection('users')
+            .doc(_auth.currentUser!.uid.toString())
+            .set(user.getData());
+      }
+
+      //finally, lets sign in
+      
+    } on FirebaseAuthException catch(e){
+      print(e.code);
+    }
   }
 
   //google sign out
   signOutWithGoogle() async{
+    // print(gUser!.email);
     // Sign out with google
     await _googleSignIn.signOut();
   }
@@ -68,6 +79,8 @@ class AuthService {
 
     DocumentSnapshot snapshot =
         await _firestore.collection('users').doc(currentUser.uid).get();
+
+    // print(currentUser.uid);
 
     return model.User.getUser(snapshot);
   }
@@ -103,6 +116,9 @@ class AuthService {
           username: username,
           email: email,
           uid: cred.user!.uid, 
+          location: location,
+          profileURL: '',
+          volunteeringHours: 0,
           interests: [], 
           skills: [], 
           volunteerHistory: [], 
@@ -212,6 +228,7 @@ class AuthService {
       res = "Log Out Success";
     } on FirebaseAuthException catch(err) {
       res = err.code.toString();
+      print(res);
     }
     return res;
   }
