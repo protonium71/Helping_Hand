@@ -10,6 +10,7 @@ import 'package:helping_hand/views/user/profile_screen.dart';
 import 'package:helping_hand/views/user/search_page.dart';
 import 'package:helping_hand/views/user/signed_events_page.dart';
 import 'package:helping_hand/views/user/user_feed.dart';
+//import 'package:helping_hand/views/user/user_feed.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

@@ -14,16 +14,16 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    var spots_rem = widget.documentSnapshot['total_spots'] - widget.documentSnapshot['filled_spots'];
-    Timestamp t1 = widget.documentSnapshot['start_time'] ;
-    Timestamp t2 = widget.documentSnapshot['end_time'] ;
+    var spots_rem = widget.documentSnapshot['totalSpots'] - widget.documentSnapshot['signedSpots'];
+    Timestamp t1 = widget.documentSnapshot['startTime'] ;
+    Timestamp t2 = widget.documentSnapshot['endTime'] ;
     
     DateTime s_date = t1.toDate();
     DateTime e_date = t2.toDate();
     print(s_date.toString());
     print(s_date.hour);
     
-    String date = s_date.day.toString() + '/' + s_date.month.toString() + '/' + s_date.year.toString();
+    String date = '${s_date.day}/${s_date.month}/${s_date.year}';
     
     return  Scaffold(
       body: SafeArea(
@@ -47,13 +47,13 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     ),
                   ),
                   
-                  Text(widget.documentSnapshot['title'], style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
-                  Text(widget.documentSnapshot['organisation'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff6379A5))),
+                  Text(widget.documentSnapshot['eventname'], style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                  Text(widget.documentSnapshot['organisedBy'], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff6379A5))),
                    Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
                     child: Row(
                       children: [
-                        Text(spots_rem.toString()  + ' spots remaining..', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff878787))),
+                        Text('$spots_rem spots remaining..', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff878787))),
                       ],
                     ),
                   ),
@@ -68,12 +68,12 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric( horizontal: 50),
+                    padding: const EdgeInsets.symmetric( horizontal: 50),
                     child: Row(
                       children: [
-                        Text(date.toString(), style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                        SizedBox(width: 50,),
-                        Text(s_date.hour.toString()+':'+s_date.minute.toString()+'--'+e_date.hour.toString()+':'+e_date.minute.toString(), style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                        Text(date.toString(), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                        const SizedBox(width: 50,),
+                        Text('${s_date.hour}:${s_date.minute}--${e_date.hour}:${e_date.minute}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
@@ -92,10 +92,10 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric( horizontal: 50),
+                    padding: const EdgeInsets.symmetric( horizontal: 50),
                     child: Row(
                       children: [
-                        Text(widget.documentSnapshot['location'].toString(), style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                        Text(widget.documentSnapshot['location'].toString(), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
@@ -114,7 +114,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   ),
                   const SizedBox(height: 5,),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 50),
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: Text(widget.documentSnapshot['details']),
                   
                   )
@@ -122,17 +122,15 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               ),
                       ),
             ),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             ElevatedButton(
             
-              style: ElevatedButton.styleFrom(backgroundColor: Color(0xffBBBBD6),),
+              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xffBBBBD6),),
               onPressed: (){}, 
-              child: Text('Sign up', style: TextStyle(color: Colors.black),)),
+              child: const Text('Sign up', style: TextStyle(color: Colors.black),)),
         ]
         ),
-      ),
-      
-      
+      ), 
     );
   }
 }
