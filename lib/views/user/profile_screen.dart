@@ -1,5 +1,6 @@
 //import 'package:auth/components/work_history.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:helping_hand/views/user/work_history.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -39,21 +40,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ];
     return Scaffold(
         appBar: AppBar(
-          // title: Text('Edit Profile'),
-          title: Text("Update Profile",
-              style: TextStyle(fontSize: 23, fontWeight: FontWeight.w400)),
+          leading: GestureDetector(
+          onTap: (){},
+          child: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20,)
+        ), 
+          centerTitle: true,
+          title:  Text(
+            'Profile',
+            style: TextStyle(
+                color: Color(0xFF1D1517),
+                fontSize: 26,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+            ),
+        ),
 
           titleTextStyle: TextStyle(color: Colors.black87, fontSize: 28),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
-
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.green,
-            ),
-            onPressed: () {},
-          ),
         ),
         body: SingleChildScrollView(
           child: Column(

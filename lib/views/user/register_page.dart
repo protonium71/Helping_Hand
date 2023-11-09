@@ -91,91 +91,93 @@ class _RegisterPageState extends State<RegisterPage> {
     return  Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          children: [
-            //logo
-            SizedBox(height: height*0.05,),
-            const Icon(Icons.lock, size: 50,),
-                
-            //Lets create an account for you
-            SizedBox(height: height*0.01,),
-            Text("Lets create an account for you", 
-              style: TextStyle(
-                color: Colors.grey[800],
-                fontSize: 20,
-              ),
-            ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              //logo
+              SizedBox(height: height*0.05,),
+              const Icon(Icons.lock, size: 50,),
         
-            //firstname textfield
-            SizedBox(height: height*0.02,),
-            MyTextField(controller: userNameController, hintText: "First Name", obscureText: false, icon: const Icon(Icons.person_2_outlined)),
-            
-            //location
-            SizedBox(height: height*0.01,),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: width*0.06),
-              child: CountryStateCityPicker(
-                country: country,
-                state: state,
-                city: city,
-                dialogColor: Colors.grey.shade200,
-                textFieldDecoration: InputDecoration(
-                  fillColor: Colors.blueGrey.shade100,
-                  filled: true,
-                  suffixIcon: const Icon(Icons.arrow_downward_rounded), 
-                  border:  const OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(3.0)))),
-              ),
-            ),
-            
-            //email textfield
-            SizedBox(height: height*0.01,),
-            MyTextField(controller: emailController, hintText: "Email", obscureText: false, icon: const Icon(Icons.email_outlined),),
-                
-            //password textfield
-            SizedBox(height: height*0.01,),
-            MyTextField(controller: passwordController, hintText: "Password", obscureText: true, icon: const Icon(Icons.lock_outline)),
-                
-            //sign up button
-            SizedBox(height: height*0.01),
-            MyButton(onTap: signUserUp, text: 'Sign Up',),
-                
-            //or continue with
-            SizedBox(height: height*0.02),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: Row(
-                children: [
-                  Expanded(child: Divider(thickness: 0.5, color: Colors.grey[400],)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text("Or continue with", style: TextStyle(color: Colors.grey[700]),),
-                  ),
-                  Expanded(child: Divider(thickness: 0.5, color: Colors.grey[400],)),
-                ],
-              ),
-            ),
-                
-            //google sign in
-            SizedBox(height: height*0.02),
-            SquareTile(
-              onTap: () => AuthService().signInWithGoogle(),
-              imagePath: 'lib/assets/google.png',
-            ),
-                
-            //not a member sign up
-            SizedBox(height: height*0.02),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Already have an account?', style: TextStyle(color: Colors.grey[700]),),
-                const SizedBox(width: 4,),
-                GestureDetector(
-                  onTap: widget.onTap,
-                  child: const Text('Login Now', style: TextStyle(color: Color(0xff6379A5), fontWeight: FontWeight.bold),)
+              //Lets create an account for you
+              SizedBox(height: height*0.01,),
+              Text("Lets create an account for you", 
+                style: TextStyle(
+                  color: Colors.grey[800],
+                  fontSize: 20,
                 ),
-              ],
-            )
-          ],
+              ),
+
+              //firstname textfield
+              SizedBox(height: height*0.02,),
+              MyTextField(controller: userNameController, hintText: "First Name", obscureText: false, icon: const Icon(Icons.person_2_outlined)),
+              
+              //location
+              SizedBox(height: height*0.01,),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: width*0.06),
+                child: CountryStateCityPicker(
+                  country: country,
+                  state: state,
+                  city: city,
+                  dialogColor: Colors.grey.shade200,
+                  textFieldDecoration: InputDecoration(
+                    fillColor: Colors.blueGrey.shade100,
+                    filled: true,
+                    suffixIcon: const Icon(Icons.arrow_downward_rounded), 
+                    border:  const OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(3.0)))),
+                ),
+              ),
+              
+              //email textfield
+              SizedBox(height: height*0.01,),
+              MyTextField(controller: emailController, hintText: "Email", obscureText: false, icon: const Icon(Icons.email_outlined),),
+        
+              //password textfield
+              SizedBox(height: height*0.01,),
+              MyTextField(controller: passwordController, hintText: "Password", obscureText: true, icon: const Icon(Icons.lock_outline)),
+        
+              //sign up button
+              SizedBox(height: height*0.01),
+              MyButton(onTap: signUserUp, text: 'Sign Up',),
+        
+              //or continue with
+              SizedBox(height: height*0.04),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Row(
+                  children: [
+                    Expanded(child: Divider(thickness: 0.5, color: Colors.grey[400],)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text("Or continue with", style: TextStyle(color: Colors.grey[700]),),
+                    ),
+                    Expanded(child: Divider(thickness: 0.5, color: Colors.grey[400],)),
+                  ],
+                ),
+              ),
+        
+              //google sign in
+              SizedBox(height: height*0.035),
+              SquareTile(
+                onTap: () => AuthService().signInWithGoogle(),
+                imagePath: 'lib/assets/images/google.png',
+              ),
+        
+              //not a member sign up
+              SizedBox(height: height*0.035),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Already have an account?', style: TextStyle(color: Colors.grey[700]),),
+                  const SizedBox(width: 4,),
+                  GestureDetector(
+                    onTap: widget.onTap,
+                    child: const Text('Login Now', style: TextStyle(color: Color(0xff6379A5), fontWeight: FontWeight.bold),)
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

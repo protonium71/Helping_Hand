@@ -4,8 +4,11 @@ import 'package:helping_hand/firebase_options.dart';
 import 'package:helping_hand/utilities/utils.dart';
 import 'package:helping_hand/resources/auth_page.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:helping_hand/views/user/navigation.dart';
+import 'package:helping_hand/views/user/edit_profile_page.dart';
+import 'package:helping_hand/views/user/profile_page.dart';
+import 'package:helping_hand/views/user/profile_screen.dart';
 import 'package:helping_hand/views/user/search_page.dart';
+import 'package:helping_hand/views/user/signed_events_page.dart';
 import 'package:helping_hand/views/user/user_feed.dart';
 //import 'package:helping_hand/views/user/user_feed.dart';
 
@@ -25,10 +28,10 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: colorCustom,
-        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
+        fontFamily: 'Poppins'
       ),
       debugShowCheckedModeBanner: false,
-      home: const AuthPage(),
+      home: EditProfilePage(),
     );
   }
 }
