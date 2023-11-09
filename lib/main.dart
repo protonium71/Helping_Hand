@@ -1,15 +1,18 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/firebase_options.dart';
+import 'package:helping_hand/providers/user_provider.dart';
 import 'package:helping_hand/utilities/utils.dart';
 import 'package:helping_hand/resources/auth_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:helping_hand/views/user/edit_profile_page.dart';
+import 'package:helping_hand/views/user/navigation.dart';
 import 'package:helping_hand/views/user/profile_page.dart';
 import 'package:helping_hand/views/user/profile_screen.dart';
 import 'package:helping_hand/views/user/search_page.dart';
 import 'package:helping_hand/views/user/signed_events_page.dart';
 import 'package:helping_hand/views/user/user_feed.dart';
+import 'package:provider/provider.dart';
 //import 'package:helping_hand/views/user/user_feed.dart';
 
 void main() async{
@@ -25,13 +28,20 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: colorCustom,
-        fontFamily: 'Poppins'
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => UserProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          primarySwatch: colorCustom,
+          fontFamily: 'Poppins'
+        ),
+        debugShowCheckedModeBanner: false,
+        home: AuthPage(),
       ),
-      debugShowCheckedModeBanner: false,
-      home: EditProfilePage(),
     );
   }
 }

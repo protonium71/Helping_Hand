@@ -114,9 +114,9 @@ class _LoginPageState extends State<LoginPage> {
                         )
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       "Forgot password?",
-                      style: TextStyle(color: Colors.grey[600], fontSize: 15,),
+                      style: TextStyle(color: Color(0xff6379A5), fontSize: 15,),
                     ),
                   ),
                 ],
@@ -125,7 +125,10 @@ class _LoginPageState extends State<LoginPage> {
                 
             //sign in button
             SizedBox(height: height*0.075),
-            MyButton(onTap: signUserIn, text: 'Sign In',),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: MyButton(onTap: signUserIn, text: 'Sign In',),
+            ),
                 
             //or continue with
             SizedBox(height: height*0.06),
@@ -147,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: height*0.04),
             SquareTile(
               onTap: () => AuthService().signInWithGoogle(),
-              imagePath: 'lib/assets/google.png',
+              imagePath: 'lib/assets/images/google.png',
             ),
                 
             //not a member sign up

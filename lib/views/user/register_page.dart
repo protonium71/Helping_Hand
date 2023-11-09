@@ -121,7 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   city: city,
                   dialogColor: Colors.grey.shade200,
                   textFieldDecoration: InputDecoration(
-                    fillColor: Colors.blueGrey.shade100,
+                    fillColor: Colors.grey.shade200,
                     filled: true,
                     suffixIcon: const Icon(Icons.arrow_downward_rounded), 
                     border:  const OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(3.0)))),
@@ -137,11 +137,14 @@ class _RegisterPageState extends State<RegisterPage> {
               MyTextField(controller: passwordController, hintText: "Password", obscureText: true, icon: const Icon(Icons.lock_outline)),
         
               //sign up button
-              SizedBox(height: height*0.01),
-              MyButton(onTap: signUserUp, text: 'Sign Up',),
+              SizedBox(height: height*0.02),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: MyButton(onTap: signUserUp, text: 'Sign Up',),
+              ),
         
               //or continue with
-              SizedBox(height: height*0.04),
+              SizedBox(height: height*0.02),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Row(

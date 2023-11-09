@@ -1,10 +1,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:helping_hand/providers/user_provider.dart';
 import 'package:helping_hand/views/user/profile_page.dart';
 import 'package:helping_hand/views/user/search_page.dart';
+import 'package:helping_hand/views/user/temp.dart';
 import 'package:helping_hand/views/user/user_feed.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
@@ -24,7 +27,16 @@ class _NavigationState extends State<Navigation> {
   //   // ProfileScreen(),
   // ];
 
+  @override
+  void initState() {
+    super.initState();
+    loadUserData();
+  }
 
+  loadUserData() async {
+    UserProvider userProvider = Provider.of(context, listen: false);
+    await userProvider.refreshUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +98,7 @@ class NavigationController extends GetxController{
     const UserFeed(),
     SearchPage(),
     Container(color: Colors.orange,),
-    Container(color: Colors.purple,),
-    ProfilePage(),
+    const Temp(),
+    const ProfilePage(),
   ];
 }
