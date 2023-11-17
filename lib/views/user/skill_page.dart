@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:helping_hand/utilities/skill_card.dart';
-import 'package:helping_hand/utilities/utils.dart';
+import 'package:helping_hand/widgets/skill_card.dart';
+import 'package:helping_hand/widgets/utils.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 
 class SkillPage extends StatelessWidget {
