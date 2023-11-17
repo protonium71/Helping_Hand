@@ -17,16 +17,22 @@ class AuthService {
   GoogleSignInAuthentication? gAuth;
 
   //google sign in
-  signInWithGoogle() async{
+  signInWithGoogle({required BuildContext context}) async{
     try{
-        //begin interactive sign in process
+      //show loading circle
+      showDialog(context: context, builder: (context){
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      });
+
+      //begin interactive sign in process
       gUser = await _googleSignIn.signIn();
 
       //obtain auth details from request
       gAuth = await gUser!.authentication;
 
-      print('hhhhhhhhhhhhhhhhhhhhhhhhhhh');
-      print(gUser!.email);
+      print(gUser!.id);
 
       //create a new credential for user
       final cred = GoogleAuthProvider.credential(
@@ -34,11 +40,14 @@ class AuthService {
         idToken: gAuth!.idToken,
       );
 
-      await FirebaseAuth.instance.signInWithCredential(cred);
       //if the user is not present in the firestore database add it
       QuerySnapshot query = await FirebaseFirestore.instance.collection('users').where('email',isEqualTo:gUser!.email.toString()).get();
+      
       if (query.docs.isEmpty){
-        String uid = const Uuid().v1();
+        await FirebaseAuth.instance.signInWithCredential(cred).then((value) {
+          Navigator.pop(context);
+        });
+
         model.User user = model.User(
           username: '',
           email: gUser!.email,
@@ -51,6 +60,7 @@ class AuthService {
           volunteerHistory: [], 
           upcomingEvents: [], 
           following: [],
+          ftoken: '',
         );
 
         await _firestore
@@ -60,6 +70,11 @@ class AuthService {
       }
 
       //finally, lets sign in
+      else{
+        await FirebaseAuth.instance.signInWithCredential(cred).then((value) {
+          Navigator.pop(context);
+        });
+      }
       
     } on FirebaseAuthException catch(e){
       print(e.code);
@@ -77,8 +92,7 @@ class AuthService {
   Future<model.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
 
-    DocumentSnapshot snapshot =
-        await _firestore.collection('users').doc(currentUser.uid).get();
+    DocumentSnapshot snapshot = await _firestore.collection('users').doc(currentUser.uid).get();
 
     // print(currentUser.uid);
 
@@ -89,8 +103,7 @@ class AuthService {
   Future<Organisation> getOrganisationDetails() async {
     User currentOrg = _auth.currentUser!;
 
-    DocumentSnapshot snapshot =
-        await _firestore.collection('organisations').doc(currentOrg.uid).get();
+    DocumentSnapshot snapshot = await _firestore.collection('organisations').doc(currentOrg.uid).get();
 
     return Organisation.getOrganisation(snapshot);
   }
@@ -109,27 +122,35 @@ class AuthService {
           password.isNotEmpty &&
           username.isNotEmpty &&
           location.isNotEmpty) {
-        UserCredential cred = await _auth.createUserWithEmailAndPassword(
-            email: email, password: password);
+        await _auth.createUserWithEmailAndPassword(
+            email: email, password: password).then((value) async {
+              
 
-        model.User user = model.User(
-          username: username,
-          email: email,
-          uid: cred.user!.uid, 
-          location: location,
-          profileURL: '',
-          volunteeringHours: 0,
-          interests: [], 
-          skills: [], 
-          volunteerHistory: [], 
-          upcomingEvents: [], 
-          following: [],
-        );
-        Navigator.pop(context);
-        await _firestore
-            .collection('users')
-            .doc(cred.user!.uid)
-            .set(user.getData());
+              model.User user = model.User(
+                username: username,
+                email: email,
+                uid: _auth.currentUser!.uid, 
+                location: location,
+                profileURL: '',
+                volunteeringHours: 0,
+                interests: [], 
+                skills: [], 
+                volunteerHistory: [], 
+                upcomingEvents: [], 
+                following: [],
+                ftoken: '',
+              );
+              Navigator.pop(context);
+              await _firestore
+                  .collection('users')
+                  .doc(_auth.currentUser!.uid)
+                  .set(user.getData());
+              
+            });
+
+        
+
+        
         // await _firestore
         //     .collection('type')
         //     .doc(cred.user!.uid)

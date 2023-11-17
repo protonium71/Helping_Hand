@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:helping_hand/utilities/event_card.dart';
+import 'package:helping_hand/widgets/event_card.dart';
 const List<String> list = <String>['Recommendations', 'Location', 'Date', 'Cause', 'Organisation'];
 
 // ignore: must_be_immutable

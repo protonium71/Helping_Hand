@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:helping_hand/widgets/interest_card.dart';
-import 'package:helping_hand/widgets/my_button.dart';
+import 'package:helping_hand/widgets/skill_card.dart';
 import 'package:helping_hand/widgets/utils.dart';
+import 'package:helping_hand/widgets/my_button.dart';
 
-class InterestsPage extends StatelessWidget {
-  const InterestsPage({super.key});
+class SkillPage extends StatelessWidget {
+  const SkillPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class InterestsPage extends StatelessWidget {
           child: Column(
             children: [
                SizedBox(height: height * 0.05,),
-              const Text('Select your interests', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color(0xff323459)),),
+              const Text('Select your Skills', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color(0xff323459)),),
               SizedBox(height: height * 0.005,),
               const Text('You can choose multiple categories', style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),),
                SizedBox(height: height * 0.02,),
@@ -30,7 +30,7 @@ class InterestsPage extends StatelessWidget {
                   ),
                   itemCount: cardList.length,
                   itemBuilder: (BuildContext context, int index){
-                    return InterestCard(text: cardList[index].text!, icon: cardList[index].icon!, size: cardList[index].size!,);
+                    return SkillCard(text: skillCard[index].text!, icon: skillCard[index].icon!, size: skillCard[index].size!,);
                   }
                 ),
               ),
