@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:helping_hand/utilities/my_button.dart';
-import 'package:helping_hand/utilities/my_textField.dart';
+import 'package:helping_hand/widgets/my_button.dart';
+import 'package:helping_hand/widgets/my_textField.dart';
 import 'package:helping_hand/resources/auth_page.dart';
 
 class ForgetPasswordPage extends StatefulWidget {

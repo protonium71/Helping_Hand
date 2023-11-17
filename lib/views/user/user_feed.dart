@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/resources/auth_services.dart';
-import 'package:helping_hand/utilities/event_card.dart';
+import 'package:helping_hand/resources/notifications.dart';
+import 'package:helping_hand/widgets/event_card.dart';
 
 class UserFeed extends StatefulWidget {
    const UserFeed({super.key});
@@ -10,6 +11,12 @@ class UserFeed extends StatefulWidget {
 }
 
 class _UserFeedState extends State<UserFeed> {
+
+  @override
+  void initState() {
+    super.initState();
+    Notifications.getFirebaseMessagingToken();
+  }
   
   final CollectionReference _jobs = FirebaseFirestore.instance.collection('events');
   @override

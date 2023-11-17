@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:helping_hand/utilities/event_card.dart';
+import 'package:helping_hand/widgets/event_card.dart';
 import 'package:helping_hand/views/user/profile_page.dart';
 
 class SignedEventsPage extends StatefulWidget {
