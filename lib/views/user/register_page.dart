@@ -4,9 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/resources/auth_services.dart';
-import 'package:helping_hand/utilities/my_button.dart';
-import 'package:helping_hand/utilities/my_textField.dart';
-import 'package:helping_hand/utilities/square_tile.dart';
+import 'package:helping_hand/widgets/my_button.dart';
+import 'package:helping_hand/widgets/my_textField.dart';
+import 'package:helping_hand/widgets/square_tile.dart';
 
 // ignore: must_be_immutable
 class RegisterPage extends StatefulWidget {
@@ -162,7 +162,7 @@ class _RegisterPageState extends State<RegisterPage> {
               //google sign in
               SizedBox(height: height*0.035),
               SquareTile(
-                onTap: () => AuthService().signInWithGoogle(),
+                onTap: () => AuthService().signInWithGoogle(context: context),
                 imagePath: 'lib/assets/images/google.png',
               ),
         
