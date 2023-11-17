@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:helping_hand/widgets/my_textField.dart';
 import 'package:helping_hand/views/user/interests_page.dart';
-import 'package:helping_hand/views/user/profile_page.dart';
 
 class EditProfilePage extends StatelessWidget {
   final controller = TextEditingController();
