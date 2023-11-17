@@ -11,7 +11,8 @@ import 'package:helping_hand/views/user/profile_page.dart';
 import 'package:helping_hand/views/user/profile_screen.dart';
 import 'package:helping_hand/views/user/search_page.dart';
 import 'package:helping_hand/views/user/signed_events_page.dart';
-import 'package:helping_hand/views/user/user_feed.dart';
+import 'package:helping_hand/views/user/interests_page.dart';
+import 'package:helping_hand/views/user/skill_page.dart';
 import 'package:provider/provider.dart';
 //import 'package:helping_hand/views/user/user_feed.dart';
 
@@ -40,7 +41,7 @@ class MainApp extends StatelessWidget {
           fontFamily: 'Poppins'
         ),
         debugShowCheckedModeBanner: false,
-        home: AuthPage(),
+        home: AuthPage(), 
       ),
     );
   }
