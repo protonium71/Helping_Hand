@@ -66,7 +66,7 @@ class CustomProfileContainer extends StatelessWidget {
                   else if(type == 'skills'){
                     return  Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(height: height*0.13, width: width*0.237, child: InterestCard(text: items[index]!, icon: s_string_icon[items[index]]!, size: 11, list: const []),),
+                      child: Container(height: height*0.13, width: width*0.237, child: InterestCard(text: items[index], icon: s_string_icon[items[index]]!, size: 11, list: const []),),
                     );
                   }
                   else{
