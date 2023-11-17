@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:helping_hand/utilities/custom_profile_container.dart';
-import 'package:helping_hand/utilities/my_button.dart';
+import 'package:helping_hand/widgets/custom_profile_container.dart';
+import 'package:helping_hand/widgets/my_button.dart';
 import 'package:helping_hand/views/user/edit_profile_page.dart';
 import 'package:helping_hand/views/user/signed_events_page.dart';
 

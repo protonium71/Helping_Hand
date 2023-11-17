@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:helping_hand/resources/auth_page.dart';
-import 'package:helping_hand/utilities/my_button.dart';
+import 'package:helping_hand/widgets/my_button.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

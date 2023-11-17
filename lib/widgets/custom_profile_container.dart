@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:helping_hand/utilities/interest_card.dart';
-import 'package:helping_hand/utilities/utils.dart';
+import 'package:helping_hand/widgets/interest_card.dart';
+import 'package:helping_hand/widgets/utils.dart';
 
 class CustomProfileContainer extends StatelessWidget {
   final String text;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:helping_hand/utilities/search_results_widget.dart'; 
+import 'package:helping_hand/widgets/search_results_widget.dart'; 
 
 const List<String> list = <String>['Recommendations', 'Location', 'Date', 'Cause', 'Organisation'];
 

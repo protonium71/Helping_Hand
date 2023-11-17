@@ -7,9 +7,9 @@ class Organisation {
   String? profileURL;
   String? email;
   String? bio;
-  String? following;
-  List<String> volunteerHistory = [];  // list of job ids
-  List<String> upcomingEvents = [];  // list of job ids
+  List<dynamic>? following;  // list of volunteers uids following
+  List<dynamic>? volunteerHistory;  // list of event ids
+  List<dynamic>? upcomingEvents;  // list of event ids
 
   Organisation({
     this.uid,
@@ -18,8 +18,8 @@ class Organisation {
     this.profileURL,
     this.bio,
     this.following,
-    required this.volunteerHistory,
-    required this.upcomingEvents,
+    this.volunteerHistory,
+    this.upcomingEvents,
   });
 
   //This function returns a map of data related to the Organisation object

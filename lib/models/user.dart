@@ -13,6 +13,7 @@ class User {
   List<dynamic>? upcomingEvents;  // list of job ids
   List<dynamic>? following;  // list of organisation ids
   int? volunteeringHours;
+  String? ftoken;
 
   User({
     this.uid,
@@ -26,6 +27,7 @@ class User {
     this.upcomingEvents,
     this.following,
     this.volunteeringHours,
+    this.ftoken,
   });
 
   //This function returns a map of data related to the user object
@@ -41,6 +43,7 @@ class User {
         "upcomingEvents": upcomingEvents,
         "following": following,
         "volunteeringHours": volunteeringHours,
+        "ftoken": ftoken,
       };
 
   //This method returns a user instance based on the document snapshot given by firebase authentication
@@ -59,6 +62,7 @@ class User {
       upcomingEvents: map['upcomingEvents'],
       following: map['following'],
       volunteeringHours: map['volunteeringHours'],
+      ftoken: map['ftoken'],
     );
   }
 }
