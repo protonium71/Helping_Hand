@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 class Card{
@@ -31,28 +33,75 @@ List<Card> cardList = [
                         Card(text: 'Tutoring', icon: const Icon(Icons.book), size: 12),
                       ];
 
-    List<Card> skillCard =[
+List<Card> skillCard = [
                         Card(text: 'Animal Care', icon: const Icon(Icons.pets), size: 12),
-                        Card(text: 'Communication Skill', icon: const Icon(Icons.chat_bubble), size: 12),
-                        Card(text: 'Counselling & Support', icon: const Icon(Icons.favorite), size: 11),
+                        Card(text: 'Communication Skill', icon: const Icon(Icons.chat_bubble, size: 40,), size: 11.5),
+                        Card(text: 'Counselling and Support', icon: const Icon(Icons.favorite), size: 12),
                         Card(text: 'Customer Service', icon: const Icon(Icons.headset_mic), size: 12),
-                        Card(text: 'Creativity', icon: const Icon(Icons.brush), size: 11),
+                        Card(text: 'Creativity', icon: const Icon(Icons.brush), size: 12),
                         Card(text: 'Education & Mentoring', icon: const Icon(Icons.school), size: 12),
-                        Card(text: 'Environmental Skill', icon: const Icon(Icons.eco), size: 12),
-                        Card(text: 'Event Planning', icon: const Icon(Icons.event), size: 12),
-                        Card(text: 'Fundraising', icon: const Icon(Icons.monetization_on), size: 12),
-                        Card(text: 'Healthcare Skills', icon: const Icon(Icons.eco), size: 12),
-                        Card(text: 'Teamwork', icon: const Icon(Icons.people, size: 40,), size: 11.5),
+                        Card(text: 'Environment Skill', icon: const Icon(Icons.eco), size: 12),
+                        Card(text: 'Event Planning', icon: const Icon(Icons.event), size: 11),
+                        Card(text: 'Fundraising', icon: const Icon(Icons.monetization_on), size: 11),
+                        Card(text: 'Healthcare Skills', icon: const Icon(Icons.healing), size: 12),
+                        Card(text: 'Teamwork', icon: const Icon(Icons.people), size: 12),
                         Card(text: 'Language Skill', icon: const Icon(Icons.language), size: 12),
-                        Card(text: 'Manual Skill', icon: const Icon(Icons.build), size: 11),
-                        Card(text: 'Organizational Skill', icon: const Icon(Icons.event), size: 12),
+                        Card(text: 'Manual Skill', icon: const Icon(Icons.build), size: 12),
+                        Card(text: 'Organisation Skill', icon: const Icon(Icons.event), size: 12),
                         Card(text: 'Research Skill', icon: const Icon(Icons.search), size: 11),
-                        Card(text: 'Sports & Fitness', icon: const Icon(Icons.fitness_center), size: 12),
-                        Card(text: 'Social Media', icon: const Icon(Icons.share), size: 12),
-                        Card(text: 'Teaching & Training', icon: const Icon(Icons.school), size: 12),
+                        Card(text: 'Sports and Fitness', icon: const Icon(Icons.fitness_center), size: 12),
+                        Card(text: 'Social Media', icon: const Icon(Icons.share), size: 11),
+                        Card(text: 'Teaching and Training', icon: const Icon(Icons.school), size: 12),
                         Card(text: 'Technical Skill', icon: const Icon(Icons.code), size: 12),
                         Card(text: 'Technical Support', icon: const Icon(Icons.settings), size: 12),
-    ];
+                      ];
+
+//this map maps the string value of skills to their respective icons
+Map<String, Icon>s_string_icon = {
+'Animal Care':const Icon(Icons.pets),
+'Communication Skill':const Icon(Icons.chat_bubble),
+'Counselling and Support':const Icon(Icons.favorite),
+'Customer Service':const Icon(Icons.headset_mic),
+'Creativity':const Icon(Icons.brush),
+'Education & Mentoring':const Icon(Icons.school),
+'Environment Skill':const Icon(Icons.eco),
+'Event Planning':const Icon(Icons.event),
+'Fundraising':const Icon(Icons.monetization_on),
+'Healthcare Skills':const Icon(Icons.healing),
+'Teamwork':const Icon(Icons.people),
+'Language Skill':const Icon(Icons.language),
+'Manual Skill':const Icon(Icons.build),
+'Organisation Skill':const Icon(Icons.event),
+'Research Skill':const Icon(Icons.search),
+'Sports and Fitness':const Icon(Icons.fitness_center),
+'Social Media':const Icon(Icons.share),
+'Teaching and Training':const Icon(Icons.school),
+'Technical Skill':const Icon(Icons.code),
+'Technical Support':const Icon(Icons.settings),
+};
+
+//this map maps the string value of interests to their respective icons
+Map<String, Icon>i_string_icon = {
+'Animals':const Icon(Icons.pets),
+'Art & Culture':const Icon(Icons.art_track),
+'Children & youth':const Icon(Icons.child_friendly),
+'Cooking':const Icon(Icons.fastfood),
+'Education & Literacy':const Icon(Icons.cast_for_education),
+'Emergency & Safety':const Icon(Icons.safety_check),
+'Employment':const Icon(Icons.work),
+'Environment':const Icon(Icons.nature),
+'Faith Based':const Icon(Icons.healing),
+'Health & Medicine':const Icon(Icons.health_and_safety),
+'Homeless & Housing':const Icon(Icons.house),
+'Human Rights':const Icon(Icons.man),
+'Immigrants & Refugees':const Icon(Icons.flag),
+'International':const Icon(Icons.group_add_outlined),
+'LGBTQ+':const Icon(Icons.transgender),
+'Media & Broadcasting':const Icon(Icons.perm_media),
+'Social Work':const Icon(Icons.social_distance),
+'Sports':const Icon(Icons.sports_tennis),
+'Tutoring':const Icon(Icons.book),
+};
 
 //custom colorswatch
 Map<int, Color> color =
