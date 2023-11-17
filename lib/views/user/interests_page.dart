@@ -3,8 +3,15 @@ import 'package:helping_hand/widgets/interest_card.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:helping_hand/widgets/utils.dart';
 
-class InterestsPage extends StatelessWidget {
+class InterestsPage extends StatefulWidget {
   const InterestsPage({super.key});
+
+  @override
+  State<InterestsPage> createState() => _InterestsPageState();
+}
+
+class _InterestsPageState extends State<InterestsPage> {
+  List<String> interests = [];
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +21,11 @@ class InterestsPage extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-               SizedBox(height: height * 0.05,),
+              SizedBox(height: height * 0.05,),
               const Text('Select your interests', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color(0xff323459)),),
               SizedBox(height: height * 0.005,),
               const Text('You can choose multiple categories', style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),),
-               SizedBox(height: height * 0.02,),
+              SizedBox(height: height * 0.02,),
               Container(
                 height: height * 0.57,
                 child: GridView.builder(
@@ -30,7 +37,12 @@ class InterestsPage extends StatelessWidget {
                   ),
                   itemCount: cardList.length,
                   itemBuilder: (BuildContext context, int index){
-                    return InterestCard(text: cardList[index].text!, icon: cardList[index].icon!, size: cardList[index].size!,);
+                    return InterestCard(
+                      text: cardList[index].text, 
+                      icon: cardList[index].icon, 
+                      size: cardList[index].size,
+                      list: interests,
+                    );
                   }
                 ),
               ),
@@ -42,9 +54,13 @@ class InterestsPage extends StatelessWidget {
               ),
 
               //skip button
-               SizedBox(height: height * 0.02,),
+              SizedBox(height: height * 0.02,),
               GestureDetector(
-                onTap: (){},
+                onTap: (){
+                  for(String s in interests){
+                    print('\n$s');
+                  }
+                },
                 child: Container(
                   padding: const EdgeInsets.all(25),
                   margin: const EdgeInsets.symmetric(horizontal: 25),

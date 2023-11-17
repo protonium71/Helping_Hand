@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 
 class Card{
-  String? text;
-  Icon? icon;
-  double? size;
+  String text;
+  Icon icon;
+  double size;
 
   Card({required this.text, required this.icon, required this.size});
 }

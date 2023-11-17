@@ -19,10 +19,16 @@ class ProfilePage extends StatelessWidget {
     Map<String, dynamic> userMap = user.getData();
     String name;
     String location;
-    if(userMap['username'] == "")name = "New User";
-    else name = userMap['username'];
-    if(userMap['location'] == "")location = "no_location";
-    else location = userMap['location'];
+    if(userMap['username'] == "") {
+      name = "New User";
+    } else {
+      name = userMap['username'];
+    }
+    if(userMap['location'] == "") {
+      location = "no_location";
+    } else {
+      location = userMap['location'];
+    }
 
     return Scaffold(
       
