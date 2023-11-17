@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:helping_hand/utilities/following_card.dart';
 import 'package:helping_hand/utilities/interest_card.dart';
 import 'package:helping_hand/utilities/utils.dart';
 
 class CustomProfileContainer extends StatelessWidget {
   final String text;
   final String type;
+  final List items;
 
-  const CustomProfileContainer({super.key, required this.text, required this.type});
+  const CustomProfileContainer({super.key, required this.text, required this.type, required this.items});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class CustomProfileContainer extends StatelessWidget {
 
     return Container(
       width: width*0.9,
-      height: height*0.2,
+      height: items.isEmpty ? height*0.07 : height*0.2,
       decoration: ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(
@@ -47,31 +49,31 @@ class CustomProfileContainer extends StatelessWidget {
               ),
             ),
              SizedBox(height: height*0.007,),
+             items.isEmpty ? const SizedBox(height: 0,):
             Container(
               height: height*0.13,
               // color: Colors.black,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 12,
+                itemCount: items.length,
                 itemBuilder: (BuildContext context, int index) {
                   if(type == 'interests'){
                     return  Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(height: height*0.13, width: width*0.237, child: InterestCard(text: cardList[index].text!, icon: cardList[index].icon!, size: cardList[index].size!,),),
+                      child: Container(height: height*0.13, width: width*0.237, child: InterestCard(text: items[index]!, icon: i_string_icon[items[index]]!, size: 11,),),
                     );
                   }
                   else if(type == 'skills'){
                     return  Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(height: height*0.13, width: width*0.237, color: Colors.red,),
+                      child: Container(height: height*0.13, width: width*0.237, child: InterestCard(text: items[index]!, icon: s_string_icon[items[index]]!, size: 11,),),
                     );
                   }
                   else{
                     return  Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(height: height*0.13, width: width*0.237, color: Colors.red,),
-                    );
-                  }
+                      child: Container(height: height*0.13, width: width*0.237, child: FollowingCard(text: items[index]!, size: 10,))
+              );}
                 }
               ),
             ),
