@@ -17,7 +17,7 @@ class CustomProfileContainer extends StatelessWidget {
 
     return Container(
       width: width*0.9,
-      height: items.isEmpty ? height*0.07 : height*0.2,
+      height: items.isEmpty ? height*0.07 : type == "following" ? height*0.23 : height*0.2,
       decoration: ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(
@@ -26,7 +26,7 @@ class CustomProfileContainer extends StatelessWidget {
           shadows: const [
                BoxShadow(
                   color: Color(0x111D1617),
-                  blurRadius: 40,
+                  blurRadius: 22,
                   offset: Offset(0, 10),
                   spreadRadius: 0,
               )
@@ -48,10 +48,11 @@ class CustomProfileContainer extends StatelessWidget {
                   fontWeight: FontWeight.w500,
               ),
             ),
-             SizedBox(height: height*0.007,),
-             items.isEmpty ? const SizedBox(height: 0,):
+            items.isEmpty ? const SizedBox(height: 0,):
+            SizedBox(height: height*0.007,),
+            items.isEmpty ? const SizedBox(height: 0,):
             Container(
-              height: height*0.13,
+              height: type == "following" ? height*0.16 : height*0.13,
               // color: Colors.black,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -71,8 +72,8 @@ class CustomProfileContainer extends StatelessWidget {
                   }
                   else{
                     return  Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(height: height*0.13, width: width*0.237, child: FollowingCard(text: items[index]!, size: 10,))
+                      padding: const EdgeInsets.all(5.0),
+                      child: Container(height: height*0.13, width: width*0.25, child: FollowingCard(text: items[index]!, size: 10,))
               );}
                 }
               ),

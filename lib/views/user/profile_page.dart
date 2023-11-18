@@ -57,6 +57,7 @@ class ProfilePage extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: width*0.04, vertical: height*0.02),
             child: Column(
               children: [
+                //user info
                 Container(
                   height: height*0.11,
                   // color: Colors.yellow,
@@ -126,8 +127,10 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: height*0.025,),
+                //edit profile button
                 MyButton(onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage()));}, text: 'Edit Profile'),
                 SizedBox(height: height*0.025,),
+                //volunteering hours 
                 Container(
                   width: width*0.9,
                   height: height*0.07,
@@ -139,7 +142,7 @@ class ProfilePage extends StatelessWidget {
                       shadows: const [
                           BoxShadow(
                               color: Color(0x111D1617),
-                              blurRadius: 40,
+                              blurRadius: 22,
                               offset: Offset(0, 10),
                               spreadRadius: 0,
                           )
@@ -184,15 +187,69 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: height*0.025,),
+                //signed events button
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SignedEventsPage()));
+                  },
+                  child: Container(
+                    width: width*0.9,
+                    height: height*0.07,
+                    decoration: ShapeDecoration(
+                        color: const Color.fromARGB(255, 218, 234, 251),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                        ),
+                        shadows: const [
+                            BoxShadow(
+                                color: Color(0x111D1617),
+                                blurRadius: 22,
+                                offset: Offset(0, 10),
+                                spreadRadius: 0,
+                            )
+                        ],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: width*0.04),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Text(
+                            'Signed Events',
+                            style: TextStyle(
+                                color: Color(0xFF1D1517),
+                                fontSize: 25,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                Icon(Icons.arrow_forward_ios, size: 20,),
+                              ],
+                            )
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: height*0.025,),
+                //interests
                 CustomProfileContainer(text: 'Interests', type: 'interests', items: userMap['interests'],),
                 SizedBox(height: height*0.025,),
-                CustomProfileContainer(text: 'Skills', type: 'interests', items: userMap['skills'],),
+                //skills
+                CustomProfileContainer(text: 'Skills', type: 'skills', items: userMap['skills'],),
                 SizedBox(height: height*0.025,),
-                CustomProfileContainer(text: 'Following', type: 'interests', items: userMap['following'],),
-                SizedBox(height: height*0.025,),
-                MyButton(onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SignedEventsPage()));
-                }, text: 'Signed Events'),
+                //following
+                CustomProfileContainer(text: 'Following', type: 'following', items: userMap['following'],),
+                SizedBox(height: height*0.025,),               
               ],
             ),
           ),

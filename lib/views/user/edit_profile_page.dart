@@ -1,5 +1,6 @@
 import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:helping_hand/views/user/skill_page.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:helping_hand/widgets/my_textField.dart';
 import 'package:helping_hand/views/user/interests_page.dart';
@@ -111,44 +112,44 @@ class EditProfilePage extends StatelessWidget {
             SizedBox(height: height*0.03,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Container(
-                height: 60,
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 218, 234, 251), 
-                  borderRadius: BorderRadius.circular(16)
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: width*0.04),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      const Text(
-                        'Edit Interests',
-                        style: TextStyle(
-                            color: Color(0xFF1D1517),
-                            fontSize: 20,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500,
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const InterestsPage()));
+                },
+                child: Container(
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 218, 234, 251), 
+                    borderRadius: BorderRadius.circular(16)
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: width*0.04),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          'Edit Interests',
+                          style: TextStyle(
+                              color: Color(0xFF1D1517),
+                              fontSize: 20,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const InterestsPage()));
-                              },
-                              child: const Icon(Icons.arrow_forward_ios, size: 20,)
-                            )
-                          ],
-                        )
-                      ),
-                    ],
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Icon(Icons.arrow_forward_ios, size: 20,)
+                            ],
+                          )
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -157,44 +158,44 @@ class EditProfilePage extends StatelessWidget {
             SizedBox(height: height*0.03,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Container(
-                height: 60,
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 218, 234, 251), 
-                  borderRadius: BorderRadius.circular(16)
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: width*0.04),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      const Text(
-                        'Edit Skills',
-                        style: TextStyle(
-                            color: Color(0xFF1D1517),
-                            fontSize: 20,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500,
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SkillPage()));
+                },
+                child: Container(
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 218, 234, 251), 
+                    borderRadius: BorderRadius.circular(16)
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: width*0.04),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          'Edit Skills',
+                          style: TextStyle(
+                              color: Color(0xFF1D1517),
+                              fontSize: 20,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const InterestsPage()));
-                              },
-                              child: const Icon(Icons.arrow_forward_ios, size: 20,)
-                            )
-                          ],
-                        )
-                      ),
-                    ],
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Icon(Icons.arrow_forward_ios, size: 20,)
+                            ],
+                          )
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
