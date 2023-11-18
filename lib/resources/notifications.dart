@@ -37,7 +37,7 @@ class Notifications{
           "android_channel_id": "chats",
         },
         "data": {
-          "some_data": "User ID: abc",
+          "some_data": "\nUser ID: ${FirebaseAuth.instance.currentUser!.uid}",
         },
       };
 
