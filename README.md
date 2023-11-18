@@ -1,3 +1,3 @@
-# helping_hand
+# Helping Hand
 
 A new Flutter project.

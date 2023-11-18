@@ -7,9 +7,33 @@ import 'package:helping_hand/views/user/signed_events_page.dart';
 import 'package:provider/provider.dart';
 import 'package:helping_hand/models/user.dart' as model;
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  String name = "";
+  String location = "";
+  List<dynamic> interests = [];
+  List<dynamic> skills = [];
+   _changeState(dynamic value) async{
+    UserProvider userProvider = Provider.of(context, listen: false);
+    await userProvider.refreshUser();
+     model.User user = userProvider.getUser;
+    Map<String, dynamic> userMap = user.getData();
+    
+    setState((){
+      name = userMap['username']; 
+      location = userMap['location'];
+      interests = userMap['interests'];
+      skills = userMap['skills'];
+      
+      });
+    print(name);
+  }
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -17,8 +41,8 @@ class ProfilePage extends StatelessWidget {
     
     model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
     Map<String, dynamic> userMap = user.getData();
-    String name;
-    String location;
+    
+    
     if(userMap['username'] == "") {
       name = "New User";
     } else {
@@ -29,6 +53,8 @@ class ProfilePage extends StatelessWidget {
     } else {
       location = userMap['location'];
     }
+    interests = userMap['interests'];
+    skills = userMap['skills'];
 
     return Scaffold(
       
@@ -127,8 +153,13 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: height*0.025,),
-                //edit profile button
-                MyButton(onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage()));}, text: 'Edit Profile'),
+                MyButton(
+                  onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(context1: context))).then(_changeState);
+                  
+                  }, 
+                  text: 'Edit Profile'
+                ),
                 SizedBox(height: height*0.025,),
                 //volunteering hours 
                 Container(

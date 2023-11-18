@@ -65,4 +65,5 @@ class User {
       ftoken: map['ftoken'],
     );
   }
+  
 }

@@ -35,7 +35,7 @@ List<Card> cardList = [
 
 List<Card> skillCard = [
                         Card(text: 'Animal Care', icon: const Icon(Icons.pets), size: 12),
-                        Card(text: 'Communication Skill', icon: const Icon(Icons.chat_bubble, size: 40,), size: 11.5),
+                        Card(text: 'Communication Skill', icon: const Icon(Icons.chat_bubble, size: 25,), size: 11.5),
                         Card(text: 'Counselling and Support', icon: const Icon(Icons.favorite), size: 12),
                         Card(text: 'Customer Service', icon: const Icon(Icons.headset_mic), size: 12),
                         Card(text: 'Creativity', icon: const Icon(Icons.brush), size: 12),
@@ -51,7 +51,7 @@ List<Card> skillCard = [
                         Card(text: 'Research Skill', icon: const Icon(Icons.search), size: 11),
                         Card(text: 'Sports and Fitness', icon: const Icon(Icons.fitness_center), size: 12),
                         Card(text: 'Social Media', icon: const Icon(Icons.share), size: 11),
-                        Card(text: 'Teaching and Training', icon: const Icon(Icons.school), size: 12),
+                        Card(text: 'Teaching', icon: const Icon(Icons.school), size: 12),
                         Card(text: 'Technical Skill', icon: const Icon(Icons.code), size: 12),
                         Card(text: 'Technical Support', icon: const Icon(Icons.settings), size: 12),
                       ];
@@ -75,7 +75,7 @@ Map<String, Icon>s_string_icon = {
 'Research Skill':const Icon(Icons.search),
 'Sports and Fitness':const Icon(Icons.fitness_center),
 'Social Media':const Icon(Icons.share),
-'Teaching and Training':const Icon(Icons.school),
+'Teaching':const Icon(Icons.school),
 'Technical Skill':const Icon(Icons.code),
 'Technical Support':const Icon(Icons.settings),
 };
