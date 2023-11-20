@@ -19,6 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String location = "";
   List<dynamic> interests = [];
   List<dynamic> skills = [];
+  String profileURL = "";
    _changeState(dynamic value) async{
     UserProvider userProvider = Provider.of(context, listen: false);
     await userProvider.refreshUser();
@@ -30,7 +31,8 @@ class _ProfilePageState extends State<ProfilePage> {
       location = userMap['location'];
       interests = userMap['interests'];
       skills = userMap['skills'];
-      
+      profileURL = userMap['profileURL'];
+      print("3333"+profileURL);
       });
     print(name);
   }
@@ -55,6 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
     interests = userMap['interests'];
     skills = userMap['skills'];
+    profileURL = userMap['profileURL'];
 
     return Scaffold(
       
@@ -94,7 +97,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         width: height*0.11,
                         decoration: BoxDecoration(
                           color: Colors.green,
-                          borderRadius: BorderRadius.circular(100) 
+                          borderRadius: BorderRadius.circular(100),
+                          //shape: BoxShape.circle,
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: profileURL != "" ? NetworkImage(profileURL!) : AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,), 
                           //more than 50% of width makes circle
                         ),
                       ),
