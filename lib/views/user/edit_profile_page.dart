@@ -1,6 +1,10 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/models/user.dart';
 import 'package:helping_hand/providers/user_provider.dart';
@@ -9,26 +13,48 @@ import 'package:helping_hand/views/user/skill_page.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:helping_hand/widgets/my_textField.dart';
 import 'package:helping_hand/views/user/interests_page.dart';
+import 'package:helping_hand/widgets/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:helping_hand/models/user.dart' as model;
 
-class EditProfilePage extends StatelessWidget {
-  final controller = TextEditingController();
-  final country = TextEditingController();
-  final state = TextEditingController();
-  final city = TextEditingController();
+class EditProfilePage extends StatefulWidget {
   final BuildContext context1;
 
   EditProfilePage({super.key, required this.context1});
 
   @override
+  State<EditProfilePage> createState() => _EditProfilePageState();
+}
+
+class _EditProfilePageState extends State<EditProfilePage> {
+  final controller = TextEditingController();
+
+  final country = TextEditingController();
+
+  final state = TextEditingController();
+
+  final city = TextEditingController();
+
+  String? imageURL = "";
+
+  @override
   Widget build(BuildContext context) {
+    
+ //Uint8List profile_pic;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
     Map<String, dynamic> userMap = user.getData();
+    //imageURL = userMap['profileURL'];
     String id = userMap['uid'];
+    
+    // void selectImage()async{
+    //   Uint8List img = await pickImage(ImageSource.gallery);
+    //   setState(() {
+    //     profile_pic = img;
+    //   });
+    // };
 
     return Scaffold(
       appBar: AppBar(
@@ -80,10 +106,9 @@ class EditProfilePage extends StatelessWidget {
                             offset: const Offset(0, 10))
                       ],
                       shape: BoxShape.circle,
-                      image: const DecorationImage(
+                      image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: NetworkImage(
-                              "https://img.freepik.com/free-photo/abstract-design-with-colorful-patterns-nature-leaf-generated-by-ai_188544-15573.jpg?size=626&ext=jpg")),
+                          image: imageURL != "" ? NetworkImage(imageURL!) : AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,),
                     ),
                   ),
                   //EDIT PROFILE PIC BUTTON
@@ -91,9 +116,29 @@ class EditProfilePage extends StatelessWidget {
                     bottom: 0,
                     right: 0,
                     child: MaterialButton(
-                      onPressed: () async{
-                        // ImagePicker imagePicker = ImagePicker();
-                        // XFile? profile_pic = await imagePicker.pickImage(source: ImageSource.gallery);
+                      onPressed: () async{  
+                        ImagePicker imagePicker = ImagePicker();
+                        XFile? profile_pic = await imagePicker.pickImage(source: ImageSource.gallery);
+                        if(profile_pic == null)return;
+                        print('${profile_pic?.path}');
+                        String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+
+                        Reference referenceRoot = FirebaseStorage.instance.ref();
+                        Reference referenceDir = referenceRoot.child('profile_pics');
+                        Reference imageToUpload = referenceDir.child(uniqueName);
+
+                        try{
+                          await imageToUpload.putFile(File(profile_pic!.path));
+                          String tempImageURL = await imageToUpload.getDownloadURL();
+                          //print("0000000"+tempImageURL);
+                          setState(() {
+                            imageURL = tempImageURL;
+                          });
+                          //print("0000000"+imageURL);
+                        }
+                        catch(error){
+
+                        }
                       },
                       shape: const CircleBorder(),
                       color: Colors.white,
@@ -132,7 +177,8 @@ class EditProfilePage extends StatelessWidget {
                 if(city.text != "")
                   await FirebaseFirestore.instance.collection("users").doc(id).update({"location":city.text});
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-                
+                if(imageURL != "")
+                  await FirebaseFirestore.instance.collection("users").doc(id).update({"profileURL":imageURL});
                 
 
               }, text: 'Update Profile'),
