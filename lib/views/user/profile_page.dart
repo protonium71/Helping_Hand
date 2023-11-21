@@ -22,7 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
    _changeState(dynamic value) async{
     UserProvider userProvider = Provider.of(context, listen: false);
     await userProvider.refreshUser();
-     model.User user = userProvider.getUser;
+    model.User user = userProvider.getUser;
     Map<String, dynamic> userMap = user.getData();
     
     setState((){
@@ -153,6 +153,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 SizedBox(height: height*0.025,),
+                //update button
                 MyButton(
                   onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(context1: context))).then(_changeState);
