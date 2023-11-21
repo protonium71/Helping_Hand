@@ -19,14 +19,6 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // var res = await FlutterNotificationChannel.registerNotificationChannel(
-  //   description: 'For showing message notification',
-  //   id: 'chats',
-  //   importance: NotificationImportance.IMPORTANCE_HIGH,
-  //   name: 'Chats',
-  //   visibility: v.NotificationVisibility.VISIBILITY_PUBLIC,
-  // );
-  // print('\n$res');
   await Notifications.createNotificationChannel('chats', 'Chats');
   await Notifications.initNotification();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
