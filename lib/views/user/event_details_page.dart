@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:helping_hand/models/user.dart' as model;
+import 'package:helping_hand/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class EventDetailsPage extends StatefulWidget {
   final DocumentSnapshot documentSnapshot;
@@ -17,11 +20,15 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     var spots_rem = widget.documentSnapshot['totalSpots'] - widget.documentSnapshot['signedSpots'];
     Timestamp t1 = widget.documentSnapshot['startTime'] ;
     Timestamp t2 = widget.documentSnapshot['endTime'] ;
+    model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
+    Map<String, dynamic> userMap = user.getData();
+    List<dynamic> all_events = userMap['upcomingEvents'];
+    String id = userMap['uid'];
     
     DateTime s_date = t1.toDate();
     DateTime e_date = t2.toDate();
-    print(s_date.toString());
-    print(s_date.hour);
+    // print(s_date.toString());
+    // print(s_date.hour);
     
     String date = '${s_date.day}/${s_date.month}/${s_date.year}';
     
@@ -126,7 +133,10 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
             ElevatedButton(
             
               style: ElevatedButton.styleFrom(backgroundColor: const Color(0xffBBBBD6),),
-              onPressed: (){}, 
+              onPressed: () async{
+                all_events.add(widget.documentSnapshot['eventid']);
+                await FirebaseFirestore.instance.collection("users").doc(id).update({"upcomingEvents":all_events});
+              }, 
               child: const Text('Sign up', style: TextStyle(color: Colors.black),)),
         ]
         ),

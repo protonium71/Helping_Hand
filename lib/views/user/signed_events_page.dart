@@ -17,6 +17,7 @@ class _SignedEventsPageState extends State<SignedEventsPage> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    // Timestamp t1 = _events['startTime'] ;
     
     return Scaffold(
       appBar: AppBar(
@@ -105,7 +106,11 @@ class _SignedEventsPageState extends State<SignedEventsPage> {
                     itemCount: streamSnapshot.data!.docs.length,
                     itemBuilder: (context, index){
                       final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
-                    return EventCard(documentSnapshot: documentSnapshot);
+                      Timestamp t1 = documentSnapshot['startTime'] ;
+                      DateTime s_date = t1.toDate();
+                      DateTime now = DateTime.now();
+                      if(s_date.isAfter(now))
+                        return EventCard(documentSnapshot: documentSnapshot);
                   });
                 }
                 return const Center(
@@ -178,6 +183,10 @@ class _SignedEventsPageState extends State<SignedEventsPage> {
                     itemCount: streamSnapshot.data!.docs.length,
                     itemBuilder: (context, index){
                       final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
+                      Timestamp t1 = documentSnapshot['startTime'] ;
+                      DateTime s_date = t1.toDate();
+                      DateTime now = DateTime.now();
+                      if(s_date.isBefore(now))
                     return EventCard(documentSnapshot: documentSnapshot);
                   });
                 }

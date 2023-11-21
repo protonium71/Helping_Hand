@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Card{
   String text;
@@ -120,6 +121,9 @@ Map<int, Color> color =
 
 MaterialColor colorCustom = MaterialColor(0xFF92A3FD, color);
 
-// String getTextResult(){
-
-// }
+pickImage(ImageSource source) async{
+  final ImagePicker _imagePicker = ImagePicker();
+  XFile? file = await _imagePicker.pickImage(source: source);
+  if(file != null)return await file.readAsBytes();
+  print("no image selected");
+}
