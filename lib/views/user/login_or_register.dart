@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:helping_hand/views/user/login_page.dart';
 import 'package:helping_hand/views/user/register_page.dart';
 
+// ignore: must_be_immutable
 class LoginOrRegisterPage extends StatefulWidget {
-  const LoginOrRegisterPage({super.key});
+  BuildContext parent;
+  LoginOrRegisterPage({super.key, required this.parent});
 
   @override
   State<LoginOrRegisterPage> createState() => _LoginOrRegisterPageState();
@@ -24,7 +26,7 @@ class _LoginOrRegisterPageState extends State<LoginOrRegisterPage> {
   @override
   Widget build(BuildContext context) {
     if(showLoginPage){
-      return LoginPage(onTap: togglePages);
+      return LoginPage(onTap: togglePages, parent: widget.parent);
     }
     else{
       return RegisterPage(onTap: togglePages);

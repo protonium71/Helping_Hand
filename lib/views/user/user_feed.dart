@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/resources/auth_services.dart';
 import 'package:helping_hand/resources/notifications.dart';
+import 'package:helping_hand/user_type_page.dart';
 import 'package:helping_hand/widgets/event_card.dart';
 
 class UserFeed extends StatefulWidget {
@@ -16,6 +17,7 @@ class _UserFeedState extends State<UserFeed> {
   void initState() {
     super.initState();
     Notifications.getFirebaseMessagingToken();
+    // Navigator.of(context, rootNavigator: true).pop();
   }
   
   final CollectionReference _jobs = FirebaseFirestore.instance.collection('events');
@@ -25,7 +27,20 @@ class _UserFeedState extends State<UserFeed> {
 
     return Scaffold(
       appBar: AppBar(
-        actions: [IconButton(onPressed: () => AuthService().logoutUser(), icon: const Icon(Icons.logout))],
+        actions: [
+          IconButton(
+            onPressed: () async{
+              await AuthService().logoutUser();
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => const UserType(),
+                ),
+              );
+            }, 
+            icon: const Icon(Icons.logout)
+          )
+        ],
         centerTitle: true, 
         backgroundColor: const Color(0xffCDD4E0),
         title: const Text('Home Feed'),),

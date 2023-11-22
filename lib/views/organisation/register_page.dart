@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/resources/auth_services.dart';
@@ -8,23 +7,20 @@ import 'package:helping_hand/widgets/my_textField.dart';
 import 'package:helping_hand/widgets/square_tile.dart';
 
 // ignore: must_be_immutable
-class RegisterPage extends StatefulWidget {
+class RegisterPageOrg extends StatefulWidget {
   void Function()? onTap;
 
-  RegisterPage({super.key, required this.onTap});
+  RegisterPageOrg({super.key, required this.onTap});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<RegisterPageOrg> createState() => _RegisterPageOrgState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageOrgState extends State<RegisterPageOrg> {
   //text editing controllers
   final userNameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final country = TextEditingController();
-  final state = TextEditingController();
-  final city = TextEditingController();
 
   //sign user in method
   void signUserUp() async{
@@ -37,15 +33,14 @@ class _RegisterPageState extends State<RegisterPage> {
 
     String res;
 
-    QuerySnapshot query = await FirebaseFirestore.instance.collection('users').where('email',isEqualTo:emailController.text).get();
+    QuerySnapshot query = await FirebaseFirestore.instance.collection('organisations').where('email',isEqualTo:emailController.text).get();
     if (query.docs.isEmpty){
       //signup user
       // ignore: use_build_context_synchronously
-      res = await AuthService().signUpUser(
+      res = await AuthService().signUpOrganisation(
         email: emailController.text,
         password: passwordController.text,
-        username: userNameController.text,
-        location: city.text,
+        orgname: userNameController.text,
         context: context
       );
     }
@@ -61,13 +56,17 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     //EMPTY FIELDS
-    if(res == 'Enter email and password'){
+    else if(res == 'Enter email and password'){
       showErrorMessage('Enter email and password!');
     }
 
     //WRONG PASSWORD
-    if(res == 'user-already-present'){
+    else if(res == 'user-already-present'){
       showErrorMessage('User already present with given email!');
+    }
+
+    else{
+      showErrorMessage('User registered successfully!');
     }
   }
 
@@ -82,7 +81,6 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
 
     return  Scaffold(
       backgroundColor: Colors.white,
@@ -105,24 +103,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
               //firstname textfield
               SizedBox(height: height*0.02,),
-              MyTextField(controller: userNameController, hintText: "First Name", obscureText: false, icon: const Icon(Icons.person_2_outlined)),
-              
-              //location
-              SizedBox(height: height*0.01,),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: width*0.06),
-                child: CountryStateCityPicker(
-                  country: country,
-                  state: state,
-                  city: city,
-                  dialogColor: Colors.grey.shade200,
-                  textFieldDecoration: InputDecoration(
-                    fillColor: Colors.grey.shade200,
-                    filled: true,
-                    suffixIcon: const Icon(Icons.arrow_downward_rounded), 
-                    border:  const OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(3.0)))),
-                ),
-              ),
+              MyTextField(controller: userNameController, hintText: "Organisation Name", obscureText: false, icon: const Icon(Icons.person_2_outlined)),
               
               //email textfield
               SizedBox(height: height*0.01,),
@@ -160,7 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
               SquareTile(
                 onTap: () async {
                   bool res = false;
-                  await AuthService().signInWithGoogle(context: context);
+                  await AuthService().signInWithGoogleOrg(context: context);
                   if(FirebaseAuth.instance.currentUser != null){
                     res = true;
                   }

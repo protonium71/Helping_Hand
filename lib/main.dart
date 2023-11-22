@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:helping_hand/firebase_options.dart';
 import 'package:helping_hand/providers/user_provider.dart';
 import 'package:helping_hand/resources/notifications.dart';
+import 'package:helping_hand/splash_screen.dart';
 import 'package:helping_hand/widgets/utils.dart';
-import 'package:helping_hand/resources/auth_page.dart';
 import 'package:provider/provider.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
+  // ignore: avoid_print
   print("Handling a background message: ${message.messageId}");
 }
 
@@ -42,7 +43,7 @@ class MainApp extends StatelessWidget {
           fontFamily: 'Poppins'
         ),
         debugShowCheckedModeBanner: false,
-        home: const AuthPage(),
+        home: const SplashScreen(),
       ),
     );
   }
