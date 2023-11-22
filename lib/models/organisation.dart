@@ -7,6 +7,7 @@ class Organisation {
   String? profileURL;
   String? email;
   String? bio;
+  String? upiID;
   List<dynamic>? following;  // list of volunteers uids following
   List<dynamic>? volunteerHistory;  // list of event ids
   List<dynamic>? upcomingEvents;  // list of event ids
@@ -17,6 +18,7 @@ class Organisation {
     this.email,
     this.profileURL,
     this.bio,
+    this.upiID,
     this.following,
     this.volunteerHistory,
     this.upcomingEvents,
@@ -29,6 +31,7 @@ class Organisation {
         "email": email,
         "profileURL": profileURL,
         "location": bio,
+        "upiID":upiID,
         "following": following,
         "volunteerHistory": volunteerHistory,
         "upcomingEvents": upcomingEvents,
@@ -44,6 +47,7 @@ class Organisation {
       email: map['email'],
       profileURL: map['profileURL'],
       bio: map['bio'],
+      upiID: map['upiID'],
       following: map['following'],
       volunteerHistory: map['volunteerHistory'],
       upcomingEvents: map['upcomingEvents'],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:helping_hand/providers/user_provider.dart';
+import 'package:helping_hand/views/organisation/org_edit_profile.dart';
 import 'package:helping_hand/widgets/custom_profile_container.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:helping_hand/views/user/edit_profile_page.dart';
@@ -7,57 +8,57 @@ import 'package:helping_hand/views/user/signed_events_page.dart';
 import 'package:provider/provider.dart';
 import 'package:helping_hand/models/user.dart' as model;
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class OrganisationProfilePage extends StatefulWidget {
+  const OrganisationProfilePage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<OrganisationProfilePage> createState() => _OrganisationProfilePage();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _OrganisationProfilePage extends State<OrganisationProfilePage> {
   String name = "";
   String location = "";
   List<dynamic> interests = [];
   List<dynamic> skills = [];
   String profileURL = "";
-   _changeState(dynamic value) async{
-    UserProvider userProvider = Provider.of(context, listen: false);
-    await userProvider.refreshUser();
-     model.User user = userProvider.getUser;
-    Map<String, dynamic> userMap = user.getData();
+  //  _changeState(dynamic value) async{
+  //   UserProvider userProvider = Provider.of(context, listen: false);
+  //   await userProvider.refreshUser();
+  //    model.User user = userProvider.getUser;
+  //   Map<String, dynamic> userMap = user.getData();
     
-    setState((){
-      name = userMap['username']; 
-      location = userMap['location'];
-      interests = userMap['interests'];
-      skills = userMap['skills'];
-      profileURL = userMap['profileURL'];
-      print("3333"+profileURL);
-      });
-    print(name);
-  }
+  //   setState((){
+  //     name = userMap['username']; 
+  //     location = userMap['location'];
+  //     interests = userMap['interests'];
+  //     skills = userMap['skills'];
+  //     profileURL = userMap['profileURL'];
+  //     print("3333"+profileURL);
+  //     });
+  //   print(name);
+  // }
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     
-    model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
-    Map<String, dynamic> userMap = user.getData();
+    // model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
+    // Map<String, dynamic> userMap = user.getData();
     
     
-    if(userMap['username'] == "") {
-      name = "New User";
-    } else {
-      name = userMap['username'];
-    }
-    if(userMap['location'] == "") {
-      location = "no_location";
-    } else {
-      location = userMap['location'];
-    }
-    interests = userMap['interests'];
-    skills = userMap['skills'];
-    profileURL = userMap['profileURL'];
+    // if(userMap['username'] == "") {
+    //   name = "New User";
+    // } else {
+    //   name = userMap['username'];
+    // }
+    // if(userMap['location'] == "") {
+    //   location = "no_location";
+    // } else {
+    //   location = userMap['location'];
+    // }
+    // interests = userMap['interests'];
+    // skills = userMap['skills'];
+    // profileURL = userMap['profileURL'];
 
     return Scaffold(
       
@@ -101,7 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           //shape: BoxShape.circle,
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: profileURL != "" ? NetworkImage(profileURL!) : AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,), 
+                          image: profileURL != "" ? NetworkImage(profileURL!) : const AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,), 
                           //more than 50% of width makes circle
                         ),
                       ),
@@ -111,7 +112,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                            Text(
-                            name,
+                            //name,
+                            'Prashant',
                             style: const TextStyle(
                                 color: Color(0xFF1D1517),
                                 fontSize: 20,
@@ -124,7 +126,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               const Icon(Icons.location_on_outlined, color: Color(0xFF7B6F72), size: 20,),
                               SizedBox(width: width*0.01,),
                               Text(
-                                location,
+                                //location,
+                                'fake@upiID',
                                 style: const TextStyle(
                                     color: Color(0xFF7B6F72),
                                     fontSize: 15,
@@ -141,10 +144,11 @@ class _ProfilePageState extends State<ProfilePage> {
                               Container(
                                 width: width*0.59,
                                 // color: Colors.red,
-                                child: Text(
-                                  userMap['email'],
+                                child: const Text(
+                                  //userMap['email'],
+                                  'dummymail@gmail.com',
                                   maxLines: 2,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       color: Color(0xFF7B6F72),
                                       fontSize: 15,
                                       fontFamily: 'Poppins',
@@ -162,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(height: height*0.025,),
                 MyButton(
                   onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const EditProfilePage())).then(_changeState);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => OrganisationEditProfilePage()));//.then(_changeState);
                   
                   }, 
                   text: 'Edit Profile'
@@ -194,7 +198,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          'Volunteering Hours',
+                          'following',
                           style: TextStyle(
                               color: Color(0xFF1D1517),
                               fontSize: 25,
@@ -225,69 +229,88 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 SizedBox(height: height*0.025,),
-                //signed events button
-                GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SignedEventsPage()));
-                  },
-                  child: Container(
-                    width: width*0.9,
-                    height: height*0.07,
-                    decoration: ShapeDecoration(
-                        color: const Color.fromARGB(255, 218, 234, 251),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                        ),
-                        shadows: const [
-                            BoxShadow(
-                                color: Color(0x111D1617),
-                                blurRadius: 22,
-                                offset: Offset(0, 10),
-                                spreadRadius: 0,
-                            )
-                        ],
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: width*0.04),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text(
-                            'Signed Events',
-                            style: TextStyle(
-                                color: Color(0xFF1D1517),
-                                fontSize: 25,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
-                                Icon(Icons.arrow_forward_ios, size: 20,),
-                              ],
-                            )
-                          ),
-                        ],
-                      ),
+                const SizedBox(height: 20,),
+                  const Padding(
+                    padding: EdgeInsets.symmetric( horizontal: 15),
+                    child: Row(
+                      children: [
+                        SizedBox(height: 20,),
+                        Icon(Icons.corporate_fare_sharp),
+                        SizedBox(width: 10,),
+                        Text('About Us..', style: TextStyle(fontSize: 20, color: Color(0xff6379A5), fontWeight: FontWeight.bold)),
+                    
+                      ],
                     ),
                   ),
-                ),
-                SizedBox(height: height*0.025,),
+                  const SizedBox(height: 5,),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: Text('about organisation'),
+                  
+                  )
+                //signed events button
+                // GestureDetector(
+                //   onTap: (){
+                //     Navigator.push(context, MaterialPageRoute(builder: (context) => const SignedEventsPage()));
+                //   },
+                //   child: Container(
+                //     width: width*0.9,
+                //     height: height*0.07,
+                //     decoration: ShapeDecoration(
+                //         color: const Color.fromARGB(255, 218, 234, 251),
+                //         shape: RoundedRectangleBorder(
+                //             borderRadius: BorderRadius.circular(16),
+                //         ),
+                //         shadows: const [
+                //             BoxShadow(
+                //                 color: Color(0x111D1617),
+                //                 blurRadius: 22,
+                //                 offset: Offset(0, 10),
+                //                 spreadRadius: 0,
+                //             )
+                //         ],
+                //     ),
+                //     child: Padding(
+                //       padding: EdgeInsets.symmetric(horizontal: width*0.04),
+                //       child: const Row(
+                //         mainAxisAlignment: MainAxisAlignment.start,
+                //         crossAxisAlignment: CrossAxisAlignment.center,
+                //         mainAxisSize: MainAxisSize.max,
+                //         children: [
+                //           Text(
+                //             'Signed Events',
+                //             style: TextStyle(
+                //                 color: Color(0xFF1D1517),
+                //                 fontSize: 25,
+                //                 fontFamily: 'Poppins',
+                //                 fontWeight: FontWeight.w500,
+                //             ),
+                //           ),
+                //           Expanded(
+                //             child: Row(
+                //               mainAxisAlignment: MainAxisAlignment.end,
+                //               crossAxisAlignment: CrossAxisAlignment.center,
+                //               mainAxisSize: MainAxisSize.max,
+                //               children: <Widget>[
+                //                 Icon(Icons.arrow_forward_ios, size: 20,),
+                //               ],
+                //             )
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                //SizedBox(height: height*0.025,),
                 //interests
-                CustomProfileContainer(text: 'Interests', type: 'interests', items: userMap['interests'],),
-                SizedBox(height: height*0.025,),
+                //CustomProfileContainer(text: 'Interests', type: 'interests', items: userMap['interests'],),
+                //SizedBox(height: height*0.025,),
                 //skills
-                CustomProfileContainer(text: 'Skills', type: 'skills', items: userMap['skills'],),
-                SizedBox(height: height*0.025,),
+                //CustomProfileContainer(text: 'Skills', type: 'skills', items: userMap['skills'],),
+                //SizedBox(height: height*0.025,),
                 //following
-                CustomProfileContainer(text: 'Following', type: 'following', items: userMap['following'],),
-                SizedBox(height: height*0.025,),               
+                //CustomProfileContainer(text: 'Following', type: 'following', items: userMap['following'],),
+                //SizedBox(height: height*0.025,),               
               ],
             ),
           ),

@@ -19,9 +19,9 @@ import 'package:provider/provider.dart';
 import 'package:helping_hand/models/user.dart' as model;
 
 class EditProfilePage extends StatefulWidget {
-  final BuildContext context1;
+  //final BuildContext context1;
 
-  EditProfilePage({super.key, required this.context1});
+  const EditProfilePage({super.key});
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();

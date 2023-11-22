@@ -2,8 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/firebase_options.dart';
+import 'package:helping_hand/providers/organisation_provider.dart';
 import 'package:helping_hand/providers/user_provider.dart';
 import 'package:helping_hand/resources/notifications.dart';
+import 'package:helping_hand/views/organisation/org_edit_profile.dart';
+import 'package:helping_hand/views/organisation/org_feed.dart';
+import 'package:helping_hand/views/organisation/org_profile.dart';
+import 'package:helping_hand/views/user/profile_page.dart';
 import 'package:helping_hand/widgets/utils.dart';
 import 'package:helping_hand/resources/auth_page.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +48,9 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => UserProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => OrganisationProvider(),
+        ),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -50,7 +58,7 @@ class MainApp extends StatelessWidget {
           fontFamily: 'Poppins'
         ),
         debugShowCheckedModeBanner: false,
-        home: const AuthPage(),
+        home:  OrganisationProfilePage(), 
       ),
     );
   }
