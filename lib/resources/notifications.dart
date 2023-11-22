@@ -6,10 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:helping_hand/models/user.dart' as model;
-import 'package:helping_hand/providers/user_provider.dart';
 import 'package:helping_hand/resources/auth_services.dart';
 import 'package:http/http.dart';
-import 'package:provider/provider.dart';
 
 class Notifications{
   // for accessing firebase messaging (Push Notification)
@@ -21,6 +19,7 @@ class Notifications{
     String? ftoken;
     await fMessaging.getToken().then((value) {
       ftoken = value;
+      // ignore: avoid_print
       print('\nftoken: $value');
     });
     await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update({
@@ -51,6 +50,7 @@ class Notifications{
           },
           body: jsonEncode(body));
     } catch (e) {
+      // ignore: avoid_print
       print('\nsendPushNotificationE: $e');
     }
   }
@@ -108,6 +108,7 @@ class Notifications{
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification!.android;
       storeNotification(message.data);
+      // ignore: avoid_print
       print(message.data);
       await flutterLocalNotificationsPlugin.initialize(initializationSettings);
       // If `onMessage` is triggered with a notification, construct our own
