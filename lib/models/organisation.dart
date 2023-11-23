@@ -28,7 +28,7 @@ class Organisation {
         "orgname": orgname,
         "email": email,
         "profileURL": profileURL,
-        "location": bio,
+        "bio": bio,
         "following": following,
         "volunteerHistory": volunteerHistory,
         "upcomingEvents": upcomingEvents,
