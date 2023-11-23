@@ -2,8 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/resources/auth_services.dart';
 import 'package:helping_hand/views/organisation/home_page.dart';
-import 'package:helping_hand/views/organisation/org_navidation.dart';
-import 'package:helping_hand/views/organisation/org_profile.dart';
+import 'package:helping_hand/views/organisation/navigation_page.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:helping_hand/widgets/my_textField.dart';
 import 'package:helping_hand/widgets/square_tile.dart';
@@ -68,7 +67,7 @@ class _LoginPageOrgState extends State<LoginPageOrg> {
       // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const OrganisationNavigation(),
+          builder: (context) => const NavigationPage(),
         ),
       );
     }
@@ -175,7 +174,7 @@ class _LoginPageOrgState extends State<LoginPageOrg> {
                     // ignore: use_build_context_synchronously
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => const OrganisationNavigation(),
+                        builder: (context) => const NavigationPage(),
                       ),
                     );
                   }

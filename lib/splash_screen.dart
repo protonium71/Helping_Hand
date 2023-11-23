@@ -2,8 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/user_type_page.dart';
-import 'package:helping_hand/views/organisation/home_page.dart';
-import 'package:helping_hand/views/organisation/org_navidation.dart';
+import 'package:helping_hand/views/organisation/navigation_page.dart';
 import 'package:helping_hand/views/user/navigation.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -31,8 +30,8 @@ class _SplashScreenState extends State<SplashScreen> {
       Widget next = user == "onBoard"
           ? const UserType()
           : user == "volunteer"
-              ? Navigation()
-              : OrganisationNavigation();
+              ? const Navigation()
+              : const NavigationPage();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

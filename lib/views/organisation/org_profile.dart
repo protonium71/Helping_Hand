@@ -24,7 +24,7 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
   String profileURL = "";
    _changeState(dynamic value) async{
     OrganisationProvider organisationProvider = Provider.of(context, listen: false);
-    await organisationProvider.refreshOrganisation();
+    await organisationProvider.refreshUser();
     Organisation organisation = organisationProvider.getOrganisation;
     Map<String, dynamic> organisationMap = organisation.getData();
     
