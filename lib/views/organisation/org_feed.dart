@@ -1,28 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:helping_hand/models/user.dart' as model;
-import 'package:helping_hand/providers/user_provider.dart';
+import 'package:helping_hand/models/organisation.dart' ;
+import 'package:helping_hand/models/organisation.dart';
+import 'package:helping_hand/providers/organisation_provider.dart';
 import 'package:helping_hand/widgets/event_card.dart';
-import 'package:helping_hand/views/user/profile_page.dart';
 import 'package:provider/provider.dart';
 
-class SignedEventsPage extends StatefulWidget {
-  const SignedEventsPage({super.key});
+class OrganisationFeed extends StatefulWidget {
+  const OrganisationFeed({super.key});
 
   @override
-  State<SignedEventsPage> createState() => _SignedEventsPageState();
+  State<OrganisationFeed> createState() => _OrganisationFeedState();
 }
 
-class _SignedEventsPageState extends State<SignedEventsPage> {
+class _OrganisationFeedState extends State<OrganisationFeed> {
   final CollectionReference _events = FirebaseFirestore.instance.collection('events');
-  
-  @override
-  Widget build(BuildContext context) {
+
+  Widget build(BuildContext context){
+
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
-    Map<String, dynamic> userMap = user.getData();
-    List<dynamic> userEvents = userMap['upcomingEvents'];
+    
+    Organisation organisation = Provider.of<OrganisationProvider>(context, listen: false).getOrganisation;
+    Map<String, dynamic> organisationMap = organisation.getData();
+
+    List<dynamic> organisationEvents = organisationMap['upcomingEvents'];
+    print(organisationMap['email']);
     //print(userEvents);
     // Timestamp t1 = _events['startTime'] ;
     
@@ -36,7 +39,7 @@ class _SignedEventsPageState extends State<SignedEventsPage> {
         ), 
         centerTitle: true,
         title:  const Text(
-          'Signed Events',
+          'Posted Events',
           style: TextStyle(
               color: Color(0xFF1D1517),
               fontSize: 25,
@@ -116,7 +119,7 @@ class _SignedEventsPageState extends State<SignedEventsPage> {
                       Timestamp t1 = documentSnapshot['startTime'];
                       DateTime s_date = t1.toDate();
                       DateTime now = DateTime.now();
-                      if(s_date.isAfter(now) && userEvents.contains(documentSnapshot['eventid'])){
+                      if(s_date.isAfter(now) && organisationEvents.contains(documentSnapshot['eventid'])){
                         print(documentSnapshot['eventid']);
                         return EventCard(documentSnapshot: documentSnapshot);
                       }
@@ -196,8 +199,8 @@ class _SignedEventsPageState extends State<SignedEventsPage> {
                       Timestamp t1 = documentSnapshot['startTime'] ;
                       DateTime s_date = t1.toDate();
                       DateTime now = DateTime.now();
-                      if(s_date.isBefore(now) && userEvents.contains(documentSnapshot['eventid'])){
-                        print(userEvents);
+                      if(s_date.isBefore(now) && organisationEvents.contains(documentSnapshot['eventid'])){
+                        //print(userEvents);
                         print(documentSnapshot['eventid']);
                         return EventCard(documentSnapshot: documentSnapshot);
                       }
@@ -214,4 +217,5 @@ class _SignedEventsPageState extends State<SignedEventsPage> {
       ),
     );
   }
+
 }

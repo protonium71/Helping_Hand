@@ -23,11 +23,11 @@ class _FollowingCardState extends State<FollowingCard> {
 
   random() async{
     final data = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('organisations')
           .where('uid', isEqualTo: widget.text)
           .get();
     setState(() {
-      orgname = data.docs.first.data()['email'];
+      orgname = data.docs.first.data()['orgname'];
       profileURL = data.docs.first.data()['profileURL'];
     });
   }
@@ -37,7 +37,7 @@ class _FollowingCardState extends State<FollowingCard> {
     double height = MediaQuery.of(context).size.height;
     return Container(
       // color: Colors.teal[400],
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8), 
         // color: Colors.teal[400],
@@ -52,9 +52,13 @@ class _FollowingCardState extends State<FollowingCard> {
             width: height*0.07,
             decoration: BoxDecoration(
               color: Colors.green,
-              borderRadius: BorderRadius.circular(100) 
+              borderRadius: BorderRadius.circular(100),
+              image: DecorationImage(
+              fit: BoxFit.cover,
+              image: profileURL != "" ? NetworkImage(profileURL!) : AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,), 
               //more than 50% of width makes circle
             ),
+            //child: ,
           ),
           SizedBox(height: height*0.01,),
           Container(

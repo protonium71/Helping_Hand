@@ -4,6 +4,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:helping_hand/providers/organisation_provider.dart';
 import 'package:helping_hand/views/organisation/home_page.dart';
 import 'package:get/get.dart';
+import 'package:helping_hand/views/organisation/org_profile.dart';
 import 'package:helping_hand/views/organisation/post_event_page.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +30,7 @@ class _NavigationPageState extends State<NavigationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigationController());
+    final controller = Get.put(NavigationControlle());
     return Scaffold(
       backgroundColor: Colors.white,
        body: Obx(() => controller.screens[controller.selectedIndex.value]),
@@ -64,10 +65,10 @@ class _NavigationPageState extends State<NavigationPage> {
                 GButton(icon: Icons.monetization_on_rounded,
                 //text: 'Raise Fund',
                 ),
-                // GButton(icon: Icons.notifications,
-                // //text: 'Notifications',
+                GButton(icon: Icons.notifications,
+                //text: 'Notifications',
                 
-                // ),
+                ),
                 // GButton(icon: Icons.person_rounded,
                 // //text: 'Profile',
                 // ),
@@ -79,10 +80,11 @@ class _NavigationPageState extends State<NavigationPage> {
   }
 }
 
-class NavigationController extends GetxController{
+class NavigationControlle extends GetxController{
   final Rx<int> selectedIndex = 0.obs ;
   final screens = [
     const HomePage(),
+    OrganisationProfilePage(),
     const PostEventPage(),
     Container(color: Colors.orange,),
   ];

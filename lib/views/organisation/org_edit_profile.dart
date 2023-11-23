@@ -6,7 +6,9 @@ import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:helping_hand/models/organisation.dart';
 import 'package:helping_hand/models/user.dart';
+import 'package:helping_hand/providers/organisation_provider.dart';
 import 'package:helping_hand/providers/user_provider.dart';
 import 'package:helping_hand/views/user/profile_page.dart';
 import 'package:helping_hand/views/user/skill_page.dart';
@@ -18,23 +20,23 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:helping_hand/models/user.dart' as model;
 
-class EditProfilePage extends StatefulWidget {
+class OrganisationEditProfilePage extends StatefulWidget {
   //final BuildContext context1;
 
-  const EditProfilePage({super.key});
+  OrganisationEditProfilePage({super.key});
 
   @override
-  State<EditProfilePage> createState() => _EditProfilePageState();
+  State<OrganisationEditProfilePage> createState() => _OrganisationEditProfilePage();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
+class _OrganisationEditProfilePage extends State<OrganisationEditProfilePage> {
   final controller = TextEditingController();
 
-  final country = TextEditingController();
+  final upi_controller = TextEditingController();
 
-  final state = TextEditingController();
+  final bio_controller = TextEditingController();
 
-  final city = TextEditingController();
+  //final upiID_controller = TextEditingController();
 
   String? imageURL = "";
 
@@ -44,10 +46,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
  //Uint8List profile_pic;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
-    Map<String, dynamic> userMap = user.getData();
-    //imageURL = userMap['profileURL'];
-    String id = userMap['uid'];
+    Organisation organisation = Provider.of<OrganisationProvider>(context, listen: false).getOrganisation;
+    Map<String, dynamic> organisationMap = organisation.getData();
+    // //imageURL = userMap['profileURL'];
+    String id = organisationMap['uid'];
     
     // void selectImage()async{
     //   Uint8List img = await pickImage(ImageSource.gallery);
@@ -153,129 +155,54 @@ class _EditProfilePageState extends State<EditProfilePage> {
             MyTextField(controller: controller, hintText: 'Enter name', obscureText: false),
             //location
             SizedBox(height: height*0.03,),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: width*0.06),
-              child: CountryStateCityPicker(
-                country: country,
-                state: state,
-                city: city,
-                dialogColor: Colors.grey.shade200,
-                textFieldDecoration: InputDecoration(
-                  fillColor: Colors.grey.shade200,
-                  filled: true,
-                  suffixIcon: const Icon(Icons.arrow_downward_rounded), 
-                  border:  const OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(3.0)))),
-              ),
-            ),
+            MyTextField(controller: upi_controller, hintText: 'Enter upi ID', obscureText: false),
+            SizedBox(height: height*0.02,),
+            
             //update button
-            SizedBox(height: height*0.03,),
+            //SizedBox(height: height*0.03,),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Center(
+                child: TextField(
+                  minLines: 2,
+                  maxLines: 20,
+                  controller: bio_controller,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    //prefixIcon: icon,
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white)
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    fillColor: Colors.grey.shade200,
+                    filled: true,
+                    hintText: 'Enter bio..',
+                  
+                ),
+              ),
+            ),),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: MyButton(onTap: () async {
                 if(controller.text != "")
-                  await FirebaseFirestore.instance.collection("users").doc(id).update({"username":controller.text});
-                if(city.text != "")
-                  await FirebaseFirestore.instance.collection("users").doc(id).update({"location":city.text});
+                  await FirebaseFirestore.instance.collection("organisations").doc(id).update({"orgname":controller.text});
+                if(upi_controller.text != "")
+                  await FirebaseFirestore.instance.collection("organisations").doc(id).update({"upiID":upi_controller.text});
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
                 if(imageURL != "")
-                  await FirebaseFirestore.instance.collection("users").doc(id).update({"profileURL":imageURL});
+                  await FirebaseFirestore.instance.collection("organisations").doc(id).update({"profileURL":imageURL});
+                if(bio_controller.text != "")
+                  await FirebaseFirestore.instance.collection("organisations").doc(id).update({"bio":bio_controller.text});
                 
-
               }, text: 'Update Profile'),
             ),
             //edit interests
             SizedBox(height: height*0.03,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const InterestsPage()));
-                },
-                child: Container(
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 218, 234, 251), 
-                    borderRadius: BorderRadius.circular(16)
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: width*0.04),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Edit Interests',
-                          style: TextStyle(
-                              color: Color(0xFF1D1517),
-                              fontSize: 20,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              Icon(Icons.arrow_forward_ios, size: 20,)
-                            ],
-                          )
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
             //edit skills
-            SizedBox(height: height*0.03,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SkillPage()));
-                },
-                child: Container(
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 218, 234, 251), 
-                    borderRadius: BorderRadius.circular(16)
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: width*0.04),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Edit Skills',
-                          style: TextStyle(
-                              color: Color(0xFF1D1517),
-                              fontSize: 20,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              Icon(Icons.arrow_forward_ios, size: 20,)
-                            ],
-                          )
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+            //SizedBox(height: height*0.03,),
+            ],
         ),
       ),
     );
