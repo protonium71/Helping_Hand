@@ -1,7 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:helping_hand/providers/organisation_provider.dart';
 import 'package:helping_hand/providers/user_provider.dart';
+import 'package:helping_hand/views/organisation/org_feed.dart';
+import 'package:helping_hand/views/organisation/org_profile.dart';
 import 'package:helping_hand/views/user/profile_page.dart';
 import 'package:helping_hand/views/user/search_page.dart';
 import 'package:helping_hand/views/user/notification_page.dart';
@@ -9,14 +12,14 @@ import 'package:helping_hand/views/user/user_feed.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class Navigation extends StatefulWidget {
-  const Navigation({super.key});
+class OrganisationNavigation extends StatefulWidget {
+  const OrganisationNavigation({super.key});
 
   @override
-  State<Navigation> createState() => _NavigationState();
+  State<OrganisationNavigation> createState() => _OrganisationNavigation();
 }
 
-class _NavigationState extends State<Navigation> {
+class _OrganisationNavigation extends State<OrganisationNavigation> {
 
   // int _selectedIndex = 1;
   // static List<Widget> _pages = <Widget>[
@@ -34,8 +37,8 @@ class _NavigationState extends State<Navigation> {
   }
 
   loadUserData() async {
-    UserProvider userProvider = Provider.of(context, listen: false);
-    await userProvider.refreshUser();
+    OrganisationProvider organisationProvider = Provider.of(context, listen: false);
+    await organisationProvider.refreshOrganisation();
   }
 
   @override
@@ -69,17 +72,8 @@ class _NavigationState extends State<Navigation> {
                 GButton(icon: Icons.home_rounded,
                 //text: 'Home',
                 ),
-                GButton(icon: Icons.search,
-                //text: 'Search',
-                
-                
-                ),
-                GButton(icon: Icons.monetization_on_rounded,
+                GButton(icon: Icons.post_add_outlined,
                 //text: 'Raise Fund',
-                ),
-                GButton(icon: Icons.notifications,
-                //text: 'Notifications',
-                
                 ),
                 GButton(icon: Icons.person_rounded,
                 //text: 'Profile',
@@ -95,10 +89,8 @@ class _NavigationState extends State<Navigation> {
 class NavigationController extends GetxController{
   final Rx<int> selectedIndex = 0.obs ;
   final screens = [
-    const UserFeed(),
-    SearchPage(),
+    const OrganisationFeed(),
     Container(color: Colors.orange,),
-    const NotificationPage(),
-    const ProfilePage(),
+    const OrganisationProfilePage(),
   ];
 }

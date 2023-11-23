@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:helping_hand/models/organisation.dart';
+import 'package:helping_hand/providers/organisation_provider.dart';
 import 'package:helping_hand/providers/user_provider.dart';
 import 'package:helping_hand/views/organisation/org_edit_profile.dart';
 import 'package:helping_hand/widgets/custom_profile_container.dart';
@@ -17,48 +19,50 @@ class OrganisationProfilePage extends StatefulWidget {
 
 class _OrganisationProfilePage extends State<OrganisationProfilePage> {
   String name = "";
-  String location = "";
-  List<dynamic> interests = [];
-  List<dynamic> skills = [];
+  String upiID = "";
+  String following = "";
   String profileURL = "";
-  //  _changeState(dynamic value) async{
-  //   UserProvider userProvider = Provider.of(context, listen: false);
-  //   await userProvider.refreshUser();
-  //    model.User user = userProvider.getUser;
-  //   Map<String, dynamic> userMap = user.getData();
+   _changeState(dynamic value) async{
+    OrganisationProvider organisationProvider = Provider.of(context, listen: false);
+    await organisationProvider.refreshOrganisation();
+    Organisation organisation = organisationProvider.getOrganisation;
+    Map<String, dynamic> organisationMap = organisation.getData();
     
-  //   setState((){
-  //     name = userMap['username']; 
-  //     location = userMap['location'];
-  //     interests = userMap['interests'];
-  //     skills = userMap['skills'];
-  //     profileURL = userMap['profileURL'];
-  //     print("3333"+profileURL);
-  //     });
-  //   print(name);
-  // }
+    setState((){
+      name = organisationMap['orgname']; 
+      upiID = organisationMap['upiID'];
+      following = organisationMap['following'].length.toString();
+      profileURL = organisationMap['profileURL'];
+      print("3333"+profileURL);
+      });
+    print(name);
+  }
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     
-    // model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
-    // Map<String, dynamic> userMap = user.getData();
+    Organisation organisation = Provider.of<OrganisationProvider>(context, listen: false).getOrganisation;
+    Map<String, dynamic> organisationMap = organisation.getData();
     
     
-    // if(userMap['username'] == "") {
-    //   name = "New User";
-    // } else {
-    //   name = userMap['username'];
-    // }
-    // if(userMap['location'] == "") {
-    //   location = "no_location";
-    // } else {
-    //   location = userMap['location'];
-    // }
-    // interests = userMap['interests'];
-    // skills = userMap['skills'];
-    // profileURL = userMap['profileURL'];
+    if(organisationMap['orgname'] == "") {
+      name = "New Organisation";
+    } else {
+      name = organisationMap['orgname'];
+    }
+    if(organisationMap['upiID'] == "") {
+      upiID = "no_upiID";
+    } else {
+      upiID = organisationMap['upiID'];
+    }
+    if(organisationMap['following'].length != 0) {
+      following = organisationMap['following'].length.toString();
+    } else {
+      following = "0";
+    }
+    
+    profileURL = organisationMap['profileURL'];
 
     return Scaffold(
       
@@ -112,8 +116,8 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                            Text(
-                            //name,
-                            'Prashant',
+                            name,
+                            //'Prashant',
                             style: const TextStyle(
                                 color: Color(0xFF1D1517),
                                 fontSize: 20,
@@ -123,11 +127,11 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                           ),
                             Row(
                             children: [
-                              const Icon(Icons.location_on_outlined, color: Color(0xFF7B6F72), size: 20,),
+                              const Icon(Icons.monetization_on_rounded, color: Color(0xFF7B6F72), size: 20,),
                               SizedBox(width: width*0.01,),
                               Text(
-                                //location,
-                                'fake@upiID',
+                                upiID,
+                                //'fake@upiID',
                                 style: const TextStyle(
                                     color: Color(0xFF7B6F72),
                                     fontSize: 15,
@@ -144,9 +148,9 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                               Container(
                                 width: width*0.59,
                                 // color: Colors.red,
-                                child: const Text(
-                                  //userMap['email'],
-                                  'dummymail@gmail.com',
+                                child: Text(
+                                  organisationMap['email'],
+                                  //'dummymail@gmail.com',
                                   maxLines: 2,
                                   style: TextStyle(
                                       color: Color(0xFF7B6F72),
@@ -166,7 +170,7 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                 SizedBox(height: height*0.025,),
                 MyButton(
                   onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => OrganisationEditProfilePage()));//.then(_changeState);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => OrganisationEditProfilePage())).then(_changeState);
                   
                   }, 
                   text: 'Edit Profile'
@@ -192,7 +196,7 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                   ),
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: width*0.04),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
@@ -213,7 +217,7 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                             mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
                               Text(
-                                '0',
+                                following,
                                 style: TextStyle(
                                     color: Color(0xFF7B6F72),
                                     fontSize: 20,
@@ -245,7 +249,7 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                   const SizedBox(height: 5,),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: Text('about organisation'),
+                    child: Text(organisationMap['bio']),
                   
                   )
                 //signed events button

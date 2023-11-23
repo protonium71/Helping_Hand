@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/providers/user_provider.dart';
 import 'package:helping_hand/widgets/custom_profile_container.dart';
@@ -15,15 +16,18 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  
   String name = "";
   String location = "";
   List<dynamic> interests = [];
   List<dynamic> skills = [];
   String profileURL = "";
+  int volunteeringHours = 0;
+
    _changeState(dynamic value) async{
     UserProvider userProvider = Provider.of(context, listen: false);
     await userProvider.refreshUser();
-     model.User user = userProvider.getUser;
+    model.User user = userProvider.getUser;
     Map<String, dynamic> userMap = user.getData();
     
     setState((){
@@ -36,6 +40,28 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     print(name);
   }
+  
+
+  _get_volunteredTime(List<dynamic> history)async{
+      int total_hours = 0;
+      int total_min = 0;
+      for(int i = 0; i < history.length; i++){
+        final e1 = await FirebaseFirestore.instance.collection('events').where('eventid', isEqualTo: history[i]).get();
+        Timestamp t1 = e1.docs.first.data()['startTime'] ;
+        Timestamp t2 = e1.docs.first.data()['endTime'] ;
+        DateTime s_date = t1.toDate();
+        DateTime e_date = t2.toDate();
+        total_hours += e_date.hour - s_date.hour;
+        total_min += e_date.minute - s_date.minute;
+        
+      }
+      
+      total_hours += ((total_min  + 59 )/ 60).toInt();
+      setState(() {
+          volunteeringHours = total_hours;
+        });
+      
+    }
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -58,6 +84,8 @@ class _ProfilePageState extends State<ProfilePage> {
     interests = userMap['interests'];
     skills = userMap['skills'];
     profileURL = userMap['profileURL'];
+    _get_volunteredTime(userMap['upcomingEvents']) ;
+    //print("0000"+volunteeringHours.toString());
 
     return Scaffold(
       
@@ -101,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           //shape: BoxShape.circle,
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: profileURL != "" ? NetworkImage(profileURL!) : AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,), 
+                          image: profileURL != "" ? NetworkImage(profileURL!) : const AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,), 
                           //more than 50% of width makes circle
                         ),
                       ),
@@ -160,6 +188,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 SizedBox(height: height*0.025,),
+                //update button
                 MyButton(
                   onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const EditProfilePage())).then(_changeState);
@@ -188,12 +217,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: width*0.04),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
+                        const Text(
                           'Volunteering Hours',
                           style: TextStyle(
                               color: Color(0xFF1D1517),
@@ -209,8 +238,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
                               Text(
-                                '0',
-                                style: TextStyle(
+                                volunteeringHours.toString(),
+                                style: const TextStyle(
                                     color: Color(0xFF7B6F72),
                                     fontSize: 20,
                                     fontFamily: 'Poppins',

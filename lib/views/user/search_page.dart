@@ -83,7 +83,6 @@ class _SearchPageState extends State<SearchPage> {
                   }).toList(),
                 ),
                 SearchResultsWidget(category: widget.dropdownValue, searchDate:search_date,),
-                
               ],
             ),
           ),

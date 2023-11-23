@@ -1,24 +1,26 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/resources/auth_services.dart';
-import 'package:helping_hand/views/user/navigation.dart';
+import 'package:helping_hand/views/organisation/home_page.dart';
+import 'package:helping_hand/views/organisation/org_navidation.dart';
+import 'package:helping_hand/views/organisation/org_profile.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:helping_hand/widgets/my_textField.dart';
 import 'package:helping_hand/widgets/square_tile.dart';
 import 'package:helping_hand/views/user/forget_pw_page.dart';
 
 // ignore: must_be_immutable
-class LoginPage extends StatefulWidget {
+class LoginPageOrg extends StatefulWidget {
   void Function()? onTap;
   BuildContext parent;
 
-  LoginPage({super.key, required this.onTap, required this.parent});
+  LoginPageOrg({super.key, required this.onTap, required this.parent});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginPageOrg> createState() => _LoginPageOrgState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageOrgState extends State<LoginPageOrg> {
   //text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -66,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
       // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const Navigation(),
+          builder: (context) => const OrganisationNavigation(),
         ),
       );
     }
@@ -166,14 +168,14 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: height*0.04),
               SquareTile(
                 onTap: () async {
-                  await AuthService().signInWithGoogle(context: context);
+                  await AuthService().signInWithGoogleOrg(context: context);
                   if (FirebaseAuth.instance.currentUser != null) {
                     // ignore: use_build_context_synchronously
                     Navigator.pop(widget.parent);
                     // ignore: use_build_context_synchronously
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => const Navigation(),
+                        builder: (context) => const OrganisationNavigation(),
                       ),
                     );
                   }

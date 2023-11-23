@@ -1,90 +1,65 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:helping_hand/resources/auth_page.dart';
-import 'package:helping_hand/widgets/my_button.dart';
+import 'package:helping_hand/user_type_page.dart';
+import 'package:helping_hand/views/organisation/home_page.dart';
+import 'package:helping_hand/views/organisation/org_navidation.dart';
+import 'package:helping_hand/views/user/navigation.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreen();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreen extends State<SplashScreen> with SingleTickerProviderStateMixin{
+class _SplashScreenState extends State<SplashScreen> {
   @override
-  void initState(){
-    //super.initState();
-    //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-    Future.delayed(Duration(seconds: 0),(){
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const AuthPage()));
+  void initState() {
+    super.initState();
+
+    Future.wait([
+      getUserData(),
+      Future.delayed(
+        const Duration(milliseconds: 3000),
+      ),
+    ]).then((snapshot) {
+      String user = (snapshot.first as String);
+      // ignore: avoid_print
+      print(user);
+      Widget next = user == "onBoard"
+          ? const UserType()
+          : user == "volunteer"
+              ? Navigation()
+              : OrganisationNavigation();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => next,
+        ),
+      );
     });
   }
-  // @override
-  // void dispose(){
-  //   super.dispose();
-  //   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-  // }
+
+  Future<String> getUserData() async {
+    if(FirebaseAuth.instance.currentUser == null) return "onBoard";
+    QuerySnapshot query = await FirebaseFirestore.instance.collection('users')
+                          .where('email',isEqualTo:FirebaseAuth.instance.currentUser!.email.toString()).get();
+    if(query.docs.isEmpty){
+      return "organiser";
+    }
+    else{
+      return "volunteer";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
     return Scaffold(
-    //backgroundColor: Colors.red,
-    body: Container(
-        
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-        begin: Alignment(1.00, -0.08),
-        end: Alignment(-1, 0.08),
-        colors: [Color(0xFF92A3FD), Color(0xFF9DCEFF)],
-        ),
-        
+      body: Center(
+        child: LoadingAnimationWidget.flickr(leftDotColor: const Color(0xFF92A3FD), rightDotColor: Colors.black, size: 80),
       ),
-      // ignore: prefer_const_constructors
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          //SizedBox(height: height * 0.3,),
-          Center(
-            child: Text(
-              "Helping Hand",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 45,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Text('making a difference', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,),),
-          //SizedBox(height: height * 0.35,),
-          // GestureDetector(
-          //   onTap: (){
-          //     Navigator.pop(context);
-          //     Navigator.push(context, MaterialPageRoute(builder: (context) =>
-          //                 AuthPage()));
-          //   },
-          //   // child: Container(
-          //   //   padding: const EdgeInsets.all(20),
-          //   //   margin: const EdgeInsets.symmetric(horizontal: 25),
-          //   //   decoration: ShapeDecoration(
-          //   //     color: Color.fromARGB(255, 235, 236, 237), 
-                
-          //   //   shape: RoundedRectangleBorder(
-          //   //     borderRadius: BorderRadius.circular(50),
-          //   //   ), 
-          //   //   ),
-          //   //   child: Center(
-          //   //     child: Text('Get Started', style: const TextStyle(color: Color(0xFF92A3FD), fontWeight: FontWeight.bold, fontSize: 20),),
-          //   //   ),
-          //   // ),
-          // ),
-        ],
-      ),
-    ),
-        );
+    );
   }
-  }
-
-
-
-
+}

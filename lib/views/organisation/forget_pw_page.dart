@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:helping_hand/widgets/my_textField.dart';
 
-class ForgetPasswordPage extends StatefulWidget {
-  const ForgetPasswordPage({super.key});
+class ForgetPasswordPageOrg extends StatefulWidget {
+  const ForgetPasswordPageOrg({super.key});
 
   @override
-  State<ForgetPasswordPage> createState() => _ForgetPasswordPageState();
+  State<ForgetPasswordPageOrg> createState() => _ForgetPasswordPageOrgState();
 }
 
-class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
+class _ForgetPasswordPageOrgState extends State<ForgetPasswordPageOrg> {
   final emailController = TextEditingController();
 
   Future passwordReset() async{
     try{
-      QuerySnapshot query = await FirebaseFirestore.instance.collection('users').where('email',isEqualTo:emailController.text).get();
+      QuerySnapshot query = await FirebaseFirestore.instance.collection('organisations').where('email',isEqualTo:emailController.text).get();
       if (query.docs.isEmpty){
         // ignore: use_build_context_synchronously
         showDialog(context: context, builder: (context){

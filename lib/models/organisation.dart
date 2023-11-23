@@ -30,7 +30,7 @@ class Organisation {
         "orgname": orgname,
         "email": email,
         "profileURL": profileURL,
-        "location": bio,
+        "bio": bio,
         "upiID":upiID,
         "following": following,
         "volunteerHistory": volunteerHistory,

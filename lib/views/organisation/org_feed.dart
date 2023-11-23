@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:helping_hand/models/organisation.dart' as model;
+import 'package:helping_hand/models/organisation.dart' ;
 import 'package:helping_hand/models/organisation.dart';
 import 'package:helping_hand/providers/organisation_provider.dart';
 import 'package:helping_hand/widgets/event_card.dart';
@@ -15,25 +15,17 @@ class OrganisationFeed extends StatefulWidget {
 
 class _OrganisationFeedState extends State<OrganisationFeed> {
   final CollectionReference _events = FirebaseFirestore.instance.collection('events');
-  @override
-  void initState(){
-    // TODO: implement initState
-    super.initState();
-    loadUserData();
-  }
-  loadUserData() async {
-    OrganisationProvider organisationProvider = Provider.of(context, listen: false);
-    await organisationProvider.refreshOrganisation();
-  }
 
   Widget build(BuildContext context){
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    model.Organisation organisation = Provider.of<OrganisationProvider>(context, listen: false).getOrganisation;
+    
+    Organisation organisation = Provider.of<OrganisationProvider>(context, listen: false).getOrganisation;
     Map<String, dynamic> organisationMap = organisation.getData();
 
     List<dynamic> organisationEvents = organisationMap['upcomingEvents'];
+    print(organisationMap['email']);
     //print(userEvents);
     // Timestamp t1 = _events['startTime'] ;
     
@@ -47,7 +39,7 @@ class _OrganisationFeedState extends State<OrganisationFeed> {
         ), 
         centerTitle: true,
         title:  const Text(
-          'Signed Events',
+          'Posted Events',
           style: TextStyle(
               color: Color(0xFF1D1517),
               fontSize: 25,

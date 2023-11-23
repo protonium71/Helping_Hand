@@ -12,6 +12,7 @@ class User {
   List<dynamic>? volunteerHistory;  // list of job ids
   List<dynamic>? upcomingEvents;  // list of job ids
   List<dynamic>? following;  // list of organisation ids
+  List<dynamic>? notifications;
   int? volunteeringHours;
   String? ftoken;
 
@@ -26,6 +27,7 @@ class User {
     this.volunteerHistory,
     this.upcomingEvents,
     this.following,
+    this.notifications,
     this.volunteeringHours,
     this.ftoken,
   });
@@ -42,6 +44,7 @@ class User {
         "volunteerHistory": volunteerHistory,
         "upcomingEvents": upcomingEvents,
         "following": following,
+        "notifications": notifications,
         "volunteeringHours": volunteeringHours,
         "ftoken": ftoken,
       };
@@ -61,6 +64,7 @@ class User {
       volunteerHistory: map['volunteerHistory'],
       upcomingEvents: map['upcomingEvents'],
       following: map['following'],
+      notifications: map['notifications'],
       volunteeringHours: map['volunteeringHours'],
       ftoken: map['ftoken'],
     );
