@@ -1,11 +1,18 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_state_city_pro/country_state_city_pro.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:helping_hand/models/event.dart';
+import 'package:helping_hand/models/organisation.dart';
+import 'package:helping_hand/providers/organisation_provider.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
-const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
+const List<String> list = <String>['Animals', 'Art & Culture', 'Children & youth', 'Computer & Technology', 'Cooking', 'Education & Literacy','Emergency & Safety','Employment','Environment','Faith Based','Health & Medicine','Homeless & Housing','Human Rights','Immigrants & Refugees','International','LGBTQ+','Media & Broadcasting','Social Work', 'Sports','Tutoring','Creativity','Fundraising','Teamwork','Teaching','Social Media',];
 
 const List<String> months = <String>['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -17,8 +24,10 @@ class PostEventPage extends StatefulWidget {
 }
 
 class _PostEventPageState extends State<PostEventPage> {
+  
   String selectedImagePath = '';
-  dynamic dropdownValue;
+  String imageURL = '';
+  String? dropdownValue;
   final eventname = TextEditingController();
   final cause = TextEditingController();
   final details = TextEditingController();
@@ -27,6 +36,7 @@ class _PostEventPageState extends State<PostEventPage> {
   final state = TextEditingController();
   final city = TextEditingController();
   String startDate = "", startTime = "", endDate = "", endTime = "";
+  int y1 = 0, mo1 = 0, d1 = 0, h1 = 0, mi1 = 0, s1 = 0, y2 = 0, mo2 = 0, d2 = 0, h2 = 0, mi2 = 0, s2 = 0;
   DateTime? searchDate = DateTime.now();
   TimeOfDay? searchTime = TimeOfDay.now();
 
@@ -40,10 +50,16 @@ class _PostEventPageState extends State<PostEventPage> {
       setState(() {
         searchDate = value;
         if(date == "start"){
+          y1 = searchDate!.year;
+          mo1 = searchDate!.month;
+          d1 = searchDate!.day;
           startDate = months[searchDate!.month].toString();
           startDate += " ${searchDate!.day.toString()}";
         }
         else if(date == "end"){
+          y2 = searchDate!.year;
+          mo2 = searchDate!.month;
+          d2 = searchDate!.day;
           endDate = months[searchDate!.month].toString();
           endDate += " ${searchDate!.day.toString()}";
         }
@@ -59,10 +75,14 @@ class _PostEventPageState extends State<PostEventPage> {
       setState(() {
         searchTime = value;
         if(time == "start"){
+          h1 = searchTime!.hour;
+          mi1 = searchTime!.minute;
           startTime = searchTime!.hour.toString();
           startTime += " : ${searchTime!.minute.toString()} ${searchTime!.period.name}";
         }
         else if(time == "end"){
+          h2 = searchTime!.hour;
+          mi2 = searchTime!.minute;
           endTime = searchTime!.hour.toString();
           endTime += " : ${searchTime!.minute.toString()} ${searchTime!.period.name}";
         }
@@ -72,6 +92,8 @@ class _PostEventPageState extends State<PostEventPage> {
 
   @override
   Widget build(BuildContext context) {
+    Organisation organisation = Provider.of<OrganisationProvider>(context, listen: false).getOrganisation;
+    Map<String, dynamic> organisationMap = organisation.getData();
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -574,7 +596,62 @@ class _PostEventPageState extends State<PostEventPage> {
                   ],
                 ),
                 //submit 
-                MyButton(onTap: (){}, text: "Submit"),
+                MyButton(onTap: () async{
+                  print(eventname.text);
+                  print(dropdownValue);
+                  print(details.text);
+                  print(city.text);
+                  print(startDate);
+                  print(startTime);
+                  print(endDate);
+                  print(endTime);
+                  print(totalspots.text);
+                  print(imageURL);
+                  if(organisationMap['orgname'] == ""){
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                content: Text("Pleae complete your profile first.."),
+                              ));
+                  }
+                  else if(eventname.text != "" && dropdownValue != "" && details.text != "" && city.text != "" && startDate != "" && startTime != "" && endDate != "" && endTime != "" && totalspots.text != "" && imageURL != ""){
+                    DateTime start = DateTime(y1, mo1, d1, h1, mi1), end = DateTime(y1, mo1, d1, h1, mi1);
+                    Timestamp startTimeStamp = Timestamp.fromDate(start);
+                    Timestamp endTimeStamp = Timestamp.fromDate(end);
+                    String uid = Uuid().v1() as String;
+                    Event event = Event(
+                      uid: uid, 
+                      eventid: uid, 
+                      eventname: eventname.text, 
+                      profileURL: imageURL, 
+                      location: city.text, 
+                      organiserID: organisationMap['uid'], 
+                      organiserName: organisationMap['orgname'],
+                      startTime: startTimeStamp, 
+                      endTime: endTimeStamp, 
+                      details: details.text, 
+                      totalSpots: totalspots.text, 
+                      signedSpots: '0', 
+                      cause: dropdownValue!,
+                      );
+
+                      await FirebaseFirestore.instance
+                      .collection('events')
+                      .doc(uid)
+                      .set(event.getData());
+                      
+                      List<dynamic> upcomingEvents = organisationMap['upcomingEvents'];
+                      upcomingEvents.add(uid);
+                      await FirebaseFirestore.instance.collection('organisations').doc(organisationMap['uid']).update({'upcomingEvents':upcomingEvents});
+
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                content: Text("Event added successfully.."),
+                              ));
+                  }
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                content: Text("Please Fill all fields.."),
+                              ));
+                  }
+                }, text: "Submit"),
               ],
             ),
           ),
@@ -609,10 +686,20 @@ class _PostEventPageState extends State<PostEventPage> {
                             selectedImagePath = await selectImageFromGallery();
                             // ignore: avoid_print
                             print('Image_Path:- $selectedImagePath');
+                            String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+
+                            Reference referenceRoot = FirebaseStorage.instance.ref();
+                            Reference referenceDir = referenceRoot.child('event_pics');
+                            Reference imageToUpload = referenceDir.child(uniqueName);
                             if (selectedImagePath != '') {
+                              await imageToUpload.putFile(File(selectedImagePath));
+                              String tempImageURL = await imageToUpload.getDownloadURL();
                               // ignore: use_build_context_synchronously
                               Navigator.pop(context);
-                              setState(() {});
+                              setState(() {
+                                imageURL = tempImageURL;
+                              });
+                              print(imageURL);
                             } else {
                               setState(() {});
                               // ignore: use_build_context_synchronously
@@ -642,10 +729,20 @@ class _PostEventPageState extends State<PostEventPage> {
                             selectedImagePath = await selectImageFromCamera();
                             // ignore: avoid_print
                             print('Image_Path:- $selectedImagePath');
+                            String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+
+                            Reference referenceRoot = FirebaseStorage.instance.ref();
+                            Reference referenceDir = referenceRoot.child('event_pics');
+                            Reference imageToUpload = referenceDir.child(uniqueName);
                             if (selectedImagePath != '') {
+                              await imageToUpload.putFile(File(selectedImagePath));
+                              String tempImageURL = await imageToUpload.getDownloadURL();
                               // ignore: use_build_context_synchronously
                               Navigator.pop(context);
-                              setState(() {});
+                              setState(() {
+                                imageURL = tempImageURL;
+                              });
+                              print(imageURL);
                             } else {
                               setState(() {});
                               // ignore: use_build_context_synchronously
