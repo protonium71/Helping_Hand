@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/models/organisation.dart' ;
-import 'package:helping_hand/models/organisation.dart';
 import 'package:helping_hand/providers/organisation_provider.dart';
 import 'package:helping_hand/widgets/event_card.dart';
 import 'package:provider/provider.dart';

@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:helping_hand/models/organisation.dart';
 import 'package:helping_hand/providers/organisation_provider.dart';
-import 'package:helping_hand/providers/user_provider.dart';
 import 'package:helping_hand/views/organisation/org_edit_profile.dart';
-import 'package:helping_hand/widgets/custom_profile_container.dart';
 import 'package:helping_hand/widgets/my_button.dart';
-import 'package:helping_hand/views/user/edit_profile_page.dart';
-import 'package:helping_hand/views/user/signed_events_page.dart';
 import 'package:provider/provider.dart';
-import 'package:helping_hand/models/user.dart' as model;
 
 class OrganisationProfilePage extends StatefulWidget {
   const OrganisationProfilePage({super.key});
@@ -33,7 +28,7 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
       upiID = organisationMap['upiID'];
       following = organisationMap['following'].length.toString();
       profileURL = organisationMap['profileURL'];
-      print("3333"+profileURL);
+      // print("3333"+profileURL);
       });
     print(name);
   }
@@ -152,7 +147,7 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                                   organisationMap['email'],
                                   //'dummymail@gmail.com',
                                   maxLines: 2,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Color(0xFF7B6F72),
                                       fontSize: 15,
                                       fontFamily: 'Poppins',
@@ -170,7 +165,7 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                 SizedBox(height: height*0.025,),
                 MyButton(
                   onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => OrganisationEditProfilePage())).then(_changeState);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const OrganisationEditProfilePage())).then(_changeState);
                   
                   }, 
                   text: 'Edit Profile'
@@ -201,7 +196,7 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
+                        const Text(
                           'following',
                           style: TextStyle(
                               color: Color(0xFF1D1517),
@@ -218,7 +213,7 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                             children: <Widget>[
                               Text(
                                 following,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Color(0xFF7B6F72),
                                     fontSize: 20,
                                     fontFamily: 'Poppins',

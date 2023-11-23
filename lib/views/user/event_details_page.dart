@@ -13,10 +13,39 @@ class EventDetailsPage extends StatefulWidget {
 }
 
 class _EventDetailsPageState extends State<EventDetailsPage> {
-  
+  bool isFollow = false;
+
+  // @override
+  // void initState(){
+  //   loadData();
+  //   super.initState();
+    
+  // }
+
+  loadData() async{
+    // QuerySnapshot query = await FirebaseFirestore.instance.collection('users').where('following',arrayContains: widget.documentSnapshot['eventid'].toString()).get();
+    // if(query.docs.isEmpty){
+    //   setState(() {
+    //     isFollow = false;
+    //   });
+    // }
+    UserProvider userProvider = Provider.of(context, listen: false);
+    await userProvider.refreshUser();
+    model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
+    Map<String, dynamic> userMap = user.getData();
+    for(String s in userMap['following']){
+      if(s == widget.documentSnapshot['organisedBy']){
+        setState(() {
+          isFollow = true;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    loadData();
+    print(isFollow);
     var spots_rem = widget.documentSnapshot['totalSpots'] - widget.documentSnapshot['signedSpots'];
     Timestamp t1 = widget.documentSnapshot['startTime'] ;
     Timestamp t2 = widget.documentSnapshot['endTime'] ;
@@ -55,7 +84,25 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   ),
                   
                   Text(widget.documentSnapshot['eventname'], style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
-                  Text(widget.documentSnapshot['organisedBy'], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff6379A5))),
+                  Text(widget.documentSnapshot['organisedBy'], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff6379A5),)),
+                  if (isFollow == false) Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Follow"),
+                      IconButton(
+                        onPressed: () async{
+                          List<dynamic> list = userMap['following'];
+                          list.add(widget.documentSnapshot['organisedBy']);
+                          await FirebaseFirestore.instance.collection("users").doc(id).update({"following":list});
+                          setState(() {
+                            isFollow = true;
+                          });
+                        }, 
+                        icon: Icon(Icons.add_box_outlined),
+                      ),
+                    ],
+                  ) else SizedBox(height: 0,),
                    Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
                     child: Row(

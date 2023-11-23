@@ -1,29 +1,19 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:country_state_city_pro/country_state_city_pro.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/models/organisation.dart';
-import 'package:helping_hand/models/user.dart';
 import 'package:helping_hand/providers/organisation_provider.dart';
-import 'package:helping_hand/providers/user_provider.dart';
-import 'package:helping_hand/views/user/profile_page.dart';
-import 'package:helping_hand/views/user/skill_page.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:helping_hand/widgets/my_textField.dart';
-import 'package:helping_hand/views/user/interests_page.dart';
-import 'package:helping_hand/widgets/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:helping_hand/models/user.dart' as model;
 
 class OrganisationEditProfilePage extends StatefulWidget {
   //final BuildContext context1;
 
-  OrganisationEditProfilePage({super.key});
+  const OrganisationEditProfilePage({super.key});
 
   @override
   State<OrganisationEditProfilePage> createState() => _OrganisationEditProfilePage();
@@ -120,9 +110,9 @@ class _OrganisationEditProfilePage extends State<OrganisationEditProfilePage> {
                     child: MaterialButton(
                       onPressed: () async{  
                         ImagePicker imagePicker = ImagePicker();
-                        XFile? profile_pic = await imagePicker.pickImage(source: ImageSource.gallery);
-                        if(profile_pic == null)return;
-                        print('${profile_pic?.path}');
+                        XFile? profilePic = await imagePicker.pickImage(source: ImageSource.gallery);
+                        if(profilePic == null)return;
+                        print('${profilePic?.path}');
                         String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
 
                         Reference referenceRoot = FirebaseStorage.instance.ref();
@@ -130,7 +120,7 @@ class _OrganisationEditProfilePage extends State<OrganisationEditProfilePage> {
                         Reference imageToUpload = referenceDir.child(uniqueName);
 
                         try{
-                          await imageToUpload.putFile(File(profile_pic!.path));
+                          await imageToUpload.putFile(File(profilePic!.path));
                           String tempImageURL = await imageToUpload.getDownloadURL();
                           //print("0000000"+tempImageURL);
                           setState(() {

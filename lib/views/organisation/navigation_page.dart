@@ -30,7 +30,7 @@ class _NavigationPageState extends State<NavigationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigationControlle());
+    final controller = Get.put(NavigationControllerOrg());
     return Scaffold(
       backgroundColor: Colors.white,
        body: Obx(() => controller.screens[controller.selectedIndex.value]),
@@ -80,11 +80,11 @@ class _NavigationPageState extends State<NavigationPage> {
   }
 }
 
-class NavigationControlle extends GetxController{
+class NavigationControllerOrg extends GetxController{
   final Rx<int> selectedIndex = 0.obs ;
   final screens = [
     const HomePage(),
-    OrganisationProfilePage(),
+    const OrganisationProfilePage(),
     const PostEventPage(),
     Container(color: Colors.orange,),
   ];
