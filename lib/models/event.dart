@@ -6,7 +6,8 @@ class Event {
   String eventid;
   String eventname;
   String profileURL;
-  String organisedBy;
+  String organiserID;
+  String organiserName;
   String location;
   Timestamp startTime;
   Timestamp endTime;
@@ -21,7 +22,8 @@ class Event {
     required this.eventname,
     required this.profileURL,
     required this.location,
-    required this.organisedBy,
+    required this.organiserID,
+    required this.organiserName,
     required this.startTime,
     required this.endTime,
     required this.details,
@@ -37,7 +39,8 @@ class Event {
         "eventname": eventname,
         "profileURL": profileURL,
         "location": location,
-        "organisedBy": organisedBy,
+        "organiserID": organiserID,
+        "organiserName": organiserName,
         "startTime": startTime,
         "endTime": endTime,
         "details": details,
@@ -56,7 +59,8 @@ class Event {
       eventname: map['eventname'],
       profileURL: map['profileURL'],
       location: map['location'],
-      organisedBy: map['organisedBy'],
+      organiserID: map['organiserID'],
+      organiserName: map['organiserName'],
       startTime: map['startTime'],
       endTime: map['endTime'],
       details: map['details'],

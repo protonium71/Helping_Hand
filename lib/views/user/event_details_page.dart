@@ -17,16 +17,19 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    var spots_rem = widget.documentSnapshot['totalSpots'] - widget.documentSnapshot['signedSpots'];
+    
+    var spots_rem = num.parse(widget.documentSnapshot['totalSpots']) - num.parse(widget.documentSnapshot['signedSpots']);
     Timestamp t1 = widget.documentSnapshot['startTime'] ;
     Timestamp t2 = widget.documentSnapshot['endTime'] ;
     model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
     Map<String, dynamic> userMap = user.getData();
     List<dynamic> all_events = userMap['upcomingEvents'];
     String id = userMap['uid'];
+    //Timestamp.fromDate(date);
     
     DateTime s_date = t1.toDate();
     DateTime e_date = t2.toDate();
+    //s_date.
     // print(s_date.toString());
     // print(s_date.hour);
     
@@ -55,7 +58,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   ),
                   
                   Text(widget.documentSnapshot['eventname'], style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
-                  Text(widget.documentSnapshot['organisedBy'], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff6379A5))),
+                  Text(widget.documentSnapshot['organiserName'], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff6379A5))),
                    Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
                     child: Row(
@@ -134,6 +137,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
             
               style: ElevatedButton.styleFrom(backgroundColor: const Color(0xffBBBBD6),),
               onPressed: () async{
+                
                 all_events.add(widget.documentSnapshot['eventid']);
                 await FirebaseFirestore.instance.collection("users").doc(id).update({"upcomingEvents":all_events});
               }, 
