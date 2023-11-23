@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:helping_hand/resources/auth_services.dart';
 import 'package:helping_hand/user_type_page.dart';
+import 'package:helping_hand/views/organisation/post_event_page.dart';
+import 'package:helping_hand/widgets/my_button.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key,});
@@ -27,7 +29,14 @@ class HomePage extends StatelessWidget {
         backgroundColor: const Color(0xffCDD4E0),
         title: const Text('Home Feed'),
       ),
-      body: const SafeArea(child: Text("data")),
+      body: SafeArea(
+        child: MyButton(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const PostEventPage()));
+          }, 
+          text: "Go to post event",
+        )
+      ),
     );
   }
 }
