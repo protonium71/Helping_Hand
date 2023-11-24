@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/resources/auth_services.dart';
-import 'package:helping_hand/views/organisation/home_page.dart';
 import 'package:helping_hand/views/organisation/navigation_page.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:helping_hand/widgets/my_textField.dart';

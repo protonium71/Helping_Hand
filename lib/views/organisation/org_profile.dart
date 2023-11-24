@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:helping_hand/models/organisation.dart';
 import 'package:helping_hand/providers/organisation_provider.dart';
-import 'package:helping_hand/providers/user_provider.dart';
 import 'package:helping_hand/views/organisation/org_edit_profile.dart';
-import 'package:helping_hand/widgets/custom_profile_container.dart';
 import 'package:helping_hand/widgets/my_button.dart';
-import 'package:helping_hand/views/user/edit_profile_page.dart';
-import 'package:helping_hand/views/user/signed_events_page.dart';
 import 'package:provider/provider.dart';
-import 'package:helping_hand/models/user.dart' as model;
 
 class OrganisationProfilePage extends StatefulWidget {
   const OrganisationProfilePage({super.key});
@@ -33,9 +28,7 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
       upiID = organisationMap['upiID'];
       following = organisationMap['following'].length.toString();
       profileURL = organisationMap['profileURL'];
-      print("3333"+profileURL);
       });
-    print(name);
   }
   @override
   Widget build(BuildContext context) {
@@ -94,7 +87,6 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                 //user info
                 Container(
                   height: height*0.11,
-                  // color: Colors.yellow,
                   child: Row(
                     children: [
                       Container( 
@@ -103,7 +95,6 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                         decoration: BoxDecoration(
                           color: Colors.green,
                           borderRadius: BorderRadius.circular(100),
-                          //shape: BoxShape.circle,
                       image: DecorationImage(
                           fit: BoxFit.cover,
                           image: profileURL != "" ? NetworkImage(profileURL!) : const AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,), 
@@ -117,7 +108,6 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                         children: [
                            Text(
                             name,
-                            //'Prashant',
                             style: const TextStyle(
                                 color: Color(0xFF1D1517),
                                 fontSize: 20,
@@ -131,7 +121,6 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                               SizedBox(width: width*0.01,),
                               Text(
                                 upiID,
-                                //'fake@upiID',
                                 style: const TextStyle(
                                     color: Color(0xFF7B6F72),
                                     fontSize: 15,
@@ -147,12 +136,10 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                               SizedBox(width: width*0.01,),
                               Container(
                                 width: width*0.59,
-                                // color: Colors.red,
                                 child: Text(
                                   organisationMap['email'],
-                                  //'dummymail@gmail.com',
                                   maxLines: 2,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Color(0xFF7B6F72),
                                       fontSize: 15,
                                       fontFamily: 'Poppins',
@@ -170,8 +157,7 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                 SizedBox(height: height*0.025,),
                 MyButton(
                   onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => OrganisationEditProfilePage())).then(_changeState);
-                  
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const OrganisationEditProfilePage())).then(_changeState);
                   }, 
                   text: 'Edit Profile'
                 ),
@@ -201,8 +187,8 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
-                          'following',
+                        const Text(
+                          'Followers',
                           style: TextStyle(
                               color: Color(0xFF1D1517),
                               fontSize: 25,
@@ -218,7 +204,7 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                             children: <Widget>[
                               Text(
                                 following,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Color(0xFF7B6F72),
                                     fontSize: 20,
                                     fontFamily: 'Poppins',
@@ -251,70 +237,7 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                     padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: Text(organisationMap['bio']),
                   
-                  )
-                //signed events button
-                // GestureDetector(
-                //   onTap: (){
-                //     Navigator.push(context, MaterialPageRoute(builder: (context) => const SignedEventsPage()));
-                //   },
-                //   child: Container(
-                //     width: width*0.9,
-                //     height: height*0.07,
-                //     decoration: ShapeDecoration(
-                //         color: const Color.fromARGB(255, 218, 234, 251),
-                //         shape: RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.circular(16),
-                //         ),
-                //         shadows: const [
-                //             BoxShadow(
-                //                 color: Color(0x111D1617),
-                //                 blurRadius: 22,
-                //                 offset: Offset(0, 10),
-                //                 spreadRadius: 0,
-                //             )
-                //         ],
-                //     ),
-                //     child: Padding(
-                //       padding: EdgeInsets.symmetric(horizontal: width*0.04),
-                //       child: const Row(
-                //         mainAxisAlignment: MainAxisAlignment.start,
-                //         crossAxisAlignment: CrossAxisAlignment.center,
-                //         mainAxisSize: MainAxisSize.max,
-                //         children: [
-                //           Text(
-                //             'Signed Events',
-                //             style: TextStyle(
-                //                 color: Color(0xFF1D1517),
-                //                 fontSize: 25,
-                //                 fontFamily: 'Poppins',
-                //                 fontWeight: FontWeight.w500,
-                //             ),
-                //           ),
-                //           Expanded(
-                //             child: Row(
-                //               mainAxisAlignment: MainAxisAlignment.end,
-                //               crossAxisAlignment: CrossAxisAlignment.center,
-                //               mainAxisSize: MainAxisSize.max,
-                //               children: <Widget>[
-                //                 Icon(Icons.arrow_forward_ios, size: 20,),
-                //               ],
-                //             )
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                //SizedBox(height: height*0.025,),
-                //interests
-                //CustomProfileContainer(text: 'Interests', type: 'interests', items: userMap['interests'],),
-                //SizedBox(height: height*0.025,),
-                //skills
-                //CustomProfileContainer(text: 'Skills', type: 'skills', items: userMap['skills'],),
-                //SizedBox(height: height*0.025,),
-                //following
-                //CustomProfileContainer(text: 'Following', type: 'following', items: userMap['following'],),
-                //SizedBox(height: height*0.025,),               
+                  ),              
               ],
             ),
           ),

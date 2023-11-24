@@ -62,8 +62,10 @@ class _InterestsPageState extends State<InterestsPage> {
                 child: MyButton(onTap: () async{
                   // print(interests);
                   //Navigator.pop(context, interests);
-                  if(interests.length != 0)
-                  await FirebaseFirestore.instance.collection("users").doc(id).update({"interests":interests});
+                  if(interests.isNotEmpty) {
+                    await FirebaseFirestore.instance.collection("users").doc(id).update({"interests":interests});
+                  }
+                  // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                 }, text: 'Continue', color: const Color(0xff6379A5),),
               ),

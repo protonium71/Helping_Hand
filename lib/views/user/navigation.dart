@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:helping_hand/providers/user_provider.dart';
+import 'package:helping_hand/resources/notifications.dart';
 import 'package:helping_hand/views/user/profile_page.dart';
 import 'package:helping_hand/views/user/search_page.dart';
 import 'package:helping_hand/views/user/notification_page.dart';
@@ -30,6 +31,7 @@ class _NavigationState extends State<Navigation> {
   @override
   void initState() {
     super.initState();
+    Notifications().updateToken();
     loadUserData();
   }
 
@@ -101,4 +103,12 @@ class NavigationController extends GetxController{
     const NotificationPage(),
     const ProfilePage(),
   ];
+
+  // Function to handle navigation based on a notification
+  void handleNotificationNavigation(int index) {
+    // Ensure the index is within the bounds of the screens list
+    if (index >= 0 && index < screens.length) {
+      selectedIndex.value = index;
+    }
+  }
 }

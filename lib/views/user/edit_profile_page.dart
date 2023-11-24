@@ -1,19 +1,14 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_state_city_pro/country_state_city_pro.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:helping_hand/models/user.dart';
 import 'package:helping_hand/providers/user_provider.dart';
-import 'package:helping_hand/views/user/profile_page.dart';
 import 'package:helping_hand/views/user/skill_page.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:helping_hand/widgets/my_textField.dart';
 import 'package:helping_hand/views/user/interests_page.dart';
-import 'package:helping_hand/widgets/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:helping_hand/models/user.dart' as model;
@@ -172,13 +167,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: MyButton(onTap: () async {
-                if(controller.text != "")
+                if(controller.text != "") {
                   await FirebaseFirestore.instance.collection("users").doc(id).update({"username":controller.text});
-                if(city.text != "")
+                }
+                if(city.text != "") {
                   await FirebaseFirestore.instance.collection("users").doc(id).update({"location":city.text});
+                }
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-                if(imageURL != "")
+                if(imageURL != "") {
                   await FirebaseFirestore.instance.collection("users").doc(id).update({"profileURL":imageURL});
+                }
                 
 
               }, text: 'Update Profile'),
