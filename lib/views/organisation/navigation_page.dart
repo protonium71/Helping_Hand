@@ -4,6 +4,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:helping_hand/providers/organisation_provider.dart';
 import 'package:helping_hand/views/organisation/home_page.dart';
 import 'package:get/get.dart';
+import 'package:helping_hand/views/organisation/org_feed.dart';
 import 'package:helping_hand/views/organisation/org_profile.dart';
 import 'package:helping_hand/views/organisation/post_event_page.dart';
 import 'package:provider/provider.dart';
@@ -55,18 +56,30 @@ class _NavigationPageState extends State<NavigationPage> {
               //duration: Duration(milliseconds: 90),
               padding: const EdgeInsets.all(6),
               activeColor: Colors.white,
-              tabs: const [
+              tabs: [
                 GButton(icon: Icons.home_rounded,
                 //text: 'Home',
+                onPressed: (){
+                  loadUserData();
+                },
                 ),
                 GButton(icon: Icons.search,
                 //text: 'Search',
+                onPressed: (){
+                  loadUserData();
+                },
                 ),
                 GButton(icon: Icons.monetization_on_rounded,
                 //text: 'Raise Fund',
+                onPressed: (){
+                  loadUserData();
+                },
                 ),
                 GButton(icon: Icons.notifications,
                 //text: 'Notifications',
+                onPressed: (){
+                  loadUserData();
+                },
                 
                 ),
                 // GButton(icon: Icons.person_rounded,
@@ -86,6 +99,6 @@ class NavigationControllerOrg extends GetxController{
     const HomePage(),
     const OrganisationProfilePage(),
     const PostEventPage(),
-    Container(color: Colors.orange,),
+    OrganisationFeed(),
   ];
 }

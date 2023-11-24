@@ -5,40 +5,55 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:helping_hand/main.dart';
+import 'package:helping_hand/models/organisation.dart';
 import 'package:helping_hand/models/user.dart' as model;
 import 'package:helping_hand/resources/auth_services.dart';
+import 'package:helping_hand/views/user/navigation.dart';
+import 'package:helping_hand/views/user/notification_page.dart';
 import 'package:http/http.dart';
 
 class Notifications{
   // for accessing firebase messaging (Push Notification)
-  static FirebaseMessaging fMessaging = FirebaseMessaging.instance;
+  final FirebaseMessaging fMessaging = FirebaseMessaging.instance;
+
+  //
+  static String? ftoken;
+
+  //
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   // for getting firebase messaging token
-  static Future<void> getFirebaseMessagingToken() async {
+  Future<void> getFirebaseMessagingToken() async {
     await fMessaging.requestPermission();
-    String? ftoken;
     await fMessaging.getToken().then((value) {
       ftoken = value;
       // ignore: avoid_print
       print('\nftoken: $value');
     });
+  }
+
+  //update ftoken 
+  Future<void> updateToken() async{
     await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update({
       'ftoken' : ftoken,
     });
   }
 
+
   // for sending push notification
-  static Future<void> sendPushNotification(String msg, String ftoken, String user) async {
+  static Future<void> sendPushNotification(String msg, String ftoken, String user, String eventid) async {
     try {
       final body = {
         "to": ftoken,
         "notification": {
-          "title": "New Event posted by : $user", //our name should be send
+          "title": "New Event posted by $user", //our name should be send
           "body": msg,
           "android_channel_id": "chats",
         },
         "data": {
-          "eventid": FirebaseAuth.instance.currentUser!.uid,
+          "eventid": eventid,
         },
       };
 
@@ -55,9 +70,9 @@ class Notifications{
     }
   }
 
-  //first create list of followers of the organisation
-  static Future<void> createUserList(String msg, String user) async{
-    model.User org = await AuthService().getUserDetails();
+  //first create list of ftokens of followers of the organisation
+  static Future<void> createUserList(String msg, String user, String eventid) async{
+    Organisation org = await AuthService().getOrganisationDetails();
     List<String> userTokens = [];
     List<dynamic>? followers = org.following;
     if(followers != null){
@@ -69,14 +84,13 @@ class Notifications{
         userTokens.add(data.docs.first.data()['ftoken']);
       }
       for(String ftoken in userTokens){
-        sendPushNotification(msg, ftoken, user);
+        sendPushNotification(msg, ftoken, user, eventid);
       }
     }
   }
 
   //create notification channel
-  static Future<void> createNotificationChannel(String id, String name) async {
-    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  Future<void> createNotificationChannel(String id, String name) async {
     var androidNotificationChannel = AndroidNotificationChannel(
       id,
       name,
@@ -99,18 +113,37 @@ class Notifications{
   }
 
   //notification listening initialisation
-  static Future<void> initNotification() async{
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  Future<void> initNotification() async{
     const AndroidInitializationSettings initializationSettingsAndroid =  AndroidInitializationSettings('ic_launcher');
     const InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid,);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings, onDidReceiveNotificationResponse: (notificationResponse){
+        final message = RemoteMessage.fromMap(jsonDecode(notificationResponse.payload as String));
+        // print(message.data);
+        handleMessage(message);
+    });
+  }
 
+  //handle notification
+  void handleMessage(RemoteMessage? message){
+    if(message == null)return;
+    print(navigatorKey.currentState);
+    storeNotification(message.data);
+    // navigatorKey.currentState?.pushNamed(NotificationPage.route, arguments: message);
+    // Get.toNamed('/');
+    final NavigationController controller = Get.find();
+    controller.handleNotificationNavigation(3);
+  }
+
+  //init push notification
+  Future<void> initPushNotification() async{
+    FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
+    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async{
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification!.android;
-      storeNotification(message.data);
+      
       // ignore: avoid_print
-      print(message.data);
-      await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+      // print(message.data);
       // If `onMessage` is triggered with a notification, construct our own
       // local notification to show to users using the created channel.
       if (notification != null && android != null) {
@@ -128,6 +161,7 @@ class Notifications{
               ),
                 // other properties...
               ),
+              payload: jsonEncode(message.toMap()),
             );
       }
     });

@@ -122,7 +122,9 @@ class _OrganisationFeedState extends State<OrganisationFeed> {
                         print(documentSnapshot['eventid']);
                         return EventCard(documentSnapshot: documentSnapshot);
                       }
-                        
+                      else {
+                        return const SizedBox(height: 0,);
+                      }
                   });
                 }
                 return const Center(
@@ -203,7 +205,9 @@ class _OrganisationFeedState extends State<OrganisationFeed> {
                         print(documentSnapshot['eventid']);
                         return EventCard(documentSnapshot: documentSnapshot);
                       }
-                    
+                      else {
+                        return const SizedBox(height: 0,);
+                      }
                   });
                 }
                 return const Center(
