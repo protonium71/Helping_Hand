@@ -88,7 +88,6 @@ class _ProfilePageState extends State<ProfilePage> {
     //print("0000"+volunteeringHours.toString());
 
     return Scaffold(
-      
       appBar: AppBar(
         leading: GestureDetector(
           onTap: (){},

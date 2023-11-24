@@ -35,9 +35,10 @@ class _FollowingCardState extends State<FollowingCard> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Container(
       // color: Colors.teal[400],
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      padding: EdgeInsets.symmetric(vertical: height*0.01, horizontal: height*0.01),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8), 
         // color: Colors.teal[400],
@@ -55,7 +56,7 @@ class _FollowingCardState extends State<FollowingCard> {
               borderRadius: BorderRadius.circular(100),
               image: DecorationImage(
               fit: BoxFit.cover,
-              image: profileURL != "" ? NetworkImage(profileURL!) : AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,), 
+              image: profileURL != "" ? NetworkImage(profileURL) : AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,), 
               //more than 50% of width makes circle
             ),
             //child: ,

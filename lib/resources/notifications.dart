@@ -48,7 +48,7 @@ class Notifications{
       final body = {
         "to": ftoken,
         "notification": {
-          "title": "New Event posted by $user", //our name should be send
+          "title": "📢 New Event posted by $user", //our name should be send
           "body": msg,
           "android_channel_id": "chats",
         },

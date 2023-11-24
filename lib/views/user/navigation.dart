@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:helping_hand/views/user/payments.dart';
 import 'package:helping_hand/providers/user_provider.dart';
 import 'package:helping_hand/resources/notifications.dart';
 import 'package:helping_hand/views/user/profile_page.dart';
@@ -99,7 +100,7 @@ class NavigationController extends GetxController{
   final screens = [
     const UserFeed(),
     SearchPage(),
-    Container(color: Colors.orange,),
+    const PaymentPage(),
     const NotificationPage(),
     const ProfilePage(),
   ];

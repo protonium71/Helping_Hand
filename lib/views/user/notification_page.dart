@@ -27,13 +27,13 @@ class _NotificationPageState extends State<NotificationPage> {
         .collection('events')
         .doc(id.toString())
         .get();
-    print(id);
+    // print(id);
     if (snap.data() != null) {
       Map<String, dynamic> map = snap.data() as Map<String, dynamic>;
       setState(() {
         postedBy = map['organiserName'];
         eventname = map['eventname'];
-        print(eventname);
+        // print(eventname);
       });
     }
   }
@@ -97,6 +97,7 @@ class _NotificationPageState extends State<NotificationPage> {
                     loadData(notificationList[index]);
                     return NotificationCard(
                       index: index, 
+                      postedBy: postedBy,
                       eventname: eventname, 
                       list: notificationList,
                       onDelete: (int index) async{

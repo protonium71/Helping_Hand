@@ -1,25 +1,25 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:helping_hand/models/user.dart' as model;
-import 'package:helping_hand/resources/auth_services.dart';
 
+// ignore: must_be_immutable
 class NotificationCard extends StatelessWidget {
   int index;
   final List<dynamic> list;
   final String eventname;
+  final String postedBy;
   final Function(int) onDelete;
-  NotificationCard({super.key, required this.index, required this.eventname, required this.list, required this.onDelete});
+  NotificationCard({super.key, required this.index, required this.eventname, required this.list, required this.onDelete, required this.postedBy});
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Container(
       height: 113,
       // color: Colors.yellow,
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+            padding: EdgeInsets.symmetric(vertical: height*0.005, horizontal: width*0.025),
             child: Container(
               height: 85,
               // color: Colors.grey,
@@ -35,9 +35,10 @@ class NotificationCard extends StatelessWidget {
                       //more than 50% of width makes circle
                     ),
                   ),
-                  const SizedBox(width: 15,),
+                  SizedBox(width: width*0.02,),
                   Container(
-                    width: 260,
+                    width: width*0.6,
+                    // color: Colors.red,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -53,7 +54,7 @@ class NotificationCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "$eventname",
+                          eventname,
                           style: const TextStyle(
                             height: 1.2,
                             color: Color.fromARGB(255, 112, 107, 109),
@@ -62,9 +63,9 @@ class NotificationCard extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const Text(
-                          "About 3 hours ago",
-                          style: TextStyle(
+                        Text(
+                          "by $postedBy",
+                          style: const TextStyle(
                             color: Color.fromARGB(255, 136, 125, 128),
                             fontSize: 14,
                             fontFamily: 'Poppins',
@@ -75,8 +76,9 @@ class NotificationCard extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    height: 50,
-                    width: 43,
+                    height: width*0.2,
+                    width: width*0.12,
+                    // color: Colors.white,
                     child: IconButton(
                       onPressed: () async{
                         onDelete(index);
@@ -89,7 +91,7 @@ class NotificationCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: width*0.04),
             child: Divider(thickness: 0.5, color: Colors.grey[400],),
           ),
         ],
