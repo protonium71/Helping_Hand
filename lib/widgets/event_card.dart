@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:helping_hand/views/organisation/org_event_details.dart';
 import 'package:helping_hand/views/user/event_details_page.dart';
 
 class EventCard extends StatelessWidget {
   final DocumentSnapshot documentSnapshot;
   final String user;
-  const EventCard({super.key, required this.documentSnapshot, required this.user});
+  //final CollectionReference?jobs;
+  const EventCard({super.key, required this.documentSnapshot, required this.user,});
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +105,7 @@ class EventCard extends StatelessWidget {
                         child: GestureDetector(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                            EventDetailsPage(documentSnapshot: documentSnapshot, user:user)));
+                            OrganisationEventDetailsPage(documentSnapshot: documentSnapshot, user:user,)));
                           },
                           child: const Center(
                             child: Text('Details', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),),

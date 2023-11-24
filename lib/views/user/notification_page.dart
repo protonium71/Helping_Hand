@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/models/user.dart' as model;
-import 'package:helping_hand/resources/auth_services.dart';
 import 'package:helping_hand/resources/notifications.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:helping_hand/widgets/notification_card.dart';
@@ -13,6 +12,7 @@ import '../../providers/user_provider.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
+  static const route = '/notification-page';
 
   @override
   State<NotificationPage> createState() => _NotificationPageState();
@@ -31,8 +31,8 @@ class _NotificationPageState extends State<NotificationPage> {
     if (snap.data() != null) {
       Map<String, dynamic> map = snap.data() as Map<String, dynamic>;
       setState(() {
-        postedBy = map['organisedBy'];
-        eventname = map['cause'];
+        postedBy = map['organiserName'];
+        eventname = map['eventname'];
         print(eventname);
       });
     }
@@ -62,6 +62,7 @@ class _NotificationPageState extends State<NotificationPage> {
               setState(() {
                 notificationList = userMap['notifications'];
               });
+              
             },
             icon: const Icon(
               Icons.refresh_outlined,
@@ -90,11 +91,6 @@ class _NotificationPageState extends State<NotificationPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // const SizedBox(height: 10,),
-            MyButton(
-                onTap: () => Notifications.createUserList(
-                    'From Yash', userMap['username']),
-                text: 'Send Notification'),
             Expanded(
               child: ListView.builder(
                   itemCount: notificationList.length,

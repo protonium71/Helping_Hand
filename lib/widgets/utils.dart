@@ -86,6 +86,7 @@ Map<String, Icon>i_string_icon = {
 'Animals':const Icon(Icons.pets),
 'Art & Culture':const Icon(Icons.art_track),
 'Children & youth':const Icon(Icons.child_friendly),
+'Computer & Technology':const Icon(Icons.computer),
 'Cooking':const Icon(Icons.fastfood),
 'Education & Literacy':const Icon(Icons.cast_for_education),
 'Emergency & Safety':const Icon(Icons.safety_check),

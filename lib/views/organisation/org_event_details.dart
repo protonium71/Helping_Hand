@@ -4,40 +4,40 @@ import 'package:helping_hand/models/user.dart' as model;
 import 'package:helping_hand/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-class EventDetailsPage extends StatefulWidget {
+class OrganisationEventDetailsPage extends StatefulWidget {
   final DocumentSnapshot documentSnapshot;
   final String user;
-  const EventDetailsPage( {super.key, required this.documentSnapshot, required this.user});
+  const OrganisationEventDetailsPage( {super.key, required this.documentSnapshot, required this.user});
   
   @override
-  State<EventDetailsPage> createState() => _EventDetailsPageState();
+  State<OrganisationEventDetailsPage> createState() => _OrganisationEventDetailsPageState();
 }
 
-class _EventDetailsPageState extends State<EventDetailsPage> {
+class _OrganisationEventDetailsPageState extends State<OrganisationEventDetailsPage> {
   bool isFollow = false;
   bool _isClicked = false;
   int spots_rem = 0;
 
   @override
   void initState(){
-    loadData();
+    //loadData();
     super.initState();
     
   }
 
-  loadData() async{
-    UserProvider userProvider = Provider.of(context, listen: false);
-    await userProvider.refreshUser();
-    model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
-    Map<String, dynamic> userMap = user.getData();
-    for(String s in userMap['following']){
-      if(s == widget.documentSnapshot['organiserID']){
-        setState(() {
-          isFollow = true;
-        });
-      }
-    }
-  }
+  //loadData() async{
+    // UserProvider userProvider = Provider.of(context, listen: false);
+    // await userProvider.refreshUser();
+    // model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
+    // Map<String, dynamic> userMap = user.getData();
+    // for(String s in userMap['following']){
+    //   if(s == widget.documentSnapshot['organiserID']){
+    //     setState(() {
+    //       isFollow = true;
+    //     });
+    //   }
+    // }
+  //}
   void showErrorMessage(String message){
     showDialog(context: context, builder: (context){
       return AlertDialog(
@@ -52,17 +52,17 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     
     Timestamp t1 = widget.documentSnapshot['startTime'] ;
     Timestamp t2 = widget.documentSnapshot['endTime'] ;
-    model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
-    Map<String, dynamic> userMap = user.getData();
-    List<dynamic> list = userMap['following'];
+    // model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
+    // Map<String, dynamic> userMap = user.getData();
+    // List<dynamic> list = userMap['following'];
     
-    if(list.contains(widget.documentSnapshot['organiserID'])){
-      isFollow = true;
-    }
-    List<dynamic> all_events = userMap['upcomingEvents'];
-    if(all_events.contains(widget.documentSnapshot['eventid']))
-      _isClicked = true;
-    String id = userMap['uid'];
+    // if(list.contains(widget.documentSnapshot['organiserID'])){
+    //   isFollow = true;
+    // }
+    // List<dynamic> all_events = userMap['upcomingEvents'];
+    // if(all_events.contains(widget.documentSnapshot['eventid']))
+    //   _isClicked = true;
+    // String id = userMap['uid'];
     //Timestamp.fromDate(date);
     
     DateTime s_date = t1.toDate();
@@ -102,24 +102,24 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   
                   Text(widget.documentSnapshot['eventname'], style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                   Text(widget.documentSnapshot['organiserName'], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff6379A5),)),
-                  if (isFollow == false) Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Follow"),
-                      IconButton(
-                        onPressed: () async{
-                          List<dynamic> list = userMap['following'];
-                          list.add(widget.documentSnapshot['organiserID']);
-                          await FirebaseFirestore.instance.collection("users").doc(id).update({"following":list});
-                          setState(() {
-                            isFollow = true;
-                          });
-                        }, 
-                        icon: Icon(Icons.add_box_outlined),
-                      ),
-                    ],
-                  ) else SizedBox(height: 0,),
+                  // if (isFollow == false) Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   // crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                  //     Text("Follow"),
+                  //     IconButton(
+                  //       onPressed: () async{
+                  //         List<dynamic> list = userMap['following'];
+                  //         list.add(widget.documentSnapshot['organiserID']);
+                  //         await FirebaseFirestore.instance.collection("users").doc(id).update({"following":list});
+                  //         setState(() {
+                  //           isFollow = true;
+                  //         });
+                  //       }, 
+                  //       icon: Icon(Icons.add_box_outlined),
+                  //     ),
+                  //   ],
+                  // ) else SizedBox(height: 0,),
                    Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
                     child: Row(
@@ -194,36 +194,36 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       ),
             ),
             const SizedBox(height: 20,),
-            widget.user == "volunteer"?
-            ElevatedButton(
+            // widget.user == "volunteer"?
+            // ElevatedButton(
             
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xffBBBBD6),),
-              onPressed:_isClicked
-                ? null
-                : () async{
-                model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
-                Map<String, dynamic> userMap = user.getData();
+            //   style: ElevatedButton.styleFrom(backgroundColor: const Color(0xffBBBBD6),),
+            //   onPressed:_isClicked
+            //     ? null
+            //     : () async{
+            //     model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
+            //     Map<String, dynamic> userMap = user.getData();
 
-                List<dynamic> all_events = userMap['upcomingEvents'];
-                String id = userMap['uid'];
-                String eventID = widget.documentSnapshot['eventid'];
-                String signed = widget.documentSnapshot['signedSpots'];
-                int signed1 = num.parse(signed) as int;
-                signed1++;
+            //     List<dynamic> all_events = userMap['upcomingEvents'];
+            //     String id = userMap['uid'];
+            //     String eventID = widget.documentSnapshot['eventid'];
+            //     String signed = widget.documentSnapshot['signedSpots'];
+            //     int signed1 = num.parse(signed) as int;
+            //     signed1++;
                 
-                all_events.add(widget.documentSnapshot['eventid']);
-                await FirebaseFirestore.instance.collection("users").doc(id).update({"upcomingEvents":all_events});
-                await FirebaseFirestore.instance.collection("events").doc(eventID).update({"signedSpots":signed1.toString()});
-                showErrorMessage('you signed up for this event..');
-                setState(() {
-                  spots_rem = total - signed1;
-                  //print("00000000"+spots_rem.toString());
-                  _isClicked = true;
-                });
+            //     all_events.add(widget.documentSnapshot['eventid']);
+            //     await FirebaseFirestore.instance.collection("users").doc(id).update({"upcomingEvents":all_events});
+            //     await FirebaseFirestore.instance.collection("events").doc(eventID).update({"signedSpots":signed1.toString()});
+            //     showErrorMessage('you signed up for this event..');
+            //     setState(() {
+            //       spots_rem = total - signed1;
+            //       //print("00000000"+spots_rem.toString());
+            //       _isClicked = true;
+            //     });
 
-              }, 
-              child: const Text('Sign up', style: TextStyle(color: Colors.black),)
-              ):Center(),
+            //   }, 
+            //   child: const Text('Sign up', style: TextStyle(color: Colors.black),)
+            //   ):Center(),
         ]
         ),
       ), 

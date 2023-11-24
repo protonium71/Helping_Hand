@@ -2,7 +2,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:helping_hand/models/user.dart' as model;
+import 'package:helping_hand/providers/user_provider.dart';
 import 'package:helping_hand/widgets/event_card.dart';
+import 'package:provider/provider.dart';
 const List<String> list = <String>['Recommendations', 'Location', 'Date', 'Cause', 'Organisation'];
 
 // ignore: must_be_immutable
@@ -10,19 +13,26 @@ class SearchResultsWidget extends StatefulWidget {
   
   String? category;
   DateTime? searchDate;
-  SearchResultsWidget({super.key, required this.category, required this.searchDate, DateTime? DateTime,});
+  final CollectionReference jobs;
+  SearchResultsWidget({super.key, required this.category, required this.searchDate, DateTime? DateTime, required this.jobs});
 
   @override
   State<SearchResultsWidget> createState() => _SearchResultsWidgetState();
 }
 
 class _SearchResultsWidgetState extends State<SearchResultsWidget> {
-  final CollectionReference _jobs = FirebaseFirestore.instance.collection('events'); 
+  //final CollectionReference _jobs = FirebaseFirestore.instance.collection('events'); 
   String textarea_value = "";
   
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
+    model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
+    Map<String, dynamic> userMap = user.getData();
+    List<dynamic> recommendInterest = userMap['interests'];
+    List<dynamic> recommendSkills = userMap['skills'];
+    List<dynamic> upcomingEvents = userMap['upcomingEvents'];
+
     //final searchController = SearchController();
     if(widget.category == 'Location')widget.category = 'location';
     if(widget.category == 'Date')widget.category = 'startTime';
@@ -35,7 +45,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
         child: Column(
           children:[
             StreamBuilder(
-            stream: _jobs.snapshots(),
+            stream: widget.jobs.snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot){
               //print(streamSnapshot.data!.docs.length);
               if(streamSnapshot.connectionState == ConnectionState.waiting)return const Center(child: CircularProgressIndicator(),);         
@@ -43,8 +53,13 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                 child: ListView.builder(
                   itemCount: streamSnapshot.data!.docs.length,  
                   itemBuilder: (context, index){
+                        
                       DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
-                      return EventCard(documentSnapshot: documentSnapshot,  user:"volunteer");
+                      var spots_rem = num.parse(documentSnapshot['totalSpots']) - num.parse(documentSnapshot['signedSpots']);
+                      if(spots_rem != 0 && (recommendInterest.contains(documentSnapshot['cause']) || recommendSkills.contains(documentSnapshot['cause'])) && !upcomingEvents.contains(documentSnapshot['eventid']) && documentSnapshot['startTime'].toDate().isAfter(DateTime.now()))
+                        return EventCard(documentSnapshot: documentSnapshot,  user:"volunteer");
+                      else
+                        return Center();
                       
                   }),
               );
@@ -82,7 +97,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
               ) else const SizedBox(height: 0,),
               
               StreamBuilder(
-                stream: _jobs.snapshots(),
+                stream: widget.jobs.snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot){
                   if(streamSnapshot.connectionState == ConnectionState.waiting)return Center(child: CircularProgressIndicator(),);
                   // else{
@@ -96,25 +111,23 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                         itemBuilder: (context, index){
                           // var data = streamSnapshot.data!.docs[index];
                           DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
-                          print(documentSnapshot[widget.category!]);
+                          //print(documentSnapshot[widget.category!]);
                           if(widget.category == 'startTime'){
-                            print(1);
+                            //print(1);
                             if(documentSnapshot[widget.category!].toDate().day == widget.searchDate?.day && documentSnapshot[widget.category!].toDate().month == widget.searchDate?.month && documentSnapshot[widget.category!].toDate().year == widget.searchDate?.year){
                               return EventCard(documentSnapshot: documentSnapshot,  user:"volunteer");
                             }
                             else return Center();
                           }
                           else if(textarea_value.isEmpty){  
-                            print(2);
+                            //print(2);
                             return EventCard(documentSnapshot: documentSnapshot,  user:"volunteer");
                           }    
-                          else if(documentSnapshot[widget.category!].toLowerCase().startsWith(textarea_value.toLowerCase())){
-                            print(3);
-                            return EventCard(documentSnapshot: documentSnapshot,  user:"volunteer");
+                          else if(documentSnapshot[widget.category!].toString().toLowerCase().startsWith(textarea_value.toLowerCase())){
+                            return EventCard(documentSnapshot: documentSnapshot, user: 'volunteer',);
                           }
                           else {
-                            print(4);
-                            return Center();
+                            return Container();
                           }
                         }
                         ),

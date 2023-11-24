@@ -36,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
       interests = userMap['interests'];
       skills = userMap['skills'];
       profileURL = userMap['profileURL'];
-      print("3333"+profileURL);
+      //print("3333"+profileURL);
       });
     }
     print(name);
@@ -62,6 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
           volunteeringHours = total_hours;
         });
+        //print(volunteeringHours);
       
     }
   @override
@@ -326,4 +327,5 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+  
 }

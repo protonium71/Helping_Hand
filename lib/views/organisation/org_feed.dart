@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/models/organisation.dart' ;
-import 'package:helping_hand/models/organisation.dart';
 import 'package:helping_hand/providers/organisation_provider.dart';
+import 'package:helping_hand/views/organisation/org_event_details.dart';
 import 'package:helping_hand/widgets/event_card.dart';
 import 'package:provider/provider.dart';
 
@@ -121,9 +121,11 @@ class _OrganisationFeedState extends State<OrganisationFeed> {
                       DateTime now = DateTime.now();
                       if(s_date.isAfter(now) && organisationEvents.contains(documentSnapshot['eventid'])){
                         print(documentSnapshot['eventid']);
-                        return EventCard(documentSnapshot: documentSnapshot, user:'organisation');
+                        return OrganisationEventDetailsPage(documentSnapshot: documentSnapshot, user:'organisation');
                       }
-                        
+                      else {
+                        return const SizedBox(height: 0,);
+                      }
                   });
                 }
                 return const Center(
@@ -204,7 +206,9 @@ class _OrganisationFeedState extends State<OrganisationFeed> {
                         print(documentSnapshot['eventid']);
                         return EventCard(documentSnapshot: documentSnapshot, user:'organisation');
                       }
-                    
+                      else {
+                        return const SizedBox(height: 0,);
+                      }
                   });
                 }
                 return const Center(

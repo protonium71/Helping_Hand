@@ -57,6 +57,7 @@ class AuthService {
           volunteerHistory: [], 
           upcomingEvents: [], 
           following: [],
+          notifications: [],
           ftoken: '',
         );
 
@@ -233,6 +234,7 @@ class AuthService {
           volunteerHistory: [], 
           upcomingEvents: [], 
           following: [],
+          notifications: [],
           ftoken: '',
         );
 

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:helping_hand/models/event.dart';
 import 'package:helping_hand/models/organisation.dart';
 import 'package:helping_hand/providers/organisation_provider.dart';
+import 'package:helping_hand/resources/notifications.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,7 @@ import 'package:uuid/uuid.dart';
 
 const List<String> list = <String>['Animals', 'Art & Culture', 'Children & youth', 'Computer & Technology', 'Cooking', 'Education & Literacy','Emergency & Safety','Employment','Environment','Faith Based','Health & Medicine','Homeless & Housing','Human Rights','Immigrants & Refugees','International','LGBTQ+','Media & Broadcasting','Social Work', 'Sports','Tutoring','Creativity','Fundraising','Teamwork','Teaching','Social Media',];
 
-const List<String> months = <String>['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const List<String> months = <String>['','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 class PostEventPage extends StatefulWidget {
   const PostEventPage({super.key});
@@ -39,6 +40,12 @@ class _PostEventPageState extends State<PostEventPage> {
   int y1 = 0, mo1 = 0, d1 = 0, h1 = 0, mi1 = 0, s1 = 0, y2 = 0, mo2 = 0, d2 = 0, h2 = 0, mi2 = 0, s2 = 0;
   DateTime? searchDate = DateTime.now();
   TimeOfDay? searchTime = TimeOfDay.now();
+
+  @override
+  void initState(){
+    super.initState();
+    print("h");
+  }
 
   _showDatePicker(String date){
     showDatePicker(
@@ -66,6 +73,13 @@ class _PostEventPageState extends State<PostEventPage> {
       });
     });
   }
+  void showErrorMessage(String message){
+    showDialog(context: context, builder: (context){
+      return AlertDialog(
+        title: Text(message),
+      );
+    });
+  }
 
   _showTimePicker(String time){
     showTimePicker(
@@ -87,6 +101,23 @@ class _PostEventPageState extends State<PostEventPage> {
           endTime += " : ${searchTime!.minute.toString()} ${searchTime!.period.name}";
         }
       });
+    });
+  }
+
+  _clearFields(){
+    eventname.clear();
+    details.clear();
+    country.clear();
+    state.clear();
+    totalspots.clear();
+    city.clear();
+    setState(() {
+      startDate = "";
+      startTime = "";
+      endDate = "";
+      endTime = "";
+      dropdownValue = null;
+      selectedImagePath = "";
     });
   }
 
@@ -597,20 +628,8 @@ class _PostEventPageState extends State<PostEventPage> {
                 ),
                 //submit 
                 MyButton(onTap: () async{
-                  print(eventname.text);
-                  print(dropdownValue);
-                  print(details.text);
-                  print(city.text);
-                  print(startDate);
-                  print(startTime);
-                  print(endDate);
-                  print(endTime);
-                  print(totalspots.text);
-                  print(imageURL);
                   if(organisationMap['orgname'] == ""){
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                content: Text("Pleae complete your profile first.."),
-                              ));
+                    showErrorMessage("Pleae complete your profile first..");
                   }
                   else if(eventname.text != "" && dropdownValue != "" && details.text != "" && city.text != "" && startDate != "" && startTime != "" && endDate != "" && endTime != "" && totalspots.text != "" && imageURL != ""){
                     DateTime start = DateTime(y1, mo1, d1, h1, mi1), end = DateTime(y1, mo1, d1, h1, mi1);
@@ -641,15 +660,13 @@ class _PostEventPageState extends State<PostEventPage> {
                       List<dynamic> upcomingEvents = organisationMap['upcomingEvents'];
                       upcomingEvents.add(uid);
                       await FirebaseFirestore.instance.collection('organisations').doc(organisationMap['uid']).update({'upcomingEvents':upcomingEvents});
-
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                content: Text("Event added successfully.."),
-                              ));
+                     showErrorMessage("Event added successfully..");
+                      String temp = eventname.text;
+                      _clearFields();
+                      Notifications.createUserList(temp, organisationMap['orgname'], uid);
                   }
                   else{
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                content: Text("Please Fill all fields.."),
-                              ));
+                    showErrorMessage("Please Fill all fields..");
                   }
                 }, text: "Submit"),
               ],
@@ -787,7 +804,6 @@ class _PostEventPageState extends State<PostEventPage> {
     }
   }
 
-  //
   selectImageFromCamera() async {
     XFile? file = await ImagePicker()
         .pickImage(source: ImageSource.camera, imageQuality: 10);

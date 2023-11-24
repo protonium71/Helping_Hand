@@ -1,19 +1,14 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_state_city_pro/country_state_city_pro.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:helping_hand/models/user.dart';
 import 'package:helping_hand/providers/user_provider.dart';
-import 'package:helping_hand/views/user/profile_page.dart';
 import 'package:helping_hand/views/user/skill_page.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:helping_hand/widgets/my_textField.dart';
 import 'package:helping_hand/views/user/interests_page.dart';
-import 'package:helping_hand/widgets/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:helping_hand/models/user.dart' as model;
@@ -36,7 +31,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   final city = TextEditingController();
 
-  String? imageURL = "";
+   String selectedImagePath = '';
+  String imageURL = '';
+  void showErrorMessage(String message){
+    showDialog(context: context, builder: (context){
+      return AlertDialog(
+        title: Text(message),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,28 +120,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     right: 0,
                     child: MaterialButton(
                       onPressed: () async{  
-                        ImagePicker imagePicker = ImagePicker();
-                        XFile? profile_pic = await imagePicker.pickImage(source: ImageSource.gallery);
-                        if(profile_pic == null)return;
-                        print('${profile_pic?.path}');
-                        String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
-
-                        Reference referenceRoot = FirebaseStorage.instance.ref();
-                        Reference referenceDir = referenceRoot.child('profile_pics');
-                        Reference imageToUpload = referenceDir.child(uniqueName);
-
-                        try{
-                          await imageToUpload.putFile(File(profile_pic!.path));
-                          String tempImageURL = await imageToUpload.getDownloadURL();
-                          //print("0000000"+tempImageURL);
-                          setState(() {
-                            imageURL = tempImageURL;
-                          });
-                          //print("0000000"+imageURL);
-                        }
-                        catch(error){
-
-                        }
+                        selectImage();
                       },
                       shape: const CircleBorder(),
                       color: Colors.white,
@@ -172,14 +154,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: MyButton(onTap: () async {
-                if(controller.text != "")
+                bool flag = false;
+                if(controller.text != "") {
                   await FirebaseFirestore.instance.collection("users").doc(id).update({"username":controller.text});
-                if(city.text != "")
+                  flag = true;
+                }
+                if(city.text != "") {
                   await FirebaseFirestore.instance.collection("users").doc(id).update({"location":city.text});
+                  flag = true;
+                }
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-                if(imageURL != "")
+                if(imageURL != "") {
                   await FirebaseFirestore.instance.collection("users").doc(id).update({"profileURL":imageURL});
-                
+                  flag = true;
+                }
+                if(flag)
+                showErrorMessage('profile updated..');
 
               }, text: 'Update Profile'),
             ),
@@ -188,8 +178,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const InterestsPage()));
+                onTap: ()async{
+                  String res = await Navigator.push(context, MaterialPageRoute(builder: (context) => const InterestsPage()));
+                  if(res == 'done')
+                    showErrorMessage('interest updated..');
+                  print(res);
                 },
                 child: Container(
                   height: 60,
@@ -234,8 +227,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SkillPage()));
+                onTap: () async {
+                  String res = await Navigator.push(context, MaterialPageRoute(builder: (context) => const SkillPage()));
+                  if(res == 'done')
+                    showErrorMessage('skill updated..');
+
                 },
                 child: Container(
                   height: 60,
@@ -279,5 +275,142 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
       ),
     );
+  }
+
+   Future selectImage() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)), //this right here
+            child: SizedBox(
+              height: 160,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Select Image From !',
+                      style: TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            selectedImagePath = await selectImageFromGallery();
+                            // ignore: avoid_print
+                            print('Image_Path:- $selectedImagePath');
+                            String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+
+                            Reference referenceRoot = FirebaseStorage.instance.ref();
+                            Reference referenceDir = referenceRoot.child('event_pics');
+                            Reference imageToUpload = referenceDir.child(uniqueName);
+                            if (selectedImagePath != '') {
+                              await imageToUpload.putFile(File(selectedImagePath));
+                              String tempImageURL = await imageToUpload.getDownloadURL();
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
+                              setState(() {
+                                imageURL = tempImageURL;
+                              });
+                              print(imageURL);
+                            } else {
+                              setState(() {});
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                content: Text("No Image Selected !"),
+                              ));
+                            }
+                          },
+                          child: Card(
+                              elevation: 0,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                      'lib/assets/images/gallery.png',
+                                      height: 60,
+                                      width: 60,
+                                    ),
+                                    const Text('Gallery'),
+                                  ],
+                                ),
+                              )),
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            selectedImagePath = await selectImageFromCamera();
+                            // ignore: avoid_print
+                            print('Image_Path:- $selectedImagePath');
+                            String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+
+                            Reference referenceRoot = FirebaseStorage.instance.ref();
+                            Reference referenceDir = referenceRoot.child('event_pics');
+                            Reference imageToUpload = referenceDir.child(uniqueName);
+                            if (selectedImagePath != '') {
+                              await imageToUpload.putFile(File(selectedImagePath));
+                              String tempImageURL = await imageToUpload.getDownloadURL();
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
+                              setState(() {
+                                imageURL = tempImageURL;
+                              });
+                              print(imageURL);
+                            } else {
+                              setState(() {});
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                content: Text("No Image Captured !"),
+                              ));
+                            }
+                          },
+                          child: Card(
+                              elevation: 0,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                      'lib/assets/images/camera.png',
+                                      height: 60,
+                                      width: 60,
+                                    ),
+                                    const Text('Camera'),
+                                  ],
+                                ),
+                              )),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+   selectImageFromGallery() async {
+    XFile? file = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 10);
+    if (file != null) {
+      return file.path;
+    } else {
+      return '';
+    }
+  }
+
+  selectImageFromCamera() async {
+    XFile? file = await ImagePicker()
+        .pickImage(source: ImageSource.camera, imageQuality: 10);
+    if (file != null) {
+      return file.path;
+    } else {
+      return '';
+    }
   }
 }
