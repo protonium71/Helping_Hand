@@ -7,9 +7,10 @@ const List<String> list = <String>['Recommendations', 'Location', 'Date', 'Cause
 
 // ignore: must_be_immutable
 class SearchResultsWidget extends StatefulWidget {
+  
   String? category;
   DateTime? searchDate;
-  SearchResultsWidget({super.key, required this.category, required this.searchDate, DateTime? DateTime});
+  SearchResultsWidget({super.key, required this.category, required this.searchDate, DateTime? DateTime,});
 
   @override
   State<SearchResultsWidget> createState() => _SearchResultsWidgetState();
@@ -26,7 +27,8 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
     if(widget.category == 'Location')widget.category = 'location';
     if(widget.category == 'Date')widget.category = 'startTime';
     if(widget.category == 'Cause')widget.category = 'cause';
-    if(widget.category == 'Organisation')widget.category = 'organisedBy';
+    if(widget.category == 'Organisation')widget.category = 'organiserName';
+    
     if(widget.category == 'Recommendations'){
       
       return Expanded(
@@ -42,7 +44,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                   itemCount: streamSnapshot.data!.docs.length,  
                   itemBuilder: (context, index){
                       DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
-                      return EventCard(documentSnapshot: documentSnapshot);
+                      return EventCard(documentSnapshot: documentSnapshot,  user:"volunteer");
                       
                   }),
               );
@@ -94,19 +96,26 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                         itemBuilder: (context, index){
                           // var data = streamSnapshot.data!.docs[index];
                           DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
+                          print(documentSnapshot[widget.category!]);
                           if(widget.category == 'startTime'){
-                            
+                            print(1);
                             if(documentSnapshot[widget.category!].toDate().day == widget.searchDate?.day && documentSnapshot[widget.category!].toDate().month == widget.searchDate?.month && documentSnapshot[widget.category!].toDate().year == widget.searchDate?.year){
-                              return EventCard(documentSnapshot: documentSnapshot);
+                              return EventCard(documentSnapshot: documentSnapshot,  user:"volunteer");
                             }
+                            else return Center();
                           }
                           else if(textarea_value.isEmpty){  
-                            return EventCard(documentSnapshot: documentSnapshot);
+                            print(2);
+                            return EventCard(documentSnapshot: documentSnapshot,  user:"volunteer");
                           }    
-                          else if(documentSnapshot[widget.category!].startsWith(textarea_value.toLowerCase())){
-                            return EventCard(documentSnapshot: documentSnapshot);
+                          else if(documentSnapshot[widget.category!].toLowerCase().startsWith(textarea_value.toLowerCase())){
+                            print(3);
+                            return EventCard(documentSnapshot: documentSnapshot,  user:"volunteer");
                           }
-                          return Container();
+                          else {
+                            print(4);
+                            return Center();
+                          }
                         }
                         ),
                     );

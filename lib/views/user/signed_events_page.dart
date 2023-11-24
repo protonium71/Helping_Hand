@@ -118,7 +118,7 @@ class _SignedEventsPageState extends State<SignedEventsPage> {
                       DateTime now = DateTime.now();
                       if(s_date.isAfter(now) && userEvents.contains(documentSnapshot['eventid'])){
                         print(documentSnapshot['eventid']);
-                        return EventCard(documentSnapshot: documentSnapshot);
+                        return EventCard(documentSnapshot: documentSnapshot, user:'volunteer');
                       }
                         
                   });
@@ -199,7 +199,7 @@ class _SignedEventsPageState extends State<SignedEventsPage> {
                       if(s_date.isBefore(now) && userEvents.contains(documentSnapshot['eventid'])){
                         print(userEvents);
                         print(documentSnapshot['eventid']);
-                        return EventCard(documentSnapshot: documentSnapshot);
+                        return EventCard(documentSnapshot: documentSnapshot, user:'volunteer');
                       }
                     
                   });

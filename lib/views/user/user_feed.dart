@@ -54,7 +54,7 @@ class _UserFeedState extends State<UserFeed> {
                 itemCount: streamSnapshot.data!.docs.length,
                 itemBuilder: (context, index){
                   final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
-                return EventCard(documentSnapshot: documentSnapshot);
+                return EventCard(documentSnapshot: documentSnapshot, user:'volunteer');
               });
             }
             return const Center(

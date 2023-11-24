@@ -121,7 +121,7 @@ class _OrganisationFeedState extends State<OrganisationFeed> {
                       DateTime now = DateTime.now();
                       if(s_date.isAfter(now) && organisationEvents.contains(documentSnapshot['eventid'])){
                         print(documentSnapshot['eventid']);
-                        return EventCard(documentSnapshot: documentSnapshot);
+                        return EventCard(documentSnapshot: documentSnapshot, user:'organisation');
                       }
                         
                   });
@@ -202,7 +202,7 @@ class _OrganisationFeedState extends State<OrganisationFeed> {
                       if(s_date.isBefore(now) && organisationEvents.contains(documentSnapshot['eventid'])){
                         //print(userEvents);
                         print(documentSnapshot['eventid']);
-                        return EventCard(documentSnapshot: documentSnapshot);
+                        return EventCard(documentSnapshot: documentSnapshot, user:'organisation');
                       }
                     
                   });

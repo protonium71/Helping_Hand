@@ -6,7 +6,8 @@ import 'package:provider/provider.dart';
 
 class EventDetailsPage extends StatefulWidget {
   final DocumentSnapshot documentSnapshot;
-  const EventDetailsPage( {super.key, required this.documentSnapshot});
+  final String user;
+  const EventDetailsPage( {super.key, required this.documentSnapshot, required this.user});
   
   @override
   State<EventDetailsPage> createState() => _EventDetailsPageState();
@@ -17,14 +18,11 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    
+    String imageURL = widget.documentSnapshot['profileURL'];
     var spots_rem = num.parse(widget.documentSnapshot['totalSpots']) - num.parse(widget.documentSnapshot['signedSpots']);
     Timestamp t1 = widget.documentSnapshot['startTime'] ;
     Timestamp t2 = widget.documentSnapshot['endTime'] ;
-    model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
-    Map<String, dynamic> userMap = user.getData();
-    List<dynamic> all_events = userMap['upcomingEvents'];
-    String id = userMap['uid'];
+    
     //Timestamp.fromDate(date);
     
     DateTime s_date = t1.toDate();
@@ -53,6 +51,9 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                      decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: const Color(0xffCDD4E0),
+                      image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: imageURL != "" ? NetworkImage(imageURL!) : const AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,),
                     ),
                     ),
                   ),
@@ -133,15 +134,22 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       ),
             ),
             const SizedBox(height: 20,),
+            widget.user == "volunteer"?
             ElevatedButton(
             
               style: ElevatedButton.styleFrom(backgroundColor: const Color(0xffBBBBD6),),
               onPressed: () async{
+                model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
+                Map<String, dynamic> userMap = user.getData();
+
+                List<dynamic> all_events = userMap['upcomingEvents'];
+                String id = userMap['uid'];
                 
                 all_events.add(widget.documentSnapshot['eventid']);
                 await FirebaseFirestore.instance.collection("users").doc(id).update({"upcomingEvents":all_events});
               }, 
-              child: const Text('Sign up', style: TextStyle(color: Colors.black),)),
+              child: const Text('Sign up', style: TextStyle(color: Colors.black),)
+              ):Center(),
         ]
         ),
       ), 

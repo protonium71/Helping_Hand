@@ -4,10 +4,13 @@ import 'package:helping_hand/views/user/event_details_page.dart';
 
 class EventCard extends StatelessWidget {
   final DocumentSnapshot documentSnapshot;
-  const EventCard({super.key, required this.documentSnapshot});
+  final String user;
+  const EventCard({super.key, required this.documentSnapshot, required this.user});
 
   @override
   Widget build(BuildContext context) {
+    
+    String imageURL = documentSnapshot['profileURL'];
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     Timestamp t = documentSnapshot['startTime'] as Timestamp;
@@ -26,6 +29,9 @@ class EventCard extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 color: Colors.red,
+                image: DecorationImage(
+                fit: BoxFit.cover,
+                image: imageURL != "" ? NetworkImage(imageURL!) : const AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,), 
               ),
             ),
             Container(
@@ -97,7 +103,7 @@ class EventCard extends StatelessWidget {
                         child: GestureDetector(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                            EventDetailsPage(documentSnapshot: documentSnapshot)));
+                            EventDetailsPage(documentSnapshot: documentSnapshot, user:user)));
                           },
                           child: const Center(
                             child: Text('Details', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),),
