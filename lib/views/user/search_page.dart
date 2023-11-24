@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:helping_hand/widgets/search_results_widget.dart'; 
+import 'package:helping_hand/models/user.dart' as model;
+import 'package:helping_hand/providers/user_provider.dart';
+import 'package:helping_hand/widgets/search_results_widget.dart';
+import 'package:provider/provider.dart'; 
 
 const List<String> list = <String>['Recommendations', 'Location', 'Date', 'Cause', 'Organisation'];
 
@@ -31,7 +35,7 @@ class _SearchPageState extends State<SearchPage> {
       });
     });
   }
-
+  CollectionReference jobs = FirebaseFirestore.instance.collection('events');
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -44,7 +48,26 @@ class _SearchPageState extends State<SearchPage> {
         leading: GestureDetector(
           onTap: (){},
           child: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20,)
-        ), 
+        ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              UserProvider userProvider = Provider.of(context, listen: false);
+              await userProvider.refreshUser();
+              model.User user = userProvider.getUser;
+              Map<String, dynamic> userMap = user.getData();
+              setState(() {
+                jobs = FirebaseFirestore.instance.collection('events');
+              });
+              
+            },
+            icon: const Icon(
+              Icons.refresh_outlined,
+              size: 25,
+            ),
+            splashRadius: 25,
+          ),
+        ], 
         centerTitle: true,
         title: const Text(
             'Volunteer Events',
@@ -82,7 +105,7 @@ class _SearchPageState extends State<SearchPage> {
                     return DropdownMenuEntry<String>(value: value, label: value);
                   }).toList(),
                 ),
-                SearchResultsWidget(category: widget.dropdownValue, searchDate:search_date,),
+                SearchResultsWidget(category: widget.dropdownValue, searchDate:search_date, jobs:jobs),
               ],
             ),
           ),

@@ -17,6 +17,7 @@ class SkillPage extends StatefulWidget {
 
 class _SkillPageState extends State<SkillPage> {
   List<String> skills = [];
+  
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +56,14 @@ class _SkillPageState extends State<SkillPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: MyButton(onTap: () async {
                   //print(skills);
-                  if(skills.isNotEmpty)
-                  await FirebaseFirestore.instance.collection("users").doc(id).update({"skills":skills});
-                  Navigator.pop(context);
+                  String res = 'no';
+                  if(skills.isNotEmpty){
+                    await FirebaseFirestore.instance.collection("users").doc(id).update({"skills":skills});
+                    res = 'done';
+                  }
+                  
+                  //showErrorMessage('you skill were updated..');
+                  Navigator.pop(context, res);
                 }, text: 'Continue', color: const Color(0xff6379A5),),
               ),
 

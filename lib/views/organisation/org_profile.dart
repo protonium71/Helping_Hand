@@ -54,6 +54,8 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
     } else {
       following = "0";
     }
+    // print(organisationMap['following'].length);
+    // print(following);
     
     profileURL = organisationMap['profileURL'];
 
