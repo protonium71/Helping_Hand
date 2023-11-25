@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:helping_hand/models/user.dart' as model;
 import 'package:helping_hand/providers/user_provider.dart';
+import 'package:helping_hand/views/user/navigation.dart';
 import 'package:helping_hand/widgets/search_results_widget.dart';
 import 'package:provider/provider.dart'; 
 
@@ -19,8 +21,11 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  // ignore: non_constant_identifier_names
   String dropdown_value = "";
+  // ignore: non_constant_identifier_names
   String textarea_value = "";
+  // ignore: non_constant_identifier_names
   DateTime? search_date = DateTime.now();
   final searchController = TextEditingController();
   _showDatePicker(){
@@ -46,7 +51,10 @@ class _SearchPageState extends State<SearchPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: GestureDetector(
-          onTap: (){},
+          onTap: (){
+            final NavigationController controller = Get.find();
+            controller.handleNotificationNavigation(0);
+          },
           child: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20,)
         ),
         actions: [

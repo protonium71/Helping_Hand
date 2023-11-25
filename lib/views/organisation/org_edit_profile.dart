@@ -22,8 +22,10 @@ class OrganisationEditProfilePage extends StatefulWidget {
 class _OrganisationEditProfilePage extends State<OrganisationEditProfilePage> {
   final controller = TextEditingController();
 
+  // ignore: non_constant_identifier_names
   final upi_controller = TextEditingController();
 
+  // ignore: non_constant_identifier_names
   final bio_controller = TextEditingController();
 
   //final upiID_controller = TextEditingController();
@@ -43,7 +45,6 @@ class _OrganisationEditProfilePage extends State<OrganisationEditProfilePage> {
     
  //Uint8List profile_pic;
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     Organisation organisation = Provider.of<OrganisationProvider>(context, listen: false).getOrganisation;
     Map<String, dynamic> organisationMap = organisation.getData();
     // //imageURL = userMap['profileURL'];
@@ -108,7 +109,7 @@ class _OrganisationEditProfilePage extends State<OrganisationEditProfilePage> {
                       shape: BoxShape.circle,
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: imageURL != "" ? NetworkImage(imageURL!) : AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,),
+                          image: imageURL != "" ? NetworkImage(imageURL!) : const AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,),
                     ),
                   ),
                   //EDIT PROFILE PIC BUTTON
@@ -120,7 +121,7 @@ class _OrganisationEditProfilePage extends State<OrganisationEditProfilePage> {
                         ImagePicker imagePicker = ImagePicker();
                         XFile? profilePic = await imagePicker.pickImage(source: ImageSource.gallery);
                         if(profilePic == null)return;
-                        print('${profilePic?.path}');
+                        // print('${profilePic.path}');
                         String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
 
                         Reference referenceRoot = FirebaseStorage.instance.ref();
@@ -136,6 +137,7 @@ class _OrganisationEditProfilePage extends State<OrganisationEditProfilePage> {
                           });
                           //print("0000000"+imageURL);
                         }
+                        // ignore: empty_catches
                         catch(error){
 
                         }
@@ -159,7 +161,7 @@ class _OrganisationEditProfilePage extends State<OrganisationEditProfilePage> {
             //update button
             //SizedBox(height: height*0.03,),
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Center(
                 child: TextField(
                   minLines: 2,
@@ -202,8 +204,9 @@ class _OrganisationEditProfilePage extends State<OrganisationEditProfilePage> {
                   await FirebaseFirestore.instance.collection("organisations").doc(id).update({"bio":bio_controller.text});
                   flag = true;
                 }
-                if(flag)
-                 showErrorMessage('profile updated..');
+                if(flag) {
+                  showErrorMessage('Profile updated!');
+                }
                 
               }, text: 'Update Profile'),
             ),

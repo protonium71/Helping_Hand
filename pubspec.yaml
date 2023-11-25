@@ -26,12 +26,19 @@ dependencies:
     sdk: flutter
   image_picker: ^1.0.4
   firebase_storage: ^11.5.1
-  upi_india: ^3.0.1
+  easy_upi_payment: ^0.1.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.1
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "lib/assets/images/logo.png"
+  min_sdk_android: 21
 
 flutter:
   uses-material-design: true

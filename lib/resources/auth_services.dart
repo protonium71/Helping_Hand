@@ -161,7 +161,7 @@ class AuthService {
 
     DocumentSnapshot snapshot = await _firestore.collection('organisations').doc(currentOrg.uid).get();
 
-    print("${snapshot.exists}");
+    // print("${snapshot.exists}");
 
     return Organisation.getOrganisation(snapshot);
   }

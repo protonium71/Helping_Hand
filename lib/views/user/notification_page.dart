@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:helping_hand/models/user.dart' as model;
-import 'package:helping_hand/resources/notifications.dart';
-import 'package:helping_hand/widgets/my_button.dart';
+import 'package:helping_hand/views/user/navigation.dart';
 import 'package:helping_hand/widgets/notification_card.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +18,7 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  String postedBy = "", eventname = "";
+  String postedBy = "", eventname = "", profileURL = "";
   List<dynamic> notificationList = [];
 
   loadData(dynamic id) async {
@@ -27,13 +26,14 @@ class _NotificationPageState extends State<NotificationPage> {
         .collection('events')
         .doc(id.toString())
         .get();
-    print(id);
+    // print(id);
     if (snap.data() != null) {
       Map<String, dynamic> map = snap.data() as Map<String, dynamic>;
       setState(() {
         postedBy = map['organiserName'];
         eventname = map['eventname'];
-        print(eventname);
+        profileURL = map['profileURL'];
+        // print(eventname);
       });
     }
   }
@@ -46,7 +46,10 @@ class _NotificationPageState extends State<NotificationPage> {
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              final NavigationController controller = Get.find();
+              controller.handleNotificationNavigation(0);
+            },
             child: const Icon(
               Icons.arrow_back_ios,
               color: Colors.black,
@@ -62,7 +65,6 @@ class _NotificationPageState extends State<NotificationPage> {
               setState(() {
                 notificationList = userMap['notifications'];
               });
-              
             },
             icon: const Icon(
               Icons.refresh_outlined,
@@ -97,20 +99,24 @@ class _NotificationPageState extends State<NotificationPage> {
                   itemBuilder: (context, index) {
                     loadData(notificationList[index]);
                     return NotificationCard(
-                      index: index, 
-                      eventname: eventname, 
+                      profileURL: profileURL,
+                      index: index,
+                      postedBy: postedBy,
+                      eventname: eventname,
                       list: notificationList,
-                      onDelete: (int index) async{
+                      onDelete: (int index) async {
                         setState(() {
                           notificationList.removeAt(index);
                         });
-                        await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update({
-                          'notifications' : notificationList,
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .update({
+                          'notifications': notificationList,
                         });
                       },
                     );
-                  }
-                ),
+                  }),
             ),
           ],
         ),

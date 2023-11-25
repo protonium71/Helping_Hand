@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:helping_hand/models/organisation.dart';
 import 'package:helping_hand/providers/organisation_provider.dart';
+import 'package:helping_hand/resources/auth_services.dart';
+import 'package:helping_hand/user_type_page.dart';
+import 'package:helping_hand/views/organisation/navigation_page.dart';
 import 'package:helping_hand/views/organisation/org_edit_profile.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:provider/provider.dart';
@@ -17,63 +21,84 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
   String upiID = "";
   String following = "";
   String profileURL = "";
-   _changeState(dynamic value) async{
-    OrganisationProvider organisationProvider = Provider.of(context, listen: false);
+  _changeState(dynamic value) async {
+    OrganisationProvider organisationProvider =
+        Provider.of(context, listen: false);
     await organisationProvider.refreshUser();
     Organisation organisation = organisationProvider.getOrganisation;
     Map<String, dynamic> organisationMap = organisation.getData();
-    
-    setState((){
-      name = organisationMap['orgname']; 
+
+    setState(() {
+      name = organisationMap['orgname'];
       upiID = organisationMap['upiID'];
       following = organisationMap['following'].length.toString();
       profileURL = organisationMap['profileURL'];
-      });
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    
-    Organisation organisation = Provider.of<OrganisationProvider>(context, listen: false).getOrganisation;
+
+    Organisation organisation =
+        Provider.of<OrganisationProvider>(context, listen: false)
+            .getOrganisation;
     Map<String, dynamic> organisationMap = organisation.getData();
-    
-    
-    if(organisationMap['orgname'] == "") {
+
+    if (organisationMap['orgname'] == "") {
       name = "New Organisation";
     } else {
       name = organisationMap['orgname'];
     }
-    if(organisationMap['upiID'] == "") {
+    if (organisationMap['upiID'] == "") {
       upiID = "no_upiID";
     } else {
       upiID = organisationMap['upiID'];
     }
-    if(organisationMap['following'].length != 0) {
+    if (organisationMap['following'].length != 0) {
       following = organisationMap['following'].length.toString();
     } else {
       following = "0";
     }
     // print(organisationMap['following'].length);
     // print(following);
-    
+
     profileURL = organisationMap['profileURL'];
 
     return Scaffold(
-      
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await AuthService().logoutUser();
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const UserType(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.logout))
+        ],
         leading: GestureDetector(
-          onTap: (){},
-          child: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20,)
-        ), 
+            onTap: () {
+              final NavigationControllerOrg controller = Get.find();
+              controller.handleNotificationNavigation(0);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+              size: 20,
+            )),
         centerTitle: true,
-        title:  const Text(
+        title: const Text(
           'Profile',
           style: TextStyle(
-              color: Color(0xFF1D1517),
-              fontSize: 25,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w700,
+            color: Color(0xFF1D1517),
+            fontSize: 25,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w700,
           ),
         ),
         titleTextStyle: const TextStyle(color: Colors.black87, fontSize: 28),
@@ -83,107 +108,134 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: width*0.04, vertical: height*0.02),
+            padding: EdgeInsets.symmetric(
+                horizontal: width * 0.04, vertical: height * 0.02),
             child: Column(
               children: [
                 //user info
                 Container(
-                  height: height*0.11,
+                  height: height * 0.11,
                   child: Row(
                     children: [
-                      Container( 
-                        height: height*0.11,
-                        width: height*0.11,
+                      Container(
+                        height: height * 0.11,
+                        width: height * 0.11,
                         decoration: BoxDecoration(
                           color: Colors.green,
                           borderRadius: BorderRadius.circular(100),
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: profileURL != "" ? NetworkImage(profileURL!) : const AssetImage("lib/assets/images/default_profile.jpg") as ImageProvider,), 
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: profileURL != ""
+                                ? NetworkImage(profileURL)
+                                : const AssetImage(
+                                        "lib/assets/images/default_profile.jpg")
+                                    as ImageProvider,
+                          ),
                           //more than 50% of width makes circle
                         ),
                       ),
-                        SizedBox(width: width*0.03,),
-                        Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                           Text(
-                            name,
-                            style: const TextStyle(
+                      SizedBox(
+                        width: width * 0.03,
+                      ),
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              name,
+                              style: const TextStyle(
                                 color: Color(0xFF1D1517),
                                 fontSize: 20,
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
                             Row(
-                            children: [
-                              const Icon(Icons.monetization_on_rounded, color: Color(0xFF7B6F72), size: 20,),
-                              SizedBox(width: width*0.01,),
-                              Text(
-                                upiID,
-                                style: const TextStyle(
+                              children: [
+                                const Icon(
+                                  Icons.monetization_on_rounded,
+                                  color: Color(0xFF7B6F72),
+                                  size: 20,
+                                ),
+                                SizedBox(
+                                  width: width * 0.01,
+                                ),
+                                Text(
+                                  upiID,
+                                  style: const TextStyle(
                                     color: Color(0xFF7B6F72),
                                     fontSize: 15,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w400,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Icon(Icons.email_outlined, color: Color(0xFF7B6F72), size: 20,),
-                              SizedBox(width: width*0.01,),
-                              Container(
-                                width: width*0.59,
-                                child: Text(
-                                  organisationMap['email'],
-                                  maxLines: 2,
-                                  style: const TextStyle(
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.email_outlined,
+                                  color: Color(0xFF7B6F72),
+                                  size: 20,
+                                ),
+                                SizedBox(
+                                  width: width * 0.01,
+                                ),
+                                Container(
+                                  width: width * 0.59,
+                                  child: Text(
+                                    organisationMap['email'],
+                                    maxLines: 2,
+                                    style: const TextStyle(
                                       color: Color(0xFF7B6F72),
                                       fontSize: 15,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w400,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ]
-                      ),
+                              ],
+                            ),
+                          ]),
                     ],
                   ),
                 ),
-                SizedBox(height: height*0.025,),
-                MyButton(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const OrganisationEditProfilePage())).then(_changeState);
-                  }, 
-                  text: 'Edit Profile'
+                SizedBox(
+                  height: height * 0.05,
                 ),
-                SizedBox(height: height*0.025,),
-                //volunteering hours 
+                MyButton(
+                    onTap: () {
+                      Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const OrganisationEditProfilePage()))
+                          .then(_changeState);
+                    },
+                    text: 'Edit Profile'),
+                SizedBox(
+                  height: height * 0.05,
+                ),
+                //volunteering hours
                 Container(
-                  width: width*0.9,
-                  height: height*0.07,
+                  width: width * 0.9,
+                  height: height * 0.07,
                   decoration: ShapeDecoration(
-                      color: const Color.fromARGB(255, 218, 234, 251),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                      ),
-                      shadows: const [
-                          BoxShadow(
-                              color: Color(0x111D1617),
-                              blurRadius: 22,
-                              offset: Offset(0, 10),
-                              spreadRadius: 0,
-                          )
-                      ],
+                    color: const Color.fromARGB(255, 218, 234, 251),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    shadows: const [
+                      BoxShadow(
+                        color: Color(0x111D1617),
+                        blurRadius: 22,
+                        offset: Offset(0, 10),
+                        spreadRadius: 0,
+                      )
+                    ],
                   ),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: width*0.04),
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.04),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -192,54 +244,78 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                         const Text(
                           'Followers',
                           style: TextStyle(
-                              color: Color(0xFF1D1517),
-                              fontSize: 25,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w500,
+                            color: Color(0xFF1D1517),
+                            fontSize: 25,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              Text(
-                                following,
-                                style: const TextStyle(
-                                    color: Color(0xFF7B6F72),
-                                    fontSize: 20,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w500,
-                                ),
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Text(
+                              following,
+                              style: const TextStyle(
+                                color: Color(0xFF7B6F72),
+                                fontSize: 20,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w500,
                               ),
-                            ],
-                          )
-                        ),
+                            ),
+                          ],
+                        )),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height: height*0.025,),
-                const SizedBox(height: 20,),
-                  const Padding(
-                    padding: EdgeInsets.symmetric( horizontal: 15),
-                    child: Row(
-                      children: [
-                        SizedBox(height: 20,),
-                        Icon(Icons.corporate_fare_sharp),
-                        SizedBox(width: 10,),
-                        Text('About Us..', style: TextStyle(fontSize: 20, color: Color(0xff6379A5), fontWeight: FontWeight.bold)),
-                    
-                      ],
-                    ),
+                SizedBox(
+                  height: height * 0.025,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Icon(Icons.corporate_fare_sharp),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text('About Us',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Color(0xff6379A5),
+                              fontWeight: FontWeight.bold)),
+                    ],
                   ),
-                  const SizedBox(height: 5,),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: Text(organisationMap['bio']),
-                  
-                  ),              
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Text(
+                        organisationMap['bio'],
+                        maxLines: 10,
+                        style: const TextStyle(
+                          color: Color(0xFF7B6F72),
+                          fontSize: 15,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
