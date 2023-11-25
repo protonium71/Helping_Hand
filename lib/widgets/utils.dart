@@ -123,8 +123,8 @@ Map<int, Color> color =
 MaterialColor colorCustom = MaterialColor(0xFF92A3FD, color);
 
 pickImage(ImageSource source) async{
-  final ImagePicker _imagePicker = ImagePicker();
-  XFile? file = await _imagePicker.pickImage(source: source);
+  final ImagePicker imagePicker = ImagePicker();
+  XFile? file = await imagePicker.pickImage(source: source);
   if(file != null)return await file.readAsBytes();
-  print("no image selected");
+  // print("no image selected");
 }

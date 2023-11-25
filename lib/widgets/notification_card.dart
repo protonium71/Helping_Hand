@@ -6,8 +6,16 @@ class NotificationCard extends StatelessWidget {
   final List<dynamic> list;
   final String eventname;
   final String postedBy;
+  final String profileURL;
   final Function(int) onDelete;
-  NotificationCard({super.key, required this.index, required this.eventname, required this.list, required this.onDelete, required this.postedBy});
+  NotificationCard(
+      {super.key,
+      required this.profileURL,
+      required this.index,
+      required this.eventname,
+      required this.list,
+      required this.onDelete,
+      required this.postedBy});
 
   @override
   Widget build(BuildContext context) {
@@ -19,25 +27,36 @@ class NotificationCard extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: height*0.005, horizontal: width*0.025),
+            padding: EdgeInsets.symmetric(
+                vertical: height * 0.005, horizontal: width * 0.025),
             child: Container(
               height: 85,
               // color: Colors.grey,
               child: Row(
                 children: [
                   //image
-                  Container( 
+                  Container(
                     height: 85,
                     width: 85,
                     decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(100) 
-                      //more than 50% of width makes circle
-                    ),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: profileURL != ""
+                              ? NetworkImage(profileURL!)
+                              : const AssetImage(
+                                      "lib/assets/images/default_profile.jpg")
+                                  as ImageProvider,
+                        ),
+                        // color: Colors.green,
+                        borderRadius: BorderRadius.circular(100)
+                        //more than 50% of width makes circle
+                        ),
                   ),
-                  SizedBox(width: width*0.02,),
+                  SizedBox(
+                    width: width * 0.02,
+                  ),
                   Container(
-                    width: width*0.6,
+                    width: width * 0.6,
                     // color: Colors.red,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,13 +95,13 @@ class NotificationCard extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    height: width*0.2,
-                    width: width*0.12,
+                    height: width * 0.2,
+                    width: width * 0.12,
                     // color: Colors.white,
                     child: IconButton(
-                      onPressed: () async{
+                      onPressed: () async {
                         onDelete(index);
-                      }, 
+                      },
                       icon: const Icon(Icons.delete_outline_rounded, size: 25),
                     ),
                   ),
@@ -91,8 +110,11 @@ class NotificationCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: width*0.04),
-            child: Divider(thickness: 0.5, color: Colors.grey[400],),
+            padding: EdgeInsets.symmetric(horizontal: width * 0.04),
+            child: Divider(
+              thickness: 0.5,
+              color: Colors.grey[400],
+            ),
           ),
         ],
       ),

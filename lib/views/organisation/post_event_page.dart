@@ -4,18 +4,60 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:helping_hand/models/event.dart';
 import 'package:helping_hand/models/organisation.dart';
 import 'package:helping_hand/providers/organisation_provider.dart';
 import 'package:helping_hand/resources/notifications.dart';
+import 'package:helping_hand/views/organisation/navigation_page.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-const List<String> list = <String>['Animals', 'Art & Culture', 'Children & youth', 'Computer & Technology', 'Cooking', 'Education & Literacy','Emergency & Safety','Employment','Environment','Faith Based','Health & Medicine','Homeless & Housing','Human Rights','Immigrants & Refugees','International','LGBTQ+','Media & Broadcasting','Social Work', 'Sports','Tutoring','Creativity','Fundraising','Teamwork','Teaching','Social Media',];
+const List<String> list = <String>[
+  'Animals',
+  'Art & Culture',
+  'Children & youth',
+  'Computer & Technology',
+  'Cooking',
+  'Education & Literacy',
+  'Emergency & Safety',
+  'Employment',
+  'Environment',
+  'Faith Based',
+  'Health & Medicine',
+  'Homeless & Housing',
+  'Human Rights',
+  'Immigrants & Refugees',
+  'International',
+  'LGBTQ+',
+  'Media & Broadcasting',
+  'Social Work',
+  'Sports',
+  'Tutoring',
+  'Creativity',
+  'Fundraising',
+  'Teamwork',
+  'Teaching',
+  'Social Media',
+];
 
-const List<String> months = <String>['','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const List<String> months = <String>[
+  '',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+];
 
 class PostEventPage extends StatefulWidget {
   const PostEventPage({super.key});
@@ -25,7 +67,6 @@ class PostEventPage extends StatefulWidget {
 }
 
 class _PostEventPageState extends State<PostEventPage> {
-  
   String selectedImagePath = '';
   String imageURL = '';
   String? dropdownValue;
@@ -37,33 +78,43 @@ class _PostEventPageState extends State<PostEventPage> {
   final state = TextEditingController();
   final city = TextEditingController();
   String startDate = "", startTime = "", endDate = "", endTime = "";
-  int y1 = 0, mo1 = 0, d1 = 0, h1 = 0, mi1 = 0, s1 = 0, y2 = 0, mo2 = 0, d2 = 0, h2 = 0, mi2 = 0, s2 = 0;
+  int y1 = 0,
+      mo1 = 0,
+      d1 = 0,
+      h1 = 0,
+      mi1 = 0,
+      s1 = 0,
+      y2 = 0,
+      mo2 = 0,
+      d2 = 0,
+      h2 = 0,
+      mi2 = 0,
+      s2 = 0;
   DateTime? searchDate = DateTime.now();
   TimeOfDay? searchTime = TimeOfDay.now();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    print("h");
+    // print("h");
   }
 
-  _showDatePicker(String date){
+  _showDatePicker(String date) {
     showDatePicker(
-      context: context, 
-      initialDate: DateTime.now(), 
-      firstDate: DateTime(2000), 
-      lastDate: DateTime(2030)
-    ).then((value){
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2030))
+        .then((value) {
       setState(() {
         searchDate = value;
-        if(date == "start"){
+        if (date == "start") {
           y1 = searchDate!.year;
           mo1 = searchDate!.month;
           d1 = searchDate!.day;
           startDate = months[searchDate!.month].toString();
           startDate += " ${searchDate!.day.toString()}";
-        }
-        else if(date == "end"){
+        } else if (date == "end") {
           y2 = searchDate!.year;
           mo2 = searchDate!.month;
           d2 = searchDate!.day;
@@ -73,38 +124,42 @@ class _PostEventPageState extends State<PostEventPage> {
       });
     });
   }
-  void showErrorMessage(String message){
-    showDialog(context: context, builder: (context){
-      return AlertDialog(
-        title: Text(message),
-      );
-    });
+
+  void showErrorMessage(String message) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(message),
+          );
+        });
   }
 
-  _showTimePicker(String time){
+  _showTimePicker(String time) {
     showTimePicker(
-      context: context, 
+      context: context,
       initialTime: TimeOfDay.now(),
-    ).then((value){
+    ).then((value) {
       setState(() {
         searchTime = value;
-        if(time == "start"){
+        if (time == "start") {
           h1 = searchTime!.hour;
           mi1 = searchTime!.minute;
           startTime = searchTime!.hour.toString();
-          startTime += " : ${searchTime!.minute.toString()} ${searchTime!.period.name}";
-        }
-        else if(time == "end"){
+          startTime +=
+              " : ${searchTime!.minute.toString()} ${searchTime!.period.name}";
+        } else if (time == "end") {
           h2 = searchTime!.hour;
           mi2 = searchTime!.minute;
           endTime = searchTime!.hour.toString();
-          endTime += " : ${searchTime!.minute.toString()} ${searchTime!.period.name}";
+          endTime +=
+              " : ${searchTime!.minute.toString()} ${searchTime!.period.name}";
         }
       });
     });
   }
 
-  _clearFields(){
+  _clearFields() {
     eventname.clear();
     details.clear();
     country.clear();
@@ -123,22 +178,30 @@ class _PostEventPageState extends State<PostEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    Organisation organisation = Provider.of<OrganisationProvider>(context, listen: false).getOrganisation;
+    Organisation organisation =
+        Provider.of<OrganisationProvider>(context, listen: false)
+            .getOrganisation;
     Map<String, dynamic> organisationMap = organisation.getData();
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
-          onTap: (){},
-          child: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20,)
-        ), 
+            onTap: () {
+              final NavigationControllerOrg controller = Get.find();
+              controller.handleNotificationNavigation(0);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+              size: 20,
+            )),
         centerTitle: true,
-        title:  const Text(
+        title: const Text(
           'Post Event',
           style: TextStyle(
-              color: Color(0xFF1D1517),
-              fontSize: 25,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w700,
+            color: Color(0xFF1D1517),
+            fontSize: 25,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w700,
           ),
         ),
         titleTextStyle: const TextStyle(color: Colors.black87, fontSize: 28),
@@ -179,15 +242,19 @@ class _PostEventPageState extends State<PostEventPage> {
                       fontWeight: FontWeight.w500,
                     ),
                     contentPadding: EdgeInsets.symmetric(vertical: 0),
-                    enabledBorder: UnderlineInputBorder(      
-                      borderSide: BorderSide(color: Color.fromARGB(255, 198, 194, 194)),   
-                    ),  
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 198, 194, 194)),
+                    ),
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 198, 194, 194)),
-                    ),  
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 198, 194, 194)),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 //cause
                 const Text(
                   "Cause",
@@ -239,7 +306,9 @@ class _PostEventPageState extends State<PostEventPage> {
                     );
                   }).toList(),
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 //details
                 const Text(
                   "Details",
@@ -269,15 +338,19 @@ class _PostEventPageState extends State<PostEventPage> {
                       fontWeight: FontWeight.w500,
                     ),
                     contentPadding: EdgeInsets.symmetric(vertical: 0),
-                    enabledBorder: UnderlineInputBorder(      
-                      borderSide: BorderSide(color: Color.fromARGB(255, 198, 194, 194)),   
-                    ),  
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 198, 194, 194)),
+                    ),
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 198, 194, 194)),
-                    ),  
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 198, 194, 194)),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 //location
                 const Text(
                   "Location",
@@ -288,19 +361,26 @@ class _PostEventPageState extends State<PostEventPage> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 CountryStateCityPicker(
                   country: country,
                   state: state,
                   city: city,
                   dialogColor: Colors.grey.shade200,
                   textFieldDecoration: InputDecoration(
-                    fillColor: Colors.grey.shade200,
-                    filled: true,
-                    suffixIcon: const Icon(Icons.arrow_downward_rounded), 
-                    border:  const OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(3.0)))),
+                      fillColor: Colors.grey.shade200,
+                      filled: true,
+                      suffixIcon: const Icon(Icons.arrow_downward_rounded),
+                      border: const OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(3.0)))),
                 ),
-                const SizedBox(height: 30,),
+                const SizedBox(
+                  height: 30,
+                ),
                 //start date
                 Row(
                   children: [
@@ -317,52 +397,63 @@ class _PostEventPageState extends State<PostEventPage> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          const SizedBox(height: 10,),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              if (startDate  == "") const Text(
-                                '-/-/-',
-                                style: TextStyle(
+                              if (startDate == "")
+                                const Text(
+                                  '-/-/-',
+                                  style: TextStyle(
                                     color: Color.fromARGB(255, 177, 173, 173),
                                     fontSize: 18,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w500,
-                                ),
-                              ) else  Text(
-                                startDate,
-                                style: const TextStyle(
+                                  ),
+                                )
+                              else
+                                Text(
+                                  startDate,
+                                  style: const TextStyle(
                                     color: Color(0xFF1D1517),
                                     fontSize: 18,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
                               Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: <Widget>[
-                                    InkWell(
-                                      onTap: (){_showDatePicker("start");},
+                                  child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  InkWell(
+                                      onTap: () {
+                                        _showDatePicker("start");
+                                      },
                                       child: const Icon(
-                                        Icons.calendar_month_outlined, 
-                                        color: Color.fromARGB(255, 78, 102, 223),
-                                      )
-                                    ), 
-                                  ],
-                                )
-                              ),
+                                        Icons.calendar_month_outlined,
+                                        color:
+                                            Color.fromARGB(255, 78, 102, 223),
+                                      )),
+                                ],
+                              )),
                             ],
                           ),
-                          const Divider(thickness: 1, color: Color.fromARGB(255, 198, 194, 194),),
+                          const Divider(
+                            thickness: 1,
+                            color: Color.fromARGB(255, 198, 194, 194),
+                          ),
                         ],
                       ),
                     ),
-                    const SizedBox(width: 10,),
+                    const SizedBox(
+                      width: 10,
+                    ),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -376,54 +467,65 @@ class _PostEventPageState extends State<PostEventPage> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          const SizedBox(height: 10,),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              if (startTime == "") const Text(
-                                '--:--',
-                                style: TextStyle(
+                              if (startTime == "")
+                                const Text(
+                                  '--:--',
+                                  style: TextStyle(
                                     color: Color.fromARGB(255, 177, 173, 173),
                                     fontSize: 18,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w500,
-                                ),
-                              ) else Text(
-                                startTime,
-                                style: const TextStyle(
+                                  ),
+                                )
+                              else
+                                Text(
+                                  startTime,
+                                  style: const TextStyle(
                                     color: Color(0xFF1D1517),
                                     fontSize: 18,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
                               Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: <Widget>[
-                                    InkWell(
-                                      onTap: (){_showTimePicker("start");},
+                                  child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  InkWell(
+                                      onTap: () {
+                                        _showTimePicker("start");
+                                      },
                                       child: const Icon(
-                                        Icons.timer_outlined, 
-                                        color: Color.fromARGB(255, 78, 102, 223),
-                                      )
-                                    ),
-                                  ],
-                                )
-                              ),
+                                        Icons.timer_outlined,
+                                        color:
+                                            Color.fromARGB(255, 78, 102, 223),
+                                      )),
+                                ],
+                              )),
                             ],
                           ),
-                          const Divider(thickness: 1, color: Color.fromARGB(255, 198, 194, 194),),
+                          const Divider(
+                            thickness: 1,
+                            color: Color.fromARGB(255, 198, 194, 194),
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 //end date
                 Row(
                   children: [
@@ -440,52 +542,63 @@ class _PostEventPageState extends State<PostEventPage> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          const SizedBox(height: 10,),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              if (endDate  == "") const Text(
-                                '-/-/-',
-                                style: TextStyle(
+                              if (endDate == "")
+                                const Text(
+                                  '-/-/-',
+                                  style: TextStyle(
                                     color: Color.fromARGB(255, 177, 173, 173),
                                     fontSize: 18,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w500,
-                                ),
-                              ) else  Text(
-                                endDate,
-                                style: const TextStyle(
+                                  ),
+                                )
+                              else
+                                Text(
+                                  endDate,
+                                  style: const TextStyle(
                                     color: Color(0xFF1D1517),
                                     fontSize: 18,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
                               Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: <Widget>[
-                                    InkWell(
-                                      onTap: (){_showDatePicker("end");},
+                                  child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  InkWell(
+                                      onTap: () {
+                                        _showDatePicker("end");
+                                      },
                                       child: const Icon(
-                                        Icons.calendar_month_outlined, 
-                                        color: Color.fromARGB(255, 78, 102, 223),
-                                      )
-                                    ), 
-                                  ],
-                                )
-                              ),
+                                        Icons.calendar_month_outlined,
+                                        color:
+                                            Color.fromARGB(255, 78, 102, 223),
+                                      )),
+                                ],
+                              )),
                             ],
                           ),
-                          const Divider(thickness: 1, color: Color.fromARGB(255, 198, 194, 194),),
+                          const Divider(
+                            thickness: 1,
+                            color: Color.fromARGB(255, 198, 194, 194),
+                          ),
                         ],
                       ),
                     ),
-                    const SizedBox(width: 10,),
+                    const SizedBox(
+                      width: 10,
+                    ),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -499,54 +612,65 @@ class _PostEventPageState extends State<PostEventPage> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          const SizedBox(height: 10,),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              if (endTime == "") const Text(
-                                '--:--',
-                                style: TextStyle(
+                              if (endTime == "")
+                                const Text(
+                                  '--:--',
+                                  style: TextStyle(
                                     color: Color.fromARGB(255, 177, 173, 173),
                                     fontSize: 18,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w500,
-                                ),
-                              ) else Text(
-                                endTime,
-                                style: const TextStyle(
+                                  ),
+                                )
+                              else
+                                Text(
+                                  endTime,
+                                  style: const TextStyle(
                                     color: Color(0xFF1D1517),
                                     fontSize: 18,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
                               Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: <Widget>[
-                                    InkWell(
-                                      onTap: (){_showTimePicker("end");},
+                                  child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  InkWell(
+                                      onTap: () {
+                                        _showTimePicker("end");
+                                      },
                                       child: const Icon(
-                                        Icons.timer_outlined, 
-                                        color: Color.fromARGB(255, 78, 102, 223),
-                                      )
-                                    ),
-                                  ],
-                                )
-                              ),
+                                        Icons.timer_outlined,
+                                        color:
+                                            Color.fromARGB(255, 78, 102, 223),
+                                      )),
+                                ],
+                              )),
                             ],
                           ),
-                          const Divider(thickness: 1, color: Color.fromARGB(255, 198, 194, 194),),
+                          const Divider(
+                            thickness: 1,
+                            color: Color.fromARGB(255, 198, 194, 194),
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 //total spots
                 const Text(
                   "Total Spots",
@@ -574,18 +698,22 @@ class _PostEventPageState extends State<PostEventPage> {
                       fontWeight: FontWeight.w500,
                     ),
                     contentPadding: EdgeInsets.symmetric(vertical: 0),
-                    enabledBorder: UnderlineInputBorder(      
-                      borderSide: BorderSide(color: Color.fromARGB(255, 198, 194, 194)),   
-                    ),  
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 198, 194, 194)),
+                    ),
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 198, 194, 194)),
-                    ),  
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 198, 194, 194)),
+                    ),
                   ),
                 ),
                 //select image
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 GestureDetector(
-                  onTap: () async{
+                  onTap: () async {
                     selectImage();
                     setState(() {});
                   },
@@ -602,7 +730,7 @@ class _PostEventPageState extends State<PostEventPage> {
                           spreadRadius: 0,
                         )
                       ],
-                      color: const Color(0xff6379A5), 
+                      color: const Color(0xff6379A5),
                       gradient: const LinearGradient(
                         begin: Alignment(-1.00, 0.08),
                         end: Alignment(1, -0.08),
@@ -611,64 +739,96 @@ class _PostEventPageState extends State<PostEventPage> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: const Center(
-                      child: Text("Select image", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),),
+                      child: Text(
+                        "Select image",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 //show selected image
                 if (selectedImagePath == "")
-                const SizedBox(height: 0,) 
-                else 
-                Column(
-                  children: [
-                    Center(child: Image.file(File(selectedImagePath), height: 200, fit: BoxFit.fill,)),
-                    const SizedBox(height: 20,),
-                  ],
-                ),
-                //submit 
-                MyButton(onTap: () async{
-                  if(organisationMap['orgname'] == ""){
-                    showErrorMessage("Pleae complete your profile first..");
-                  }
-                  else if(eventname.text != "" && dropdownValue != "" && details.text != "" && city.text != "" && startDate != "" && startTime != "" && endDate != "" && endTime != "" && totalspots.text != "" && imageURL != ""){
-                    DateTime start = DateTime(y1, mo1, d1, h1, mi1), end = DateTime(y1, mo1, d1, h1, mi1);
-                    Timestamp startTimeStamp = Timestamp.fromDate(start);
-                    Timestamp endTimeStamp = Timestamp.fromDate(end);
-                    String uid = Uuid().v1() as String;
-                    Event event = Event(
-                      uid: uid, 
-                      eventid: uid, 
-                      eventname: eventname.text, 
-                      profileURL: imageURL, 
-                      location: city.text, 
-                      organiserID: organisationMap['uid'], 
-                      organiserName: organisationMap['orgname'],
-                      startTime: startTimeStamp, 
-                      endTime: endTimeStamp, 
-                      details: details.text, 
-                      totalSpots: totalspots.text, 
-                      signedSpots: '0', 
-                      cause: dropdownValue!,
-                      );
+                  const SizedBox(
+                    height: 0,
+                  )
+                else
+                  Column(
+                    children: [
+                      Center(
+                          child: Image.file(
+                        File(selectedImagePath),
+                        height: 200,
+                        fit: BoxFit.fill,
+                      )),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                //submit
+                MyButton(
+                    onTap: () async {
+                      if (organisationMap['orgname'] == "") {
+                        showErrorMessage("Pleae complete your profile first..");
+                      } else if (eventname.text != "" &&
+                          dropdownValue != "" &&
+                          details.text != "" &&
+                          city.text != "" &&
+                          startDate != "" &&
+                          startTime != "" &&
+                          endDate != "" &&
+                          endTime != "" &&
+                          totalspots.text != "" &&
+                          imageURL != "") {
+                        DateTime start = DateTime(y1, mo1, d1, h1, mi1),
+                            end = DateTime(y1, mo1, d1, h1, mi1);
+                        Timestamp startTimeStamp = Timestamp.fromDate(start);
+                        Timestamp endTimeStamp = Timestamp.fromDate(end);
+                        String uid = const Uuid().v1();
+                        Event event = Event(
+                          uid: uid,
+                          eventid: uid,
+                          eventname: eventname.text,
+                          profileURL: imageURL,
+                          location: city.text,
+                          organiserID: organisationMap['uid'],
+                          organiserName: organisationMap['orgname'],
+                          startTime: startTimeStamp,
+                          endTime: endTimeStamp,
+                          details: details.text,
+                          totalSpots: totalspots.text,
+                          signedSpots: '0',
+                          cause: dropdownValue!,
+                        );
 
-                      await FirebaseFirestore.instance
-                      .collection('events')
-                      .doc(uid)
-                      .set(event.getData());
-                      
-                      List<dynamic> upcomingEvents = organisationMap['upcomingEvents'];
-                      upcomingEvents.add(uid);
-                      await FirebaseFirestore.instance.collection('organisations').doc(organisationMap['uid']).update({'upcomingEvents':upcomingEvents});
-                     showErrorMessage("Event added successfully..");
-                      String temp = eventname.text;
-                      _clearFields();
-                      Notifications.createUserList(temp, organisationMap['orgname'], uid);
-                  }
-                  else{
-                    showErrorMessage("Please Fill all fields..");
-                  }
-                }, text: "Submit"),
+                        await FirebaseFirestore.instance
+                            .collection('events')
+                            .doc(uid)
+                            .set(event.getData());
+
+                        List<dynamic> upcomingEvents =
+                            organisationMap['upcomingEvents'];
+                        upcomingEvents.add(uid);
+                        await FirebaseFirestore.instance
+                            .collection('organisations')
+                            .doc(organisationMap['uid'])
+                            .update({'upcomingEvents': upcomingEvents});
+                        showErrorMessage("Event added successfully..");
+                        String temp = eventname.text;
+                        _clearFields();
+                        Notifications.createUserList(
+                            temp, organisationMap['orgname'], uid);
+                      } else {
+                        showErrorMessage("Please Fill all fields..");
+                      }
+                    },
+                    text: "Submit"),
               ],
             ),
           ),
@@ -702,25 +862,33 @@ class _PostEventPageState extends State<PostEventPage> {
                           onTap: () async {
                             selectedImagePath = await selectImageFromGallery();
                             // ignore: avoid_print
-                            print('Image_Path:- $selectedImagePath');
-                            String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+                            // print('Image_Path:- $selectedImagePath');
+                            String uniqueName = DateTime.now()
+                                .millisecondsSinceEpoch
+                                .toString();
 
-                            Reference referenceRoot = FirebaseStorage.instance.ref();
-                            Reference referenceDir = referenceRoot.child('event_pics');
-                            Reference imageToUpload = referenceDir.child(uniqueName);
+                            Reference referenceRoot =
+                                FirebaseStorage.instance.ref();
+                            Reference referenceDir =
+                                referenceRoot.child('event_pics');
+                            Reference imageToUpload =
+                                referenceDir.child(uniqueName);
                             if (selectedImagePath != '') {
-                              await imageToUpload.putFile(File(selectedImagePath));
-                              String tempImageURL = await imageToUpload.getDownloadURL();
+                              await imageToUpload
+                                  .putFile(File(selectedImagePath));
+                              String tempImageURL =
+                                  await imageToUpload.getDownloadURL();
                               // ignore: use_build_context_synchronously
                               Navigator.pop(context);
                               setState(() {
                                 imageURL = tempImageURL;
                               });
-                              print(imageURL);
+                              // print(imageURL);
                             } else {
                               setState(() {});
                               // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
                                 content: Text("No Image Selected !"),
                               ));
                             }
@@ -746,24 +914,32 @@ class _PostEventPageState extends State<PostEventPage> {
                             selectedImagePath = await selectImageFromCamera();
                             // ignore: avoid_print
                             print('Image_Path:- $selectedImagePath');
-                            String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+                            String uniqueName = DateTime.now()
+                                .millisecondsSinceEpoch
+                                .toString();
 
-                            Reference referenceRoot = FirebaseStorage.instance.ref();
-                            Reference referenceDir = referenceRoot.child('event_pics');
-                            Reference imageToUpload = referenceDir.child(uniqueName);
+                            Reference referenceRoot =
+                                FirebaseStorage.instance.ref();
+                            Reference referenceDir =
+                                referenceRoot.child('event_pics');
+                            Reference imageToUpload =
+                                referenceDir.child(uniqueName);
                             if (selectedImagePath != '') {
-                              await imageToUpload.putFile(File(selectedImagePath));
-                              String tempImageURL = await imageToUpload.getDownloadURL();
+                              await imageToUpload
+                                  .putFile(File(selectedImagePath));
+                              String tempImageURL =
+                                  await imageToUpload.getDownloadURL();
                               // ignore: use_build_context_synchronously
                               Navigator.pop(context);
                               setState(() {
                                 imageURL = tempImageURL;
                               });
-                              print(imageURL);
+                              // print(imageURL);
                             } else {
                               setState(() {});
                               // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
                                 content: Text("No Image Captured !"),
                               ));
                             }

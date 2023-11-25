@@ -1,45 +1,8 @@
-// import 'package:flutter/material.dart';
-// import 'package:easy_upi_payment/easy_upi_payment.dart';
-
-// class PaymentPage extends StatelessWidget {
-//   const PaymentPage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('UPI Payment')),
-//       body: Center(
-//         child: ElevatedButton(
-          // onPressed: () async{
-          //   try {
-          //     final res = await EasyUpiPaymentPlatform.instance.startPayment(
-          //       const EasyUpiPaymentModel(
-          //         payeeVpa: '639401931@paytm',
-          //         payeeName: 'Yash',
-          //         amount: 1.0,
-          //         description: 'Testing payment',
-          //       ),
-          //     );
-
-          //     // TODO: add your success logic here
-          //     print(res);
-          //   } on EasyUpiPaymentException {
-          //     // TODO: add your exception logic here
-          //   }
-          // },
-//           child: const Text('Pay Now'),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// ignore_for_file: non_constant_identifier_names
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:helping_hand/views/user/navigation.dart';
 import 'package:helping_hand/widgets/donation_card.dart';
-import 'package:helping_hand/widgets/event_card.dart';
 
 // ignore: must_be_immutable
 class PaymentPage extends StatefulWidget {
@@ -54,6 +17,7 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   final CollectionReference _jobs =
       FirebaseFirestore.instance.collection('organisations');
+  // ignore: non_constant_identifier_names
   String textarea_value = "";
 
   @override
@@ -63,7 +27,10 @@ class _PaymentPageState extends State<PaymentPage> {
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              final NavigationController controller = Get.find();
+              controller.handleNotificationNavigation(0);
+            },
             child: const Icon(
               Icons.arrow_back_ios,
               color: Colors.black,

@@ -38,7 +38,7 @@ class _DonationCardState extends State<DonationCard> {
               width: width * 0.42,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Colors.red,
+                // color: Colors.red,
               ),
             ),
             Container(
@@ -97,11 +97,9 @@ class _DonationCardState extends State<DonationCard> {
                               description: 'Donation',
                             ),
                           );
-                          // TODO: add your success logic here
                           print(res);
                           // if(res.responseCode)
                         } on EasyUpiPaymentException catch(err){
-                          // TODO: add your exception logic here
                           if(err.message == "Payee VPA address should be valid (For e.g. example@vpa)"){
                             showErrorMessage("Payee VPA address should be valid (For e.g. example@vpa)");
                           }

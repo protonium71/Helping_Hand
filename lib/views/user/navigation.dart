@@ -1,8 +1,7 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:helping_hand/views/user/payments.dart';
+import 'package:helping_hand/views/user/fundraise_page.dart';
 import 'package:helping_hand/providers/user_provider.dart';
 import 'package:helping_hand/resources/notifications.dart';
 import 'package:helping_hand/views/user/profile_page.dart';
@@ -22,16 +21,6 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   bool isLoading = true;
   List<DocumentSnapshot> feed = [];
-  
-  // int _selectedIndex = 1;
-  // static List<Widget> _pages = <Widget>[
-  //   const UserFeed(),
-  //   SearchPage(),
-  //   // FundRaise(),
-  //   // FeedNotification(),
-  //   // ProfileScreen(),
-  // ];
-
   @override
   void initState() {
     super.initState();
@@ -50,7 +39,7 @@ class _NavigationState extends State<Navigation> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(NavigationController());
-    if(isLoading){
+    if (isLoading) {
       return const Scaffold(
           backgroundColor: Colors.white,
           body: Center(
@@ -58,61 +47,59 @@ class _NavigationState extends State<Navigation> {
           ));
     }
     return Scaffold(
-      backgroundColor: Colors.white,
-       body: Obx(() => controller.screens[controller.selectedIndex.value]),
-//bottom navigation bar
-      bottomNavigationBar: Obx(
-        () => Container(
-          height: MediaQuery.of(context).size.height * 0.08,
-          color: const Color(0xffCDD4E0),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 13,vertical: 13),
-            child: GNav(  
-              //gap between icon and the text
-              
-              selectedIndex: controller.selectedIndex.value,
-              onTabChange: (index) {
-                controller.selectedIndex.value = index;
-              },
-              gap: 4,
-              iconSize: 50,
-              backgroundColor: const Color(0xffCDD4E0),
-              //tabBackgroundColor: Colors.grey.shade400,
-              //duration: Duration(milliseconds: 90),
-              padding: const EdgeInsets.all(6),
-              activeColor: Colors.white,
-              tabs: [
-                GButton(icon: Icons.home_rounded,
-                //text: 'Home',
-                onPressed: (){
-                  loadUserData();
+        backgroundColor: Colors.white,
+        body: Obx(() => controller.screens[controller.selectedIndex.value]),
+        //bottom navigation bar
+        bottomNavigationBar: Obx(
+          () => Container(
+            height: MediaQuery.of(context).size.height * 0.07,
+            color: const Color(0xffCDD4E0),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+              child: GNav(
+                selectedIndex: controller.selectedIndex.value,
+                onTabChange: (index) {
+                  controller.selectedIndex.value = index;
                 },
-                ),
-                GButton(icon: Icons.search,
-                //text: 'Search',
-                
-                
-                ),
-                GButton(icon: Icons.monetization_on_rounded,
-                //text: 'Raise Fund',
-                ),
-                GButton(icon: Icons.notifications,
-                //text: 'Notifications',
-                
-                ),
-                GButton(icon: Icons.person_rounded,
-                //text: 'Profile',
-                ),
-              ], 
+                gap: 4,
+                iconSize: 32,
+                backgroundColor: const Color(0xffCDD4E0),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                activeColor: Colors.white,
+                tabs: [
+                  GButton(
+                    icon: Icons.home_rounded,
+                    //text: 'Home',
+                    onPressed: () {
+                      loadUserData();
+                    },
+                  ),
+                  const GButton(
+                    icon: Icons.search,
+                    //text: 'Search',
+                  ),
+                  const GButton(
+                    icon: Icons.monetization_on_rounded,
+                    //text: 'Raise Fund',
+                  ),
+                  const GButton(
+                    icon: Icons.notifications,
+                    //text: 'Notifications',
+                  ),
+                  const GButton(
+                    icon: Icons.person_rounded,
+                    //text: 'Profile',
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ));
+        ));
   }
 }
 
-class NavigationController extends GetxController{
-    final Rx<int> selectedIndex = 0.obs ;
+class NavigationController extends GetxController {
+  final Rx<int> selectedIndex = 0.obs;
   final screens = [
     const UserFeed(),
     SearchPage(),

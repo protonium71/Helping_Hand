@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     ]).then((snapshot) {
       String user = (snapshot.first as String);
       // ignore: avoid_print
-      print(user);
+      // print(user);
       Widget next = user == "onBoard"
           ? const UserType()
           : user == "volunteer"

@@ -63,6 +63,7 @@ class _SkillPageState extends State<SkillPage> {
                   }
                   
                   //showErrorMessage('you skill were updated..');
+                  // ignore: use_build_context_synchronously
                   Navigator.pop(context, res);
                 }, text: 'Continue', color: const Color(0xff6379A5),),
               ),

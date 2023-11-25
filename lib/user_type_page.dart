@@ -9,11 +9,29 @@ class UserType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              const SizedBox(height: 50,),
+              const Text(
+                "Choose user",
+                style: TextStyle(
+                    color: Color(0xFF1D1517),
+                    fontSize: 30,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 50,),
+              Image.asset(
+                "lib/assets/images/select.png",
+                fit: BoxFit.cover,
+              ),
+              const SizedBox(height: 150,),
               MyButton(onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context) => LoginOrRegisterPage(parent: context)));
               }, text: "Volunteer"),
