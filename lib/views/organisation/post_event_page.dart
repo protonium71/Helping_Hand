@@ -73,6 +73,13 @@ class _PostEventPageState extends State<PostEventPage> {
       });
     });
   }
+  void showErrorMessage(String message){
+    showDialog(context: context, builder: (context){
+      return AlertDialog(
+        title: Text(message),
+      );
+    });
+  }
 
   _showTimePicker(String time){
     showTimePicker(
@@ -622,9 +629,7 @@ class _PostEventPageState extends State<PostEventPage> {
                 //submit 
                 MyButton(onTap: () async{
                   if(organisationMap['orgname'] == ""){
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Pleae complete your profile first.."),
-                    ));
+                    showErrorMessage("Pleae complete your profile first..");
                   }
                   else if(eventname.text != "" && dropdownValue != "" && details.text != "" && city.text != "" && startDate != "" && startTime != "" && endDate != "" && endTime != "" && totalspots.text != "" && imageURL != ""){
                     DateTime start = DateTime(y1, mo1, d1, h1, mi1), end = DateTime(y1, mo1, d1, h1, mi1);
@@ -655,17 +660,13 @@ class _PostEventPageState extends State<PostEventPage> {
                       List<dynamic> upcomingEvents = organisationMap['upcomingEvents'];
                       upcomingEvents.add(uid);
                       await FirebaseFirestore.instance.collection('organisations').doc(organisationMap['uid']).update({'upcomingEvents':upcomingEvents});
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Event added successfully.."),
-                      ));
+                     showErrorMessage("Event added successfully..");
                       String temp = eventname.text;
                       _clearFields();
                       Notifications.createUserList(temp, organisationMap['orgname'], uid);
                   }
                   else{
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Please Fill all fields.."),
-                    ));
+                    showErrorMessage("Please Fill all fields..");
                   }
                 }, text: "Submit"),
               ],

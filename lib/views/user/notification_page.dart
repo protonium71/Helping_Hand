@@ -62,6 +62,7 @@ class _NotificationPageState extends State<NotificationPage> {
               setState(() {
                 notificationList = userMap['notifications'];
               });
+              
             },
             icon: const Icon(
               Icons.refresh_outlined,

@@ -29,15 +29,16 @@ class _ProfilePageState extends State<ProfilePage> {
     await userProvider.refreshUser();
     model.User user = userProvider.getUser;
     Map<String, dynamic> userMap = user.getData();
-    
-    setState((){
+    if(mounted) {
+      setState((){
       name = userMap['username']; 
       location = userMap['location'];
       interests = userMap['interests'];
       skills = userMap['skills'];
       profileURL = userMap['profileURL'];
-      print("3333"+profileURL);
+      //print("3333"+profileURL);
       });
+    }
     print(name);
   }
   
@@ -57,9 +58,11 @@ class _ProfilePageState extends State<ProfilePage> {
       }
       
       total_hours += ((total_min  + 59 )/ 60).toInt();
+      if(this.mounted)
       setState(() {
           volunteeringHours = total_hours;
         });
+        //print(volunteeringHours);
       
     }
   @override
@@ -323,4 +326,5 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+  
 }

@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:helping_hand/views/user/payments.dart';
@@ -19,7 +20,9 @@ class Navigation extends StatefulWidget {
 }
 
 class _NavigationState extends State<Navigation> {
-
+  bool isLoading = true;
+  List<DocumentSnapshot> feed = [];
+  
   // int _selectedIndex = 1;
   // static List<Widget> _pages = <Widget>[
   //   const UserFeed(),
@@ -39,11 +42,21 @@ class _NavigationState extends State<Navigation> {
   loadUserData() async {
     UserProvider userProvider = Provider.of(context, listen: false);
     await userProvider.refreshUser();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(NavigationController());
+    if(isLoading){
+      return const Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: CircularProgressIndicator(),
+          ));
+    }
     return Scaffold(
       backgroundColor: Colors.white,
        body: Obx(() => controller.screens[controller.selectedIndex.value]),
@@ -68,9 +81,12 @@ class _NavigationState extends State<Navigation> {
               //duration: Duration(milliseconds: 90),
               padding: const EdgeInsets.all(6),
               activeColor: Colors.white,
-              tabs: const [
+              tabs: [
                 GButton(icon: Icons.home_rounded,
                 //text: 'Home',
+                onPressed: (){
+                  loadUserData();
+                },
                 ),
                 GButton(icon: Icons.search,
                 //text: 'Search',
@@ -96,7 +112,7 @@ class _NavigationState extends State<Navigation> {
 }
 
 class NavigationController extends GetxController{
-  final Rx<int> selectedIndex = 0.obs ;
+    final Rx<int> selectedIndex = 0.obs ;
   final screens = [
     const UserFeed(),
     SearchPage(),

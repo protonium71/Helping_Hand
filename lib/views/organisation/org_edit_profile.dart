@@ -29,6 +29,14 @@ class _OrganisationEditProfilePage extends State<OrganisationEditProfilePage> {
   //final upiID_controller = TextEditingController();
 
   String? imageURL = "";
+  void showErrorMessage(String message){
+    showDialog(context: context, builder: (context){
+      return AlertDialog(
+        title: Text(message),
+      );
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -176,15 +184,26 @@ class _OrganisationEditProfilePage extends State<OrganisationEditProfilePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: MyButton(onTap: () async {
-                if(controller.text != "")
+                bool flag = false;
+                if(controller.text != "") {
                   await FirebaseFirestore.instance.collection("organisations").doc(id).update({"orgname":controller.text});
-                if(upi_controller.text != "")
+                  flag = true;
+                }
+                if(upi_controller.text != "") {
                   await FirebaseFirestore.instance.collection("organisations").doc(id).update({"upiID":upi_controller.text});
+                  flag = true;
+                }
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-                if(imageURL != "")
+                if(imageURL != "") {
                   await FirebaseFirestore.instance.collection("organisations").doc(id).update({"profileURL":imageURL});
-                if(bio_controller.text != "")
+                  flag = true;
+                }
+                if(bio_controller.text != "") {
                   await FirebaseFirestore.instance.collection("organisations").doc(id).update({"bio":bio_controller.text});
+                  flag = true;
+                }
+                if(flag)
+                 showErrorMessage('profile updated..');
                 
               }, text: 'Update Profile'),
             ),
