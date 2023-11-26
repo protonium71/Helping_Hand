@@ -170,7 +170,7 @@ class Notifications {
               'Chats',
               importance: Importance.max,
               priority: Priority.max,
-              largeIcon: FilePathAndroidBitmap('logo'),
+              largeIcon: DrawableResourceAndroidBitmap("logo"),
             ),
             // other properties...
           ),

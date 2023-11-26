@@ -20,22 +20,31 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   String postedBy = "", eventname = "", profileURL = "";
   List<dynamic> notificationList = [];
+  List<Map<String, dynamic>> notiDetails = [];
+  bool isLoading = true;
 
-  loadData(dynamic id) async {
-    DocumentSnapshot snap = await FirebaseFirestore.instance
-        .collection('events')
-        .doc(id.toString())
-        .get();
-    // print(id);
-    if (snap.data() != null) {
-      Map<String, dynamic> map = snap.data() as Map<String, dynamic>;
-      setState(() {
-        postedBy = map['organiserName'];
-        eventname = map['eventname'];
-        profileURL = map['profileURL'];
-        // print(eventname);
-      });
+  @override
+  void initState() {
+    super.initState();
+    model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
+    Map<String, dynamic> userMap = user.getData();
+    notificationList = userMap['notifications'];
+    loadDetails();
+  }
+
+  loadDetails() async {
+    notiDetails.clear();
+    for (String s in notificationList) {
+      DocumentSnapshot snap =
+          await FirebaseFirestore.instance.collection('events').doc(s).get();
+      if (snap.data() != null) {
+        notiDetails.add(snap.data() as Map<String, dynamic>);
+      }
     }
+    setState(() {
+      notiDetails;
+      isLoading = false;
+    });
   }
 
   @override
@@ -43,6 +52,13 @@ class _NotificationPageState extends State<NotificationPage> {
     model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
     Map<String, dynamic> userMap = user.getData();
     notificationList = userMap['notifications'];
+    if (isLoading) {
+      return const Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: CircularProgressIndicator(),
+          ));
+    }
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -62,9 +78,11 @@ class _NotificationPageState extends State<NotificationPage> {
               await userProvider.refreshUser();
               model.User user = userProvider.getUser;
               Map<String, dynamic> userMap = user.getData();
-              setState(() {
-                notificationList = userMap['notifications'];
-              });
+              print(notificationList);
+
+              isLoading = true;
+              notificationList = userMap['notifications'];
+              loadDetails();
             },
             icon: const Icon(
               Icons.refresh_outlined,
@@ -97,16 +115,16 @@ class _NotificationPageState extends State<NotificationPage> {
               child: ListView.builder(
                   itemCount: notificationList.length,
                   itemBuilder: (context, index) {
-                    loadData(notificationList[index]);
                     return NotificationCard(
-                      profileURL: profileURL,
+                      profileURL: notiDetails[index]['profileURL'],
                       index: index,
-                      postedBy: postedBy,
-                      eventname: eventname,
+                      postedBy: notiDetails[index]['organiserName'],
+                      eventname: notiDetails[index]['eventname'],
                       list: notificationList,
                       onDelete: (int index) async {
                         setState(() {
                           notificationList.removeAt(index);
+                          notiDetails.removeAt(index);
                         });
                         await FirebaseFirestore.instance
                             .collection('users')

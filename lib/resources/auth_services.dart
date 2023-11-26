@@ -119,6 +119,7 @@ class AuthService {
           upcomingEvents: [], 
           following: [],
           bio: '',
+          upiID: ''
         );
 
         await _firestore

@@ -25,6 +25,8 @@ class _DonationCardState extends State<DonationCard> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    String imageURL = "";
+    imageURL = widget.documentSnapshot['profileURL'];
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: height * 0.01),
@@ -38,7 +40,15 @@ class _DonationCardState extends State<DonationCard> {
               width: width * 0.42,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                // color: Colors.red,
+                color: Colors.red,
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: imageURL != ""
+                      ? NetworkImage(imageURL)
+                      : const AssetImage(
+                              "lib/assets/images/default_profile.jpg")
+                          as ImageProvider,
+                ),
               ),
             ),
             Container(
@@ -75,7 +85,7 @@ class _DonationCardState extends State<DonationCard> {
                           Container(
                             child:  Text(
                               widget.documentSnapshot['bio'],
-                              maxLines: 6,
+                              maxLines: 8,
                               style: const TextStyle(
                                 color: Color.fromARGB(255, 85, 83, 83),
                                 fontSize: 12,

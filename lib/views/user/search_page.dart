@@ -21,6 +21,8 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+
+  final formKey = GlobalKey<FormState>();
   // ignore: non_constant_identifier_names
   String dropdown_value = "";
   // ignore: non_constant_identifier_names
@@ -91,30 +93,40 @@ class _SearchPageState extends State<SearchPage> {
         elevation: 0,
       ),
       body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: width*0.04, vertical: height*0.01),
-            child: Column(
-              children: [
-                DropdownMenu<String>(
-                  textStyle: const TextStyle(fontSize: 18),
-                  initialSelection: list.first,
-                  width: width*0.92,
-                  onSelected: (String? value) {
-                    // This is called when the user selects an item.
-                    setState(() {
-                      widget.dropdownValue = value!;
-                    });
-                    if(widget.dropdownValue == 'Date'){
-                      _showDatePicker();
-                    }
-                  },
-                  dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
-                    return DropdownMenuEntry<String>(value: value, label: value);
-                  }).toList(),
+        child: GestureDetector(
+          onTap: () => {
+          FocusScope.of(context).requestFocus(
+            FocusNode(),
+          ),
+        },
+          child: Form(
+            key: formKey,
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: width*0.04, vertical: height*0.01),
+                child: Column(
+                  children: [
+                    DropdownMenu<String>(
+                      textStyle: const TextStyle(fontSize: 18),
+                      initialSelection: list.first,
+                      width: width*0.92,
+                      onSelected: (String? value) {
+                        // This is called when the user selects an item.
+                        setState(() {
+                          widget.dropdownValue = value!;
+                        });
+                        if(widget.dropdownValue == 'Date'){
+                          _showDatePicker();
+                        }
+                      },
+                      dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
+                        return DropdownMenuEntry<String>(value: value, label: value);
+                      }).toList(),
+                    ),
+                    SearchResultsWidget(category: widget.dropdownValue, searchDate:search_date, jobs:jobs),
+                  ],
                 ),
-                SearchResultsWidget(category: widget.dropdownValue, searchDate:search_date, jobs:jobs),
-              ],
+              ),
             ),
           ),
         ),

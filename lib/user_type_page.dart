@@ -8,38 +8,41 @@ class UserType extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 50,),
-              const Text(
-                "Choose user",
-                style: TextStyle(
-                    color: Color(0xFF1D1517),
-                    fontSize: 30,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(height: height*0.02,),
+                const Text(
+                  "Choose user",
+                  style: TextStyle(
+                      color: Color(0xFF1D1517),
+                      fontSize: 30,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 50,),
-              Image.asset(
-                "lib/assets/images/select.png",
-                fit: BoxFit.cover,
-              ),
-              const SizedBox(height: 150,),
-              MyButton(onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginOrRegisterPage(parent: context)));
-              }, text: "Volunteer"),
-              const SizedBox(height: 50,),
-              MyButton(onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginOrRegisterPageOrg(parent: context)));
-              }, text: "Organisation"),
-            ],
+                SizedBox(height: height*0.07,),
+                Image.asset(
+                  "lib/assets/images/select.png",
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(height: height*0.25,),
+                MyButton(onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginOrRegisterPage(parent: context)));
+                }, text: "Volunteer"),
+                SizedBox(height: height*0.05,),
+                MyButton(onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginOrRegisterPageOrg(parent: context)));
+                }, text: "Organisation"),
+              ],
+            ),
           ),
         ),
       ),

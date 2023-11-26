@@ -301,16 +301,20 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
+                  child: Column(
                     children: [
-                      Text(
-                        organisationMap['bio'],
-                        maxLines: 10,
-                        style: const TextStyle(
-                          color: Color(0xFF7B6F72),
-                          fontSize: 15,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        // color: Colors.yellow,
+                        child: Text(
+                          organisationMap['bio'],
+                          maxLines: 10,
+                          style: const TextStyle(
+                            color: Color(0xFF7B6F72),
+                            fontSize: 15,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     ],

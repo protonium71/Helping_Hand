@@ -2,12 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:helping_hand/models/user.dart' as model;
 import 'package:helping_hand/providers/user_provider.dart';
+import 'package:helping_hand/widgets/my_button.dart';
 import 'package:provider/provider.dart';
 
 class EventDetailsPage extends StatefulWidget {
-  final DocumentSnapshot documentSnapshot;
+  DocumentSnapshot documentSnapshot;
   final String user;
-  const EventDetailsPage(
+  EventDetailsPage(
       {super.key, required this.documentSnapshot, required this.user});
 
   @override
@@ -51,8 +52,9 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         });
   }
 
-  void call(int total, int signed1) {
-    setState(() {
+  void call(int total, int signed1) async{
+    widget.documentSnapshot = await FirebaseFirestore.instance.collection("events").doc(widget.documentSnapshot['eventid']).get();
+      setState(() {
       spots_rem = (total - signed1).toString();
       _isClicked = true;
     });
@@ -83,6 +85,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     spots_rem =
         (total - num.parse(widget.documentSnapshot['signedSpots']) as int)
             .toString();
+    print(spots_rem);
 
     String date = '${sDate.day}/${sDate.month}/${sDate.year}';
 
@@ -158,9 +161,22 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         onPressed: () async {
                           List<dynamic> list = userMap['following'];
                           list.add(widget.documentSnapshot['organiserID']);
+
                           await FirebaseFirestore.instance
                               .collection("users")
                               .doc(id)
+                              .update({"following": list});
+
+                          DocumentSnapshot snapshot = await FirebaseFirestore
+                              .instance
+                              .collection('organisations')
+                              .doc(widget.documentSnapshot['organiserID'])
+                              .get();
+                          list = snapshot['following'];
+                          list.add(userMap['uid']);
+                          await FirebaseFirestore.instance
+                              .collection("organisations")
+                              .doc(widget.documentSnapshot['organiserID'])
                               .update({"following": list});
                           setState(() {
                             isFollow = true;
@@ -283,10 +299,12 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Row(
+                  child: Column(
                     children: [
                       Container(
+                          alignment: Alignment.centerLeft,
                           child: Text(widget.documentSnapshot['details'],
+                              maxLines: 10,
                               style: const TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.w400))),
                     ],
@@ -298,43 +316,46 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               height: 20,
             ),
             widget.user == "volunteer"
-                ? ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xffBBBBD6),
+                ? Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: MyButton(
+                      onTap: _isClicked
+                          ? (){showErrorMessage(
+                                  'You have already signed up for this event !');}
+                          : () async {
+                              model.User user = Provider.of<UserProvider>(
+                                      context,
+                                      listen: false)
+                                  .getUser;
+                              Map<String, dynamic> userMap = user.getData();
+
+                              List<dynamic> allEvents =
+                                  userMap['upcomingEvents'];
+                              String id = userMap['uid'];
+                              String eventID =
+                                  widget.documentSnapshot['eventid'];
+                              String signed =
+                                  widget.documentSnapshot['signedSpots'];
+                              int signed1 = num.parse(signed) as int;
+                              signed1++;
+
+                              allEvents.add(widget.documentSnapshot['eventid']);
+                              await FirebaseFirestore.instance
+                                  .collection("users")
+                                  .doc(id)
+                                  .update({"upcomingEvents": allEvents});
+                              await FirebaseFirestore.instance
+                                  .collection("events")
+                                  .doc(eventID)
+                                  .update({"signedSpots": signed1.toString()});
+
+                              call(total, signed1);
+                              showErrorMessage(
+                                  'You have signed up for this event !');
+                            },
+                      text: "Sign Up",
                     ),
-                    onPressed: _isClicked
-                        ? null
-                        : () async {
-                            model.User user = Provider.of<UserProvider>(context,
-                                    listen: false)
-                                .getUser;
-                            Map<String, dynamic> userMap = user.getData();
-
-                            List<dynamic> allEvents = userMap['upcomingEvents'];
-                            String id = userMap['uid'];
-                            String eventID = widget.documentSnapshot['eventid'];
-                            String signed =
-                                widget.documentSnapshot['signedSpots'];
-                            int signed1 = num.parse(signed) as int;
-                            signed1++;
-
-                            allEvents.add(widget.documentSnapshot['eventid']);
-                            await FirebaseFirestore.instance
-                                .collection("users")
-                                .doc(id)
-                                .update({"upcomingEvents": allEvents});
-                            await FirebaseFirestore.instance
-                                .collection("events")
-                                .doc(eventID)
-                                .update({"signedSpots": signed1.toString()});
-
-                            call(total, signed1);
-                            showErrorMessage('you signed up for this event..');
-                          },
-                    child: const Text(
-                      'Sign up',
-                      style: TextStyle(color: Colors.black),
-                    ))
+                  )
                 : const Center(),
           ]),
         ),

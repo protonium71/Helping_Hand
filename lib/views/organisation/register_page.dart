@@ -17,6 +17,7 @@ class RegisterPageOrg extends StatefulWidget {
 }
 
 class _RegisterPageOrgState extends State<RegisterPageOrg> {
+  final formKey = GlobalKey<FormState>();
   //text editing controllers
   final userNameController = TextEditingController();
   final emailController = TextEditingController();
@@ -84,92 +85,102 @@ class _RegisterPageOrgState extends State<RegisterPageOrg> {
 
     return  Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              //logo
-              SizedBox(height: height*0.05,),
-              const Icon(Icons.lock, size: 50,),
-        
-              //Lets create an account for you
-              SizedBox(height: height*0.01,),
-              Text("Lets create an account for you", 
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontSize: 20,
-                ),
-              ),
-
-              //firstname textfield
-              SizedBox(height: height*0.02,),
-              MyTextField(controller: userNameController, hintText: "Organisation Name", obscureText: false, icon: const Icon(Icons.person_2_outlined)),
-              
-              //email textfield
-              SizedBox(height: height*0.01,),
-              MyTextField(controller: emailController, hintText: "Email", obscureText: false, icon: const Icon(Icons.email_outlined),),
-        
-              //password textfield
-              SizedBox(height: height*0.01,),
-              MyTextField(controller: passwordController, hintText: "Password", obscureText: true, icon: const Icon(Icons.lock_outline)),
-        
-              //sign up button
-              SizedBox(height: height*0.02),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: MyButton(onTap: signUserUp, text: 'Sign Up',),
-              ),
-        
-              //or continue with
-              SizedBox(height: height*0.02),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  children: [
-                    Expanded(child: Divider(thickness: 0.5, color: Colors.grey[400],)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text("Or continue with", style: TextStyle(color: Colors.grey[700]),),
-                    ),
-                    Expanded(child: Divider(thickness: 0.5, color: Colors.grey[400],)),
-                  ],
-                ),
-              ),
-        
-              //google sign in
-              SizedBox(height: height*0.035),
-              SquareTile(
-                onTap: () async {
-                  bool res = false;
-                  await AuthService().signInWithGoogleOrg(context: context);
-                  if(FirebaseAuth.instance.currentUser != null){
-                    res = true;
-                  }
-                  await AuthService().logoutUser();
-                  if(res){
-                    showErrorMessage("User registered successfully!");
-                  }
-                  else{
-                    showErrorMessage("An Error occurred!");
-                  }
-                },
-                imagePath: 'lib/assets/images/google.png',
-              ),
-        
-              //not a member sign up
-              SizedBox(height: height*0.035),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+      body: GestureDetector(
+        onTap: () => {
+          FocusScope.of(context).requestFocus(
+            FocusNode(),
+          ),
+        },
+        child: Form(
+          key: formKey,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  Text('Already have an account?', style: TextStyle(color: Colors.grey[700]),),
-                  const SizedBox(width: 4,),
-                  GestureDetector(
-                    onTap: widget.onTap,
-                    child: const Text('Login Now', style: TextStyle(color: Color(0xff6379A5), fontWeight: FontWeight.bold),)
+                  //logo
+                  SizedBox(height: height*0.05,),
+                  const Icon(Icons.lock, size: 50,),
+            
+                  //Lets create an account for you
+                  SizedBox(height: height*0.01,),
+                  Text("Lets create an account for you", 
+                    style: TextStyle(
+                      color: Colors.grey[800],
+                      fontSize: 20,
+                    ),
                   ),
+        
+                  //firstname textfield
+                  SizedBox(height: height*0.02,),
+                  MyTextField(controller: userNameController, hintText: "Organisation Name", obscureText: false, icon: const Icon(Icons.person_2_outlined)),
+                  
+                  //email textfield
+                  SizedBox(height: height*0.01,),
+                  MyTextField(controller: emailController, hintText: "Email", obscureText: false, icon: const Icon(Icons.email_outlined),),
+            
+                  //password textfield
+                  SizedBox(height: height*0.01,),
+                  MyTextField(controller: passwordController, hintText: "Password", obscureText: true, icon: const Icon(Icons.lock_outline)),
+            
+                  //sign up button
+                  SizedBox(height: height*0.02),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: MyButton(onTap: signUserUp, text: 'Sign Up',),
+                  ),
+            
+                  //or continue with
+                  SizedBox(height: height*0.02),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Row(
+                      children: [
+                        Expanded(child: Divider(thickness: 0.5, color: Colors.grey[400],)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text("Or continue with", style: TextStyle(color: Colors.grey[700]),),
+                        ),
+                        Expanded(child: Divider(thickness: 0.5, color: Colors.grey[400],)),
+                      ],
+                    ),
+                  ),
+            
+                  //google sign in
+                  SizedBox(height: height*0.035),
+                  SquareTile(
+                    onTap: () async {
+                      bool res = false;
+                      await AuthService().signInWithGoogleOrg(context: context);
+                      if(FirebaseAuth.instance.currentUser != null){
+                        res = true;
+                      }
+                      await AuthService().logoutUser();
+                      if(res){
+                        showErrorMessage("User registered successfully!");
+                      }
+                      else{
+                        showErrorMessage("An Error occurred!");
+                      }
+                    },
+                    imagePath: 'lib/assets/images/google.png',
+                  ),
+            
+                  //not a member sign up
+                  SizedBox(height: height*0.035),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Already have an account?', style: TextStyle(color: Colors.grey[700]),),
+                      const SizedBox(width: 4,),
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: const Text('Login Now', style: TextStyle(color: Color(0xff6379A5), fontWeight: FontWeight.bold),)
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
         ),
       ),

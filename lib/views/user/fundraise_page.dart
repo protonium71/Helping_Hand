@@ -15,6 +15,7 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
+  final formKey = GlobalKey<FormState>();
   final CollectionReference _jobs =
       FirebaseFirestore.instance.collection('organisations');
   // ignore: non_constant_identifier_names
@@ -50,70 +51,81 @@ class _PaymentPageState extends State<PaymentPage> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: width * 0.04, vertical: height * 0.01),
-          child: Column(
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    TextField(
-                      decoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 160, 159, 159))),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey.shade400),
+      body: GestureDetector(
+        onTap: () => {
+          FocusScope.of(context).requestFocus(
+            FocusNode(),
+          ),
+        },
+        child: Form(
+          key: formKey,
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: width * 0.04, vertical: height * 0.01),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        TextField(
+                          decoration: InputDecoration(
+                            enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 160, 159, 159))),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey.shade400),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            hintText: "Search organisation",
+                          ),
+                          onChanged: (val) {
+                            setState(() {
+                              textarea_value = val;
+                            });
+                          },
                         ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        hintText: "Search organisation",
-                      ),
-                      onChanged: (val) {
-                        setState(() {
-                          textarea_value = val;
-                        });
-                      },
+                        SizedBox(height: height * 0.01),
+                        StreamBuilder(
+                          stream: _jobs.snapshots(),
+                          builder: (context,
+                              AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                            if (streamSnapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else {
+                              return Expanded(
+                                child: ListView.builder(
+                                    itemCount: streamSnapshot.data!.docs.length,
+                                    itemBuilder: (context, index) {
+                                      DocumentSnapshot documentSnapshot =
+                                          streamSnapshot.data!.docs[index];
+                                      if (documentSnapshot['orgname']
+                                          .toString()
+                                          .toLowerCase()
+                                          .startsWith(
+                                              textarea_value.toLowerCase())) {
+                                        return DonationCard(
+                                            documentSnapshot: documentSnapshot);
+                                      } else {
+                                        return Container();
+                                      }
+                                    }),
+                              );
+                            }
+                          },
+                        )
+                      ],
                     ),
-                    SizedBox(height: height * 0.01),
-                    StreamBuilder(
-                      stream: _jobs.snapshots(),
-                      builder: (context,
-                          AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-                        if (streamSnapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          return Expanded(
-                            child: ListView.builder(
-                                itemCount: streamSnapshot.data!.docs.length,
-                                itemBuilder: (context, index) {
-                                  DocumentSnapshot documentSnapshot =
-                                      streamSnapshot.data!.docs[index];
-                                  if (documentSnapshot['orgname']
-                                      .toString()
-                                      .toLowerCase()
-                                      .startsWith(
-                                          textarea_value.toLowerCase())) {
-                                    return DonationCard(
-                                        documentSnapshot: documentSnapshot);
-                                  } else {
-                                    return Container();
-                                  }
-                                }),
-                          );
-                        }
-                      },
-                    )
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

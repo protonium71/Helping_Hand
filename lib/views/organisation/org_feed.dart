@@ -128,8 +128,9 @@ class _OrganisationFeedState extends State<OrganisationFeed> {
                           if (sDate.isAfter(now) &&
                               organisationEvents
                                   .contains(documentSnapshot['eventid'])) {
+                            //print(userEvents);
                             // print(documentSnapshot['eventid']);
-                            return OrganisationEventDetailsPage(
+                            return EventCard(
                                 documentSnapshot: documentSnapshot,
                                 user: 'organisation');
                           } else {
@@ -139,12 +140,12 @@ class _OrganisationFeedState extends State<OrganisationFeed> {
                           }
                         });
                   }
-                  else{
-                    return const CircularProgressIndicator();
-                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }),
           ),
-          SizedBox(
+        SizedBox(
             height: height * 0.02,
           ),
           Padding(
