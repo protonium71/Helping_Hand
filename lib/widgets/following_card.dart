@@ -35,8 +35,11 @@ class _FollowingCardState extends State<FollowingCard> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Container(
         // color: Colors.teal[400],
+        height: height*0.14,
+        width: width * 0.25,
         padding: EdgeInsets.symmetric(
             vertical: height * 0.01, horizontal: height * 0.01),
         decoration: BoxDecoration(
@@ -65,10 +68,10 @@ class _FollowingCardState extends State<FollowingCard> {
               //child: ,
             ),
             SizedBox(
-              height: height * 0.01,
+              height: height * 0.0075,
             ),
             Container(
-                height: height * 0.045,
+                height: height * 0.04,
                 // color: Colors.red,
                 child: Text(
                   orgname,
@@ -78,6 +81,7 @@ class _FollowingCardState extends State<FollowingCard> {
                   textAlign: TextAlign.center,
                 )),
           ],
-        ));
+        )
+        );
   }
 }

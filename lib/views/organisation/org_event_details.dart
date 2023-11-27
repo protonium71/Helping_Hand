@@ -110,185 +110,182 @@ class _OrganisationEventDetailsPageState
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(children: [
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 300,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xffCDD4E0),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: imageURL != ""
-                            ? NetworkImage(imageURL)
-                            : const AssetImage(
-                                    "lib/assets/images/default_profile.jpg")
-                                as ImageProvider,
-                      ),
-                    ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 300,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: const Color(0xffCDD4E0),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: imageURL != ""
+                        ? NetworkImage(imageURL)
+                        : const AssetImage(
+                                "lib/assets/images/default_profile.jpg")
+                            as ImageProvider,
                   ),
                 ),
-                Text(
-                  widget.documentSnapshot['eventname'],
-                  style: const TextStyle(
-                      fontSize: 27, fontWeight: FontWeight.w400),
-                ),
-                Text("by ${widget.documentSnapshot['organiserName']}",
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xff6379A5),
-                    )),
-                // if (isFollow == false)
-                //   Row(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     // crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       const Text("Follow",
-                //           style: TextStyle(
-                //               fontSize: 18, fontWeight: FontWeight.w400)),
-                //       IconButton(
-                //         onPressed: () async {
-                //           List<dynamic> list = userMap['following'];
-                //           list.add(widget.documentSnapshot['organiserID']);
-                //           await FirebaseFirestore.instance
-                //               .collection("users")
-                //               .doc(id)
-                //               .update({"following": list});
-                //           setState(() {
-                //             isFollow = true;
-                //             // spots_rem = "3";
-                //           });
-                //         },
-                //         icon: const Icon(Icons.add_box_outlined),
-                //       ),
-                //     ],
-                //   )
-                // else
-                //   const SizedBox(
-                //     height: 0,
-                //   ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-                  child: Row(
-                    children: [
-                      const Text('Spots Remaining     ',
-                          style: TextStyle(
-                            fontSize: 20,
-                          )),
-                      Text(spots_rem,
+              ),
+            ),
+            Text(
+              widget.documentSnapshot['eventname'],
+              style: const TextStyle(
+                  fontSize: 27, fontWeight: FontWeight.w400),
+            ),
+            Text("by ${widget.documentSnapshot['organiserName']}",
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xff6379A5),
+                )),
+            // if (isFollow == false)
+            //   Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     // crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       const Text("Follow",
+            //           style: TextStyle(
+            //               fontSize: 18, fontWeight: FontWeight.w400)),
+            //       IconButton(
+            //         onPressed: () async {
+            //           List<dynamic> list = userMap['following'];
+            //           list.add(widget.documentSnapshot['organiserID']);
+            //           await FirebaseFirestore.instance
+            //               .collection("users")
+            //               .doc(id)
+            //               .update({"following": list});
+            //           setState(() {
+            //             isFollow = true;
+            //             // spots_rem = "3";
+            //           });
+            //         },
+            //         icon: const Icon(Icons.add_box_outlined),
+            //       ),
+            //     ],
+            //   )
+            // else
+            //   const SizedBox(
+            //     height: 0,
+            //   ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+              child: Row(
+                children: [
+                  const Text('Spots Remaining     ',
+                      style: TextStyle(
+                        fontSize: 20,
+                      )),
+                  Text(spots_rem,
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xff878787))),
+                ],
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                children: [
+                  Icon(Icons.date_range_rounded),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Date & time',
+                      style: TextStyle(
+                          fontSize: 20, color: Color(0xff6379A5))),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: Text(date.toString(),
                           style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
-                              color: Color(0xff878787))),
-                    ],
+                              fontSize: 15, fontWeight: FontWeight.w400))),
+                  const SizedBox(
+                    width: 50,
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    children: [
-                      Icon(Icons.date_range_rounded),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text('Date & time',
-                          style: TextStyle(
-                              fontSize: 20, color: Color(0xff6379A5))),
-                    ],
+                  Text(
+                      '${sDate.hour}:${sDate.minute}--${eDate.hour}:${eDate.minute}',
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.w400)),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                children: [
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: Text(date.toString(),
-                              style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w400))),
-                      const SizedBox(
-                        width: 50,
-                      ),
-                      Text(
-                          '${sDate.hour}:${sDate.minute}--${eDate.hour}:${eDate.minute}',
+                  Icon(Icons.location_on_outlined),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Location',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Color(0xff6379A5),
+                          fontWeight: FontWeight.w400)),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Row(
+                children: [
+                  Text(widget.documentSnapshot['location'].toString(),
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.w400)),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Icon(Icons.event_available_outlined),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Event Details',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Color(0xff6379A5),
+                          fontWeight: FontWeight.w400)),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                      child: Text(widget.documentSnapshot['details'],maxLines: 10,
                           style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w400)),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Icon(Icons.location_on_outlined),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text('Location',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Color(0xff6379A5),
-                              fontWeight: FontWeight.w400)),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Row(
-                    children: [
-                      Text(widget.documentSnapshot['location'].toString(),
-                          style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w400)),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Icon(Icons.event_available_outlined),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text('Event Details',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Color(0xff6379A5),
-                              fontWeight: FontWeight.w400)),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Row(
-                    children: [
-                      Container(
-                          child: Text(widget.documentSnapshot['details'],
-                              style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w400))),
-                    ],
-                  ),
-                )
-              ],
+                              fontSize: 15, fontWeight: FontWeight.w400))),
+                ],
+              ),
             ),
             const SizedBox(
               height: 20,

@@ -38,7 +38,7 @@ class _NavigationState extends State<Navigation> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigationController());
+    var controller = Get.put(NavigationController());
     if (isLoading) {
       return const Scaffold(
           backgroundColor: Colors.white,

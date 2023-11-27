@@ -23,6 +23,8 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  final formKey = GlobalKey<FormState>();
+
   final controller = TextEditingController();
 
   final country = TextEditingController();
@@ -90,234 +92,245 @@ class _EditProfilePageState extends State<EditProfilePage> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            //profile pic
-            SizedBox(
-              height: height * 0.02,
-            ),
-            Center(
-              child: Stack(
-                children: [
-                  Container(
-                    width: 130,
-                    height: 130,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 4,
-                          color: Theme.of(context).scaffoldBackgroundColor),
-                      boxShadow: [
-                        BoxShadow(
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                            color: Colors.black.withOpacity(0.1),
-                            offset: const Offset(0, 10))
-                      ],
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: imageURL != ""
-                            ? NetworkImage(imageURL)
-                            : const AssetImage(
-                                    "lib/assets/images/default_profile.jpg")
-                                as ImageProvider,
+      body: GestureDetector(
+        onTap: () => {
+          FocusScope.of(context).requestFocus(
+            FocusNode(),
+          ),
+        },
+        child: Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                //profile pic
+                SizedBox(
+                  height: height * 0.02,
+                ),
+                Center(
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: 130,
+                        height: 130,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 4,
+                              color: Theme.of(context).scaffoldBackgroundColor),
+                          boxShadow: [
+                            BoxShadow(
+                                spreadRadius: 2,
+                                blurRadius: 10,
+                                color: Colors.black.withOpacity(0.1),
+                                offset: const Offset(0, 10))
+                          ],
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: imageURL != ""
+                                ? NetworkImage(imageURL)
+                                : const AssetImage(
+                                        "lib/assets/images/default_profile.jpg")
+                                    as ImageProvider,
+                          ),
+                        ),
+                      ),
+                      //EDIT PROFILE PIC BUTTON
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: MaterialButton(
+                          onPressed: () async {
+                            selectImage();
+                          },
+                          shape: const CircleBorder(),
+                          color: Colors.white,
+                          child: const Icon(Icons.edit, color: Colors.blue),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                //name
+                SizedBox(
+                  height: height * 0.03,
+                ),
+                MyTextField(
+                    controller: controller,
+                    hintText: 'Enter name',
+                    obscureText: false),
+                //location
+                SizedBox(
+                  height: height * 0.03,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.06),
+                  child: CountryStateCityPicker(
+                    country: country,
+                    state: state,
+                    city: city,
+                    dialogColor: Colors.grey.shade200,
+                    textFieldDecoration: InputDecoration(
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        suffixIcon: const Icon(Icons.arrow_downward_rounded),
+                        border: const OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(3.0)))),
+                  ),
+                ),
+                //update button
+                SizedBox(
+                  height: height * 0.03,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: MyButton(
+                      onTap: () async {
+                        bool flag = false;
+                        if (controller.text != "") {
+                          await FirebaseFirestore.instance
+                              .collection("users")
+                              .doc(id)
+                              .update({"username": controller.text});
+                          flag = true;
+                        }
+                        if (city.text != "") {
+                          await FirebaseFirestore.instance
+                              .collection("users")
+                              .doc(id)
+                              .update({"location": city.text});
+                          flag = true;
+                        }
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+                        if (imageURL != "") {
+                          await FirebaseFirestore.instance
+                              .collection("users")
+                              .doc(id)
+                              .update({"profileURL": imageURL});
+                          flag = true;
+                        }
+                        if (flag) {
+                          showErrorMessage('profile updated..');
+                        }
+                      },
+                      text: 'Update Profile'),
+                ),
+                //edit interests
+                SizedBox(
+                  height: height * 0.03,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: GestureDetector(
+                    onTap: () async {
+                      String res = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const InterestsPage()));
+                      if (res == 'done') {
+                        showErrorMessage('interest updated..');
+                      }
+                      // print(res);
+                    },
+                    child: Container(
+                      height: 60,
+                      decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 218, 234, 251),
+                          borderRadius: BorderRadius.circular(16)),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: width * 0.04),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              'Edit Interests',
+                              style: TextStyle(
+                                color: Color(0xFF1D1517),
+                                fontSize: 20,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Expanded(
+                                child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 20,
+                                )
+                              ],
+                            )),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  //EDIT PROFILE PIC BUTTON
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: MaterialButton(
-                      onPressed: () async {
-                        selectImage();
-                      },
-                      shape: const CircleBorder(),
-                      color: Colors.white,
-                      child: const Icon(Icons.edit, color: Colors.blue),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            //name
-            SizedBox(
-              height: height * 0.03,
-            ),
-            MyTextField(
-                controller: controller,
-                hintText: 'Enter name',
-                obscureText: false),
-            //location
-            SizedBox(
-              height: height * 0.03,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.06),
-              child: CountryStateCityPicker(
-                country: country,
-                state: state,
-                city: city,
-                dialogColor: Colors.grey.shade200,
-                textFieldDecoration: InputDecoration(
-                    fillColor: Colors.grey.shade200,
-                    filled: true,
-                    suffixIcon: const Icon(Icons.arrow_downward_rounded),
-                    border: const OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.all(Radius.circular(3.0)))),
-              ),
-            ),
-            //update button
-            SizedBox(
-              height: height * 0.03,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: MyButton(
-                  onTap: () async {
-                    bool flag = false;
-                    if (controller.text != "") {
-                      await FirebaseFirestore.instance
-                          .collection("users")
-                          .doc(id)
-                          .update({"username": controller.text});
-                      flag = true;
-                    }
-                    if (city.text != "") {
-                      await FirebaseFirestore.instance
-                          .collection("users")
-                          .doc(id)
-                          .update({"location": city.text});
-                      flag = true;
-                    }
-                    //Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-                    if (imageURL != "") {
-                      await FirebaseFirestore.instance
-                          .collection("users")
-                          .doc(id)
-                          .update({"profileURL": imageURL});
-                      flag = true;
-                    }
-                    if (flag) {
-                      showErrorMessage('profile updated..');
-                    }
-                  },
-                  text: 'Update Profile'),
-            ),
-            //edit interests
-            SizedBox(
-              height: height * 0.03,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: GestureDetector(
-                onTap: () async {
-                  String res = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const InterestsPage()));
-                  if (res == 'done') {
-                    showErrorMessage('interest updated..');
-                  }
-                  // print(res);
-                },
-                child: Container(
-                  height: 60,
-                  decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 218, 234, 251),
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Edit Interests',
-                          style: TextStyle(
-                            color: Color(0xFF1D1517),
-                            fontSize: 20,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Expanded(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                ),
+                //edit skills
+                SizedBox(
+                  height: height * 0.03,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: GestureDetector(
+                    onTap: () async {
+                      String res = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SkillPage()));
+                      if (res == 'done') {
+                        showErrorMessage('skill updated..');
+                      }
+                    },
+                    child: Container(
+                      height: 60,
+                      decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 218, 234, 251),
+                          borderRadius: BorderRadius.circular(16)),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: width * 0.04),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              size: 20,
-                            )
+                          children: [
+                            Text(
+                              'Edit Skills',
+                              style: TextStyle(
+                                color: Color(0xFF1D1517),
+                                fontSize: 20,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Expanded(
+                                child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 20,
+                                )
+                              ],
+                            )),
                           ],
-                        )),
-                      ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-            //edit skills
-            SizedBox(
-              height: height * 0.03,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: GestureDetector(
-                onTap: () async {
-                  String res = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SkillPage()));
-                  if (res == 'done') {
-                    showErrorMessage('skill updated..');
-                  }
-                },
-                child: Container(
-                  height: 60,
-                  decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 218, 234, 251),
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Edit Skills',
-                          style: TextStyle(
-                            color: Color(0xFF1D1517),
-                            fontSize: 20,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Expanded(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              size: 20,
-                            )
-                          ],
-                        )),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

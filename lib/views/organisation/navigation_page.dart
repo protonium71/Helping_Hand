@@ -34,6 +34,7 @@ class _NavigationPageState extends State<NavigationPage> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(NavigationControllerOrg());
+    print(controller.selectedIndex.value);
     if (isLoading) {
       return const Scaffold(
           backgroundColor: Colors.white,

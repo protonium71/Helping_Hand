@@ -19,6 +19,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  final formKey = GlobalKey<FormState>();
   //text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -86,115 +88,125 @@ class _LoginPageState extends State<LoginPage> {
 
     return  Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //logo
-              SizedBox(height: height*0.05,),
-              const Icon(Icons.lock, size: 100,),
-                  
-              //welcome, you have been missed
-              SizedBox(height: height*0.05,),
-              Text("Welcome back you've been missed", 
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontSize: 20,
-                ),
-              ),
-                  
-              //username textfield
-              SizedBox(height: height*0.04,),
-              MyTextField(controller: emailController, hintText: "Email", obscureText: false, icon: const Icon(Icons.email_outlined),),
-                  
-              //password textfield
-              SizedBox(height: height*0.025,),
-              MyTextField(controller: passwordController, hintText: "Password", obscureText: true, icon: const Icon(Icons.lock_outline)),
-                  
-              //forgot password
-              SizedBox(height: height*0.015,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.push(
-                          context, 
-                          MaterialPageRoute(
-                            builder: (context){
-                              return const ForgetPasswordPage();
-                            }
-                          )
-                        );
-                      },
-                      child: const Text(
-                        "Forgot password?",
-                        style: TextStyle(color: Color(0xff6379A5), fontSize: 15,),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-                  
-              //sign in button
-              SizedBox(height: height*0.075),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: MyButton(onTap: signUserIn, text: 'Sign In',),
-              ),
-                  
-              //or continue with
-              SizedBox(height: height*0.06),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  children: [
-                    Expanded(child: Divider(thickness: 0.5, color: Colors.grey[400],)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text("Or continue with", style: TextStyle(color: Colors.grey[700]),),
-                    ),
-                    Expanded(child: Divider(thickness: 0.5, color: Colors.grey[400],)),
-                  ],
-                ),
-              ),
-                  
-              //google sign in
-              SizedBox(height: height*0.04),
-              SquareTile(
-                onTap: () async {
-                  await AuthService().signInWithGoogle(context: context);
-                  if (FirebaseAuth.instance.currentUser != null) {
-                    // ignore: use_build_context_synchronously
-                    Navigator.pop(widget.parent);
-                    // ignore: use_build_context_synchronously
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const Navigation(),
-                      ),
-                    );
-                  }
-                },
-                imagePath: 'lib/assets/images/google.png',
-              ),
-                  
-              //not a member sign up
-              SizedBox(height: height*0.04),
-              Row(
+      body: GestureDetector(
+        onTap: () => {
+          FocusScope.of(context).requestFocus(
+            FocusNode(),
+          ),
+        },
+        child: Form(
+          key: formKey,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Not a member?', style: TextStyle(color: Colors.grey[700]),),
-                  const SizedBox(width: 4,),
-                  GestureDetector(
-                    onTap: widget.onTap,
-                    child: const Text('Register Now', style: TextStyle(color: Color(0xff6379A5), fontWeight: FontWeight.bold),)
+                  //logo
+                  SizedBox(height: height*0.05,),
+                  const Icon(Icons.lock, size: 100,),
+                      
+                  //welcome, you have been missed
+                  SizedBox(height: height*0.05,),
+                  Text("Welcome back you've been missed", 
+                    style: TextStyle(
+                      color: Colors.grey[800],
+                      fontSize: 20,
+                    ),
                   ),
+                      
+                  //username textfield
+                  SizedBox(height: height*0.04,),
+                  MyTextField(controller: emailController, hintText: "Email", obscureText: false, icon: const Icon(Icons.email_outlined),),
+                      
+                  //password textfield
+                  SizedBox(height: height*0.025,),
+                  MyTextField(controller: passwordController, hintText: "Password", obscureText: true, icon: const Icon(Icons.lock_outline)),
+                      
+                  //forgot password
+                  SizedBox(height: height*0.015,),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.push(
+                              context, 
+                              MaterialPageRoute(
+                                builder: (context){
+                                  return const ForgetPasswordPage();
+                                }
+                              )
+                            );
+                          },
+                          child: const Text(
+                            "Forgot password?",
+                            style: TextStyle(color: Color(0xff6379A5), fontSize: 15,),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                      
+                  //sign in button
+                  SizedBox(height: height*0.075),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: MyButton(onTap: signUserIn, text: 'Sign In',),
+                  ),
+                      
+                  //or continue with
+                  SizedBox(height: height*0.06),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Row(
+                      children: [
+                        Expanded(child: Divider(thickness: 0.5, color: Colors.grey[400],)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text("Or continue with", style: TextStyle(color: Colors.grey[700]),),
+                        ),
+                        Expanded(child: Divider(thickness: 0.5, color: Colors.grey[400],)),
+                      ],
+                    ),
+                  ),
+                      
+                  //google sign in
+                  SizedBox(height: height*0.04),
+                  SquareTile(
+                    onTap: () async {
+                      await AuthService().signInWithGoogle(context: context);
+                      if (FirebaseAuth.instance.currentUser != null) {
+                        // ignore: use_build_context_synchronously
+                        Navigator.pop(widget.parent);
+                        // ignore: use_build_context_synchronously
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const Navigation(),
+                          ),
+                        );
+                      }
+                    },
+                    imagePath: 'lib/assets/images/google.png',
+                  ),
+                      
+                  //not a member sign up
+                  SizedBox(height: height*0.04),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Not a member?', style: TextStyle(color: Colors.grey[700]),),
+                      const SizedBox(width: 4,),
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: const Text('Register Now', style: TextStyle(color: Color(0xff6379A5), fontWeight: FontWeight.bold),)
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
         ),
       ),

@@ -12,6 +12,7 @@ class ForgetPasswordPageOrg extends StatefulWidget {
 }
 
 class _ForgetPasswordPageOrgState extends State<ForgetPasswordPageOrg> {
+  final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
 
   Future passwordReset() async{
@@ -73,27 +74,37 @@ class _ForgetPasswordPageOrgState extends State<ForgetPasswordPageOrg> {
         backgroundColor: Colors.white, 
         elevation: 0,
       ),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: height*0.04,),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25.0),
-                child: Text(
-                  'Enter your email and we will send you a password change link',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500
+      body: GestureDetector(
+        onTap: () => {
+          FocusScope.of(context).requestFocus(
+            FocusNode(),
+          ),
+        },
+        child: Form(
+          key: formKey,
+          child: SafeArea(
+            child: Center(
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: height*0.04,),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Text(
+                      'Enter your email and we will send you a password change link',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500
+                      ),
+                    ),
                   ),
-                ),
+                  SizedBox(height: height*0.02,),
+                  MyTextField(controller: emailController, hintText: 'Email', obscureText: false),
+                  SizedBox(height: height*0.03,),
+                  MyButton(onTap: passwordReset, text: 'Reset Password'),
+                ],
               ),
-              SizedBox(height: height*0.02,),
-              MyTextField(controller: emailController, hintText: 'Email', obscureText: false),
-              SizedBox(height: height*0.03,),
-              MyButton(onTap: passwordReset, text: 'Reset Password'),
-            ],
+            ),
           ),
         ),
       ),
