@@ -30,7 +30,7 @@ class Notifications {
     await fMessaging.getToken().then((value) {
       ftoken = value;
       // ignore: avoid_print
-      // print('\nftoken: $value');
+      print('\nftoken: $value');
     });
   }
 
@@ -87,8 +87,11 @@ class Notifications {
             .get();
         userTokens.add(data.docs.first.data()['ftoken']);
       }
-      for (String ftoken in userTokens) {
-        sendPushNotification(msg, ftoken, user, eventid);
+      for (String fToken in userTokens) {
+        if(fToken != ftoken) {
+          print(fToken);
+          sendPushNotification(msg, fToken, user, eventid);
+        }
       }
     }
   }
@@ -110,6 +113,7 @@ class Notifications {
   static Future<void> storeNotification(Map<String, dynamic> data) async {
     model.User user = await AuthService().getUserDetails();
     List<dynamic> list = user.notifications!;
+    print("list : $list");
     list.add(data['eventid']);
     await FirebaseFirestore.instance
         .collection('users')

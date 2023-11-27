@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,6 +28,13 @@ class _ProfilePageState extends State<ProfilePage> {
   List<dynamic> skills = [];
   String profileURL = "";
   int volunteeringHours = 0;
+  bool isLoading = true;
+
+  void initState(){
+    super.initState();
+    _changeState(0);
+    isLoading = false;
+  }
 
   _changeState(dynamic value) async {
     UserProvider userProvider = Provider.of(context, listen: false);
@@ -75,7 +84,13 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-
+    if (isLoading) {
+      return const Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: CircularProgressIndicator(),
+          ));
+    }
     model.User user = Provider.of<UserProvider>(context, listen: false).getUser;
     Map<String, dynamic> userMap = user.getData();
 
@@ -101,6 +116,8 @@ class _ProfilePageState extends State<ProfilePage> {
           IconButton(
               onPressed: () async {
                 await AuthService().logoutUser();
+                final NavigationController controller = Get.find();
+                controller.handleNotificationNavigation(0);
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
@@ -108,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 );
               },
-              icon: const Icon(Icons.logout)),
+              icon: const Icon(Icons.logout_outlined)),
         ],
         leading: GestureDetector(
             onTap: () {
@@ -235,16 +252,39 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(
                   height: height * 0.025,
                 ),
-                //update button
-                MyButton(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const EditProfilePage())).then(_changeState);
-                    },
-                    text: 'Edit Profile'),
+                Row(
+                  children: [
+                    //edit profile button
+                    Expanded(
+                      child: MyButton(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const EditProfilePage())).then(_changeState);
+                          },
+                          text: 'Edit Profile'
+                      ),
+                    ),
+                    // SizedBox(width: width*0.04,),
+                    // // logout button
+                    // Expanded(
+                    //   child: MyButton(
+                    //     onTap: () async {
+                    //       await AuthService().logoutUser();
+                    //       // ignore: use_build_context_synchronously
+                    //       Navigator.of(context).pushReplacement(
+                    //         MaterialPageRoute(
+                    //           builder: (context) => const UserType(),
+                    //         ),
+                    //       );
+                    //     }, 
+                    //     text: "Logout"
+                    //   ),
+                    // ),
+                  ],
+                ),
                 SizedBox(
                   height: height * 0.025,
                 ),

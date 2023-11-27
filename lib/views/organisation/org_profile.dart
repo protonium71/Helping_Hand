@@ -72,6 +72,8 @@ class _OrganisationProfilePage extends State<OrganisationProfilePage> {
           IconButton(
               onPressed: () async {
                 await AuthService().logoutUser();
+                final NavigationControllerOrg controller = Get.find();
+                controller.handleNotificationNavigation(0);
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(

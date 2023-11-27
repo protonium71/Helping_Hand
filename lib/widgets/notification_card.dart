@@ -96,8 +96,8 @@ class NotificationCard extends StatelessWidget {
                   ),
                   Container(
                     height: width * 0.2,
-                    width: width * 0.12,
-                    // color: Colors.white,
+                    width: width * 0.1,
+                    // color: Colors.yellow,
                     child: IconButton(
                       onPressed: () async {
                         onDelete(index);

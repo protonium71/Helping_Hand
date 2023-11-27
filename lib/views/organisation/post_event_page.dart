@@ -12,6 +12,7 @@ import 'package:helping_hand/resources/notifications.dart';
 import 'package:helping_hand/views/organisation/navigation_page.dart';
 import 'package:helping_hand/widgets/my_button.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -691,6 +692,7 @@ class _PostEventPageState extends State<PostEventPage> {
                       ),
                     ),
                     TextField(
+                      keyboardType: TextInputType.number,
                       controller: totalspots,
                       style: const TextStyle(
                         color: Color(0xFF1D1517),
@@ -783,9 +785,12 @@ class _PostEventPageState extends State<PostEventPage> {
                     //submit
                     MyButton(
                         onTap: () async {
+                          DateTime start = DateTime(y1, mo1, d1, h1, mi1),
+                                end = DateTime(y1, mo1, d1, h1, mi1);
                           if (organisationMap['orgname'] == "") {
-                            showErrorMessage("Pleae complete your profile first..");
-                          } else if (eventname.text != "" &&
+                            showErrorMessage("Please complete your profile first..");
+                          } 
+                          else if (eventname.text != "" &&
                               dropdownValue != "" &&
                               details.text != "" &&
                               city.text != "" &&
@@ -795,45 +800,50 @@ class _PostEventPageState extends State<PostEventPage> {
                               endTime != "" &&
                               totalspots.text != "" &&
                               imageURL != "") {
-                            DateTime start = DateTime(y1, mo1, d1, h1, mi1),
-                                end = DateTime(y1, mo1, d1, h1, mi1);
-                            Timestamp startTimeStamp = Timestamp.fromDate(start);
-                            Timestamp endTimeStamp = Timestamp.fromDate(end);
-                            String uid = const Uuid().v1();
-                            Event event = Event(
-                              uid: uid,
-                              eventid: uid,
-                              eventname: eventname.text,
-                              profileURL: imageURL,
-                              location: city.text,
-                              organiserID: organisationMap['uid'],
-                              organiserName: organisationMap['orgname'],
-                              startTime: startTimeStamp,
-                              endTime: endTimeStamp,
-                              details: details.text,
-                              totalSpots: totalspots.text,
-                              signedSpots: '0',
-                              cause: dropdownValue!,
-                            );
-        
-                            await FirebaseFirestore.instance
-                                .collection('events')
-                                .doc(uid)
-                                .set(event.getData());
-        
-                            List<dynamic> upcomingEvents =
-                                organisationMap['upcomingEvents'];
-                            upcomingEvents.add(uid);
-                            await FirebaseFirestore.instance
-                                .collection('organisations')
-                                .doc(organisationMap['uid'])
-                                .update({'upcomingEvents': upcomingEvents});
-                            showErrorMessage("Event added successfully..");
-                            String temp = eventname.text;
-                            _clearFields();
-                            Notifications.createUserList(
-                                temp, organisationMap['orgname'], uid);
-                          } else {
+                            if(end.millisecond - start.millisecond <= 0 && start.microsecond < DateTime.now().microsecond){
+                              showErrorMessage("Incorrect start and end time..");
+                            }
+                            else{
+                              Timestamp startTimeStamp = Timestamp.fromDate(start);
+                              Timestamp endTimeStamp = Timestamp.fromDate(end);
+                              String uid = const Uuid().v1();
+                              Event event = Event(
+                                uid: uid,
+                                eventid: uid,
+                                eventname: eventname.text,
+                                profileURL: imageURL,
+                                location: city.text,
+                                organiserID: organisationMap['uid'],
+                                organiserName: organisationMap['orgname'],
+                                startTime: startTimeStamp,
+                                endTime: endTimeStamp,
+                                details: details.text,
+                                totalSpots: totalspots.value.text,
+                                signedSpots: '0',
+                                cause: dropdownValue!,
+                              );
+          
+                              await FirebaseFirestore.instance
+                                  .collection('events')
+                                  .doc(uid)
+                                  .set(event.getData());
+          
+                              List<dynamic> upcomingEvents =
+                                  organisationMap['upcomingEvents'];
+                              upcomingEvents.add(uid);
+                              await FirebaseFirestore.instance
+                                  .collection('organisations')
+                                  .doc(organisationMap['uid'])
+                                  .update({'upcomingEvents': upcomingEvents});
+                              
+                              String temp = eventname.text;
+                              _clearFields();
+                              Notifications.createUserList(
+                                  temp, organisationMap['orgname'], uid);
+                              showErrorMessage("Event added successfully..");
+                            }
+                          } 
+                          else {
                             showErrorMessage("Please Fill all fields..");
                           }
                         },

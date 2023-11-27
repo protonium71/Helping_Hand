@@ -11,16 +11,18 @@ const List<String> list = <String>['Recommendations', 'Location', 'Date', 'Cause
 
 // ignore: must_be_immutable
 class SearchPage extends StatefulWidget {
-  String? dropdownValue = list.first;
-  dynamic controller;
+  
 
-  SearchPage({super.key});
+  const SearchPage({super.key});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
+
+  String? dropdownValue = list.first;
+  dynamic controller;
 
   final formKey = GlobalKey<FormState>();
   // ignore: non_constant_identifier_names
@@ -108,14 +110,14 @@ class _SearchPageState extends State<SearchPage> {
                   children: [
                     DropdownMenu<String>(
                       textStyle: const TextStyle(fontSize: 18),
-                      initialSelection: list.first,
+                      initialSelection: dropdownValue,
                       width: width*0.92,
                       onSelected: (String? value) {
                         // This is called when the user selects an item.
                         setState(() {
-                          widget.dropdownValue = value!;
+                          dropdownValue = value!;
                         });
-                        if(widget.dropdownValue == 'Date'){
+                        if(dropdownValue == 'Date'){
                           _showDatePicker();
                         }
                       },
@@ -123,7 +125,7 @@ class _SearchPageState extends State<SearchPage> {
                         return DropdownMenuEntry<String>(value: value, label: value);
                       }).toList(),
                     ),
-                    SearchResultsWidget(category: widget.dropdownValue, searchDate:search_date, jobs:jobs),
+                    SearchResultsWidget(category: dropdownValue, searchDate:search_date, jobs:jobs),
                   ],
                 ),
               ),

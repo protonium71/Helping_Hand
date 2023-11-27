@@ -39,27 +39,32 @@ class CustomProfileContainer extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: width * 0.04, vertical: height * 0.012),
+            horizontal: width * 0.04, vertical: height * 0.01),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // SizedBox(height: 10,),
-            Text(
-              text,
-              style: const TextStyle(
-                color: Color(0xFF1D1517),
-                fontSize: 25,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w500,
+            // SizedBox(height: 10,),0.230 - 0.191
+            Container(
+              // color: Colors.amber,
+              height: height*0.04,
+              child: Text(
+                text,
+                style: const TextStyle(
+                  color: Color(0xFF1D1517),
+                  fontSize: 25,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
             items.isEmpty
                 ? const SizedBox(
                     height: 0,
                   )
-                : SizedBox(
-                    height: height * 0.007,
+                : Container(
+                  // color: Colors.blue,
+                    height: height * 0.01,
                   ),
             items.isEmpty
                 ? const SizedBox(
@@ -74,9 +79,9 @@ class CustomProfileContainer extends StatelessWidget {
                         itemBuilder: (BuildContext context, int index) {
                           if (type == 'interests') {
                             return Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(height*0.01),
                               child: Container(
-                                height: height * 0.13,
+                                height: height * 0.11,
                                 width: width * 0.237,
                                 child: InterestCard(
                                   text: items[index]!,
@@ -88,9 +93,9 @@ class CustomProfileContainer extends StatelessWidget {
                             );
                           } else if (type == 'skills') {
                             return Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(height*0.01),
                               child: Container(
-                                height: height * 0.13,
+                                height: height * 0.11,
                                 width: width * 0.237,
                                 child: InterestCard(
                                     text: items[index],
@@ -101,14 +106,11 @@ class CustomProfileContainer extends StatelessWidget {
                             );
                           } else {
                             return Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Container(
-                                    height: height * 0.13,
-                                    width: width * 0.25,
-                                    child: FollowingCard(
-                                      text: items[index]!,
-                                      size: 10,
-                                    )));
+                                padding: EdgeInsets.all(height * 0.01),
+                                child: FollowingCard(
+                                  text: items[index]!,
+                                  size: 10,
+                                ));
                           }
                         }),
                   ),

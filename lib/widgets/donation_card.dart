@@ -71,7 +71,7 @@ class _DonationCardState extends State<DonationCard> {
                             height: height * 0.005,
                           ),
                           Container(
-                            // height: ,
+                            // height: height*0.055,
                             child:  Text(
                               widget.documentSnapshot['orgname'],
                               maxLines: 2,
@@ -82,15 +82,25 @@ class _DonationCardState extends State<DonationCard> {
                               ),
                             ),
                           ),
-                          Container(
-                            child:  Text(
-                              widget.documentSnapshot['bio'],
-                              maxLines: 8,
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 85, 83, 83),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  // height: height*0.12,
+                                  // color: Colors.amber,
+                                  child:  Text(
+                                    widget.documentSnapshot['bio'],
+                                    maxLines: 6,
+                                    style: const TextStyle(
+                                      height: 1.3,
+                                      color: Color.fromARGB(255, 85, 83, 83),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
