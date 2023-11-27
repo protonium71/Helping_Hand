@@ -47,7 +47,7 @@ The app will be installed and launched on your Android device/emulator.
 ## Demo
 You can watch us explaning and showing the app in the given youtube video
 - https://youtu.be/4nDk_hK--ss?si=ZWLtGzC8wqwKUXc-
-- 
+
 ## Collaborators
 - Prashant Srivastava [GitHub Profile](https://github.com/codor07)
 - Yash Pal Singh [GitHub Profile](https://github.com/protonium71)
