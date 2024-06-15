@@ -187,6 +187,7 @@ class AuthService {
           email: email,
           profileURL: '',
           uid: _auth.currentUser!.uid, 
+          upiID: '',
           volunteerHistory: [], 
           upcomingEvents: [], 
           following: [],

@@ -786,7 +786,9 @@ class _PostEventPageState extends State<PostEventPage> {
                     MyButton(
                         onTap: () async {
                           DateTime start = DateTime(y1, mo1, d1, h1, mi1),
-                                end = DateTime(y1, mo1, d1, h1, mi1);
+                                end = DateTime(y2, mo2, d2, h2, mi2);
+                          print(start);
+                          print(end);
                           if (organisationMap['orgname'] == "") {
                             showErrorMessage("Please complete your profile first..");
                           } 
@@ -800,7 +802,9 @@ class _PostEventPageState extends State<PostEventPage> {
                               endTime != "" &&
                               totalspots.text != "" &&
                               imageURL != "") {
-                            if(end.millisecond - start.millisecond <= 0 && start.microsecond < DateTime.now().microsecond){
+                            if(end.microsecondsSinceEpoch - start.microsecondsSinceEpoch <= 0 && start.microsecondsSinceEpoch < DateTime.now().microsecondsSinceEpoch){
+                              print(end.millisecond);
+                              print(start.millisecond);
                               showErrorMessage("Incorrect start and end time..");
                             }
                             else{
