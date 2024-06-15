@@ -42,7 +42,6 @@ class _NotificationPageState extends State<NotificationPage> {
       }
     }
     setState(() {
-      notiDetails;
       isLoading = false;
     });
   }
@@ -80,9 +79,11 @@ class _NotificationPageState extends State<NotificationPage> {
               Map<String, dynamic> userMap = user.getData();
               print(notificationList);
 
-              isLoading = true;
-              notificationList = userMap['notifications'];
-              loadDetails();
+              setState(() {
+                isLoading = true;
+                notificationList = userMap['notifications'];
+              });
+              await loadDetails();
             },
             icon: const Icon(
               Icons.refresh_outlined,
@@ -113,7 +114,7 @@ class _NotificationPageState extends State<NotificationPage> {
           children: [
             Expanded(
               child: ListView.builder(
-                  itemCount: notificationList.length,
+                  itemCount: notiDetails.length,
                   itemBuilder: (context, index) {
                     return NotificationCard(
                       profileURL: notiDetails[index]['profileURL'],
